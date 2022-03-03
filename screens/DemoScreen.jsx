@@ -27,7 +27,7 @@ import { connect } from "react-redux";
             props.saveUser(response.user);
              console.log("user Store", props.userStore);
 
-        return navigation.navigate("HomeScreen");
+        return navigation.navigate("Home");
       }
     });
   }, []);

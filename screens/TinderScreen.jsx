@@ -82,7 +82,10 @@ export default function TinderScreen(props) {
         <View style={{ paddingHorizontal: 20, marginTop: 50, marginLeft: 50 }}>
           <TouchableWithoutFeedback
             onPress={() => {
-              props.navigation.goBack();
+              props.navigation.navigate("Home", {
+                screen: "HomeScreen",
+              });
+              
             }}
           >
             <View style={styles.container3}>
