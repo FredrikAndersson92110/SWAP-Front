@@ -159,15 +159,15 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="DemoScreen" component={DemoScreen} />
+            <Stack.Screen name="MyTabs" component={MyTabs} />
 
-            <Stack.Screen name="ConnexionScreen" component={ConnexionScreen} />
+            {/* <Stack.Screen name="ConnexionScreen" component={ConnexionScreen} /> */}
 
             <Stack.Screen name="MoreInfoScreen" component={MoreInfoScreen} />
             <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
             <Stack.Screen name="SignInScreen" component={SignInScreen} />
-            <Stack.Screen name="MyTabs" component={MyTabs} />
 
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
 
             <Stack.Screen
               name="TinderScreen"

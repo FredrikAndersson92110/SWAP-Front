@@ -40,7 +40,7 @@ const SignInScreen = (props) => {
       AsyncStorage.setItem("token", response.user.token);
       props.saveUser(response.user);
       //On redirige vers HOME
-      return navigation.navigate("HomeScreen");
+      return navigation.navigate("MyTabs");
     }
 
     // Si un message d'erreur est retourné, on l'affiche

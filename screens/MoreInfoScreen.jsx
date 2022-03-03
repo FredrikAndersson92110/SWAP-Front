@@ -108,16 +108,14 @@ export default function ConnexionScreen(props) {
 
             <Text style={styles.label}>Genre</Text>
 
-             <Input
+            <Input
               containerStyle={styles.input}
               inputStyle={{ fontSize: 13 }}
               inputContainerStyle={{ borderBottomWidth: 0 }}
               placeholder="sélectionner votre genre"
-            /> 
+            />
 
-            <View>
-
-            </View>
+            <View></View>
 
             <Text style={styles.label}>Catégories</Text>
 
@@ -149,7 +147,7 @@ export default function ConnexionScreen(props) {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => props.navigation.navigate("HomeScreen")}
+              onPress={() => props.navigation.navigate("MyTabs")}
             >
               <Text style={styles.text}>Valider</Text>
             </TouchableOpacity>
