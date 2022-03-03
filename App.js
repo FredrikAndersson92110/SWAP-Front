@@ -43,7 +43,7 @@ import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
-import userReducer from "./reducers/requests.reducer";
+import userReducer from "./reducers/user.reducer";
 
 const store = createStore(combineReducers({ requestsReducer, userReducer }));
 
