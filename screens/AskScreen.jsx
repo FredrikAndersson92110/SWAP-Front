@@ -15,14 +15,7 @@ import { Feather, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
 export default function AskScreen(props) {
-  const [loaded] = useFonts({
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-    Poppins_600SemiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
-  });
-  if (!loaded) {
-    return null;
-  }
+
   return (
     <ImageBackground
       style={styles.ImageBackground}

@@ -275,7 +275,7 @@ export default function ListRequestScreen(props) {
                     buttonStyle={styles.button}
                     containerStyle={styles.buttonContainer}
                     onPress={() => {
-                      props.navigation.navigate("MyTabs");
+                      props.navigation.navigate("Home");
                       toggleOverlay()
                     }}
 

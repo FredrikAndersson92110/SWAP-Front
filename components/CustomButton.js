@@ -18,17 +18,6 @@ const CustomButton = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [loaded] = useFonts({
-    ChivoBlack: require("../assets/fonts/Chivo-Black.ttf"),
-    ChivoBold: require("../assets/fonts/Chivo-Bold.ttf"),
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
     <>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -111,7 +100,7 @@ const CustomButton = () => {
               <Text
                 style={{
                   color: "#000",
-                  fontFamily: "ChivoBold",
+                  fontFamily: "Poppins_700Bold",
                   fontSize: 18,
                   zIndex: 10,
                 }}
