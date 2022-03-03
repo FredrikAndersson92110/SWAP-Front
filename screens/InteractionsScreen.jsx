@@ -24,7 +24,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `http://192.168.10.109:3000/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY`
+          `https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY`
         );
         let response = await request.json();
 

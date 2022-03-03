@@ -31,11 +31,14 @@ const SignUpScreen = (props) => {
       lowerCaseEmail = email.toLowerCase();
     }
 
-    let response = await fetch(`http://localhost:3000/users/sign-up`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `firstName=${firstName}&lastName=${lastName}&email=${lowerCaseEmail}&password=${password}`,
-    });
+    let response = await fetch(
+      `https://swapapp-backend.herokuapp.com/users/sign-up`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `firstName=${firstName}&lastName=${lastName}&email=${lowerCaseEmail}&password=${password}`,
+      }
+    );
     response = await response.json();
 
     //En cas d'inscription validée, stockage du token en local puis ajout USER dans store
