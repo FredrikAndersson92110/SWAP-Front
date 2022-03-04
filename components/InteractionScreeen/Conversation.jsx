@@ -6,8 +6,6 @@ import {
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 
-import { useFonts } from "expo-font";
-
 import { useNavigation } from "@react-navigation/native";
 
 export default function Conversation({
@@ -18,15 +16,6 @@ export default function Conversation({
 }) {
   const navigation = useNavigation();
 
-  const [loaded] = useFonts({
-    Poppins_700Bold: require("../../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../../assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
   return (
     <>
       <TouchableWithoutFeedback>
@@ -66,7 +55,7 @@ export default function Conversation({
             <Text
               style={{ color: "#8B8B8B", fontFamily: "Poppins_400Regular" }}
             >
-              {lastMessage}
+              {lastMessage.message}
             </Text>
           </View>
         </ListItem>

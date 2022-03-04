@@ -9,7 +9,7 @@ import Onboarding from "../components/DemoScreen/Onboarding";
 import { connect } from "react-redux";
 
 const DemoScreen = (props) => {
-  // AsyncStorage.clear();
+  AsyncStorage.clear();
   const navigation = useNavigation();
 
   useEffect(async () => {
@@ -26,7 +26,7 @@ const DemoScreen = (props) => {
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
 
-        return   props.navigation.navigate("MyTabs")
+        return props.navigation.navigate("MyTabs");
       }
     });
   }, []);

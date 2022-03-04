@@ -44,8 +44,17 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
+import willingReducer from "./reducers/willing.reducer";
+import userDetailsReducer from "./reducers/userDetails.reducer";
 
-const store = createStore(combineReducers({ requestsReducer, userReducer }));
+const store = createStore(
+  combineReducers({
+    requestsReducer,
+    userReducer,
+    willingReducer,
+    userDetailsReducer,
+  })
+);
 
 //Navigation
 const Tab = createBottomTabNavigator();
