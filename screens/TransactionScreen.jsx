@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { connect } from "react-redux";
-function TransactionScreen() {
 import TransactionContainer from "../components/TransactionScreen/TransactionContainer";
+
 
 function TransactionScreen() {
   return (

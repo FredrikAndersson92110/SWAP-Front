@@ -165,7 +165,6 @@ function App() {
   };
   return (
     <Provider store={store}>
-      <ApplicationProvider {...eva} theme={eva.light}>
         <LoadFonts>
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -194,7 +193,6 @@ function App() {
             </Stack.Navigator>
           </NavigationContainer>
         </LoadFonts>
-      </ApplicationProvider>
     </Provider>
   );
 }
