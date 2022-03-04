@@ -14,11 +14,13 @@ import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
+
 function InteractionsScreen({ requests, onAddRequests, navigation }) {
   const isFocused = useIsFocused();
 
   const [message, setMessage] = useState("");
 
+  // chercher les matches de requêtes
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -38,7 +40,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   }, [isFocused]);
 
 
-
+  // tri des données du requestSchema à récupérer
+  //  if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les autres plutôt que ma vignette.
   let conversations = [];
   requests.forEach((req) => {
     if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
@@ -68,10 +71,12 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     }
   });
 
+  //  maps générant les échanges à partir du tableau conversation créé au dessus. (contient les messages tchat notamment)
   let requestList = conversations.map((conversation, i) => {
     if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
       return (
         <Conversation
+          request={conversation}
           key={i}
           isAsker={true}
           name={conversation.conversation_id.firstName}
@@ -91,6 +96,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     } else {
       return (
         <Conversation
+          request={conversation}
           key={i}
           isAsker={false}
           name={conversation.asker.firstName}
@@ -145,6 +151,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InteractionsScreen);
+
+
 
 //STYLES
 const styles = StyleSheet.create({
