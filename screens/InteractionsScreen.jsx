@@ -9,7 +9,6 @@ import {
 
 import Conversation from "../components/InteractionScreeen/Conversation";
 
-
 import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
@@ -25,7 +24,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY`
+          "https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
         );
         let response = await request.json();
 

@@ -5,13 +5,38 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { Button, Avatar, Text } from "react-native-elements";
+import { Avatar, Text } from "react-native-elements";
 import { MaterialIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 
-import { useFonts } from "expo-font";
+import { connect } from "react-redux";
 
-export default function DetailScreen(props) {
-  let source = require("../assets/img_avatar2.png");
+function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
+  const handleAccept = async () => {
+    if (userDetails.isAsker) {
+      let request = await fetch(
+        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.request.token}`,
+        {
+          method: "PUT",
+        }
+      );
+    }
+    navigation.navigate("TransactionScreen");
+  };
+
+  const handleRefuse = async () => {
+    if (userDetails.isAsker) {
+      let request = await fetch(
+        `http://192.168.10.132:3000/delete-willing-user/${userDetails.requestId}/${userDetails.request.token}`,
+        {
+          method: "DELETE",
+        }
+      );
+      await request.json();
+      navigation.goBack();
+    } else {
+      console.log("not asker");
+    }
+  };
 
   return (
     <ImageBackground
@@ -35,20 +60,36 @@ export default function DetailScreen(props) {
                   alignItems: "center",
                 }}
               >
-                <Avatar rounded size="large" source={source} />
+                <Avatar
+                  rounded
+                  size="large"
+                  source={{ uri: userDetails.request.user_img }}
+                />
                 <View style={{ marginLeft: 20, justifyContent: "center" }}>
                   <Text style={{ fontSize: 22, fontFamily: "Poppins_700Bold" }}>
-                    Elisa
+                    {userDetails.request.firstName}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <MaterialIcons name="verified" size={14} color="#F7CE46" />
-                    <Text style={{ marginLeft: 5 }}>Profil verifie</Text>
+                    <MaterialIcons
+                      name="verified"
+                      size={14}
+                      color={
+                        userDetails.request.verified_profile
+                          ? "#F7CE46"
+                          : "#8B8B8B"
+                      }
+                    />
+                    <Text style={{ marginLeft: 5 }}>
+                      {userDetails.request.verified_profile
+                        ? "Profil verifie"
+                        : ""}
+                    </Text>
                   </View>
                 </View>
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  props.navigation.goBack();
+                  navigation.goBack();
                 }}
               >
                 <AntDesign name="close" size={24} color="black" />
@@ -57,17 +98,27 @@ export default function DetailScreen(props) {
             {/* divider */}
             <View style={styles.divider} />
             {/* Content */}
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Image
-                source={require("../assets/images/categories/bricolage.png")}
-                style={{ width: 21, height: 21, marginRight: 10 }}
-              />
-              <Text style={styles.cardTitle}>Montage de meuble</Text>
-            </View>
+            {userDetails.request.categories.map((category, i) => {
+              return (
+                <View
+                  key={i}
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  <Image
+                    source={require("../assets/images/categories/bricolage.png")}
+                    style={{ width: 21, height: 21, marginRight: 10 }}
+                  />
+                  <Text style={styles.cardTitle}>
+                    {category.sub_category
+                      ? category.sub_category.charAt(0).toUpperCase() +
+                        category.sub_category.substring(1)
+                      : category.category}
+                  </Text>
+                </View>
+              );
+            })}
             <View
               style={{
                 flexDirection: "row",
@@ -80,20 +131,22 @@ export default function DetailScreen(props) {
                 color="#F7CE46"
                 style={{ marginLeft: 7 }}
               />
-              <Text style={styles.bodyText}>5Km (Paris 11eme)</Text>
+              <Text style={styles.bodyText}>
+                5Km ({userDetails.request.userAddresses[0].address_city})
+              </Text>
             </View>
 
             <View>
               <Text style={styles.textStyle}>Infos</Text>
               <Text style={styles.bodyText}>
-                J’ai besoin d’aide pour monter les caissons de cuisine IKEA
+                {userDetails.request.description}
               </Text>
             </View>
 
             <View>
               <Text style={styles.textStyle}>Disponibilites</Text>
               <Text style={styles.bodyText}>
-                Lundi matin, jeudi & vendredi soir
+                {userDetails.request.disponibility}
               </Text>
             </View>
           </View>
@@ -105,23 +158,11 @@ export default function DetailScreen(props) {
             width: "100%",
           }}
         >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              props.navigation.navigate("TransactionScreen", {
-                screen: "TransactionScreen",
-              });
-            }}
-          >
+          <TouchableOpacity style={styles.button} onPress={handleAccept}>
             <Text style={styles.buttonTitle}>Accepter</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.buttonBlack}
-            onPress={() => {
-              props.navigation.goBack();
-            }}
-          >
+          <TouchableOpacity style={styles.buttonBlack} onPress={handleRefuse}>
             <Text style={styles.buttonTitleBlack}>Refuser</Text>
           </TouchableOpacity>
         </View>
@@ -129,6 +170,23 @@ export default function DetailScreen(props) {
     </ImageBackground>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAddRequestWillingUsers: function (token) {
+      dispatch({
+        type: "willingusers::refuse",
+        token: token,
+      });
+    },
+  };
+}
+
+function mapStateToProps(state) {
+  return { userDetails: state.userDetailsReducer };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailScreen);
 
 const styles = StyleSheet.create({
   container: {

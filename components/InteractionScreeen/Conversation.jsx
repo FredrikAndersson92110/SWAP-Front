@@ -6,8 +6,6 @@ import {
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 
-import { useFonts } from "expo-font";
-
 import { useNavigation } from "@react-navigation/native";
 // import { connect } from "react-redux";
 

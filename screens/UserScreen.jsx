@@ -31,7 +31,7 @@ const UserScreen = (props) => {
 
   let handleSubmit = async () => {
     let response = await fetch(
-      `https://swapapp-backend.herokuapp.com/users/adress/:token`,
+      `http://localhost:3000/users/adress/:token`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

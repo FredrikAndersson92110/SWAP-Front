@@ -8,13 +8,9 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
+import { Input} from "react-native-elements";
 import { Feather, Entypo } from "@expo/vector-icons";
 import Suggestions from "../components/HomeScreen/Suggestions";
-
-import { useFonts } from "expo-font";
-
-//REDUX
 import { connect } from "react-redux";
 
 const HomeScreen = (props) => {

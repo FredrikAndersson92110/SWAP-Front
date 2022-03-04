@@ -28,11 +28,14 @@ export default function LoginScreen(props) {
     }
 
     // Véririfcation du couple Mail/MDP en backend
-    let response = await fetch(`http://localhost:3000/users/sign-in`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `email=${lowerCaseEmail}&password=${password}`,
-    });
+    let response = await fetch(
+      `https://swapapp-backend.herokuapp.com/users/sign-in`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `email=${lowerCaseEmail}&password=${password}`,
+      }
+    );
     response = await response.json();
 
     // Si le couple Mail/MDP est valide
