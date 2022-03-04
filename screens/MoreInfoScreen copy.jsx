@@ -5,47 +5,41 @@ import {
   Text,
   ImageBackground,
   TouchableOpacity,
-  Button,
-  Picker,
 } from "react-native";
-import { Image, Input } from "react-native-elements";
+// import { Input } from "react-native-elements";
 // import DatePicker from "react-native-datepicker";
 // import DateField from 'react-native-datefield';
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useFonts } from "expo-font";
+// import DateTimePicker from "@react-native-community/datetimepicker";
+// import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 
-export default function ConnexionScreen(props) {
-  const [selectedValue, setSelectedValue] = useState("java");
+//Composants
+import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
+import DropDownGender from "../components/MoreInfoScreen/DropDownGender";
 
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+export default function MoreInfoScreen(props) {
+  //
+  // ─── VALIDATION DU FORMULAIRE ───────────────────────────────────────────────────
+  //
+  const handleSubmit = () => {};
 
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: "blue" }]}>
-          Dropdown label
-        </Text>
-      );
-    }
-    return null;
-  };
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-  };
+  // const [date, setDate] = useState(new Date());
+  // const [mode, setMode] = useState("date");
+  // const [show, setShow] = useState(false);
+
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === "ios");
+  //   setDate(currentDate);
+  // };
 
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode("date");
-  };
+  // const showDatepicker = () => {
+  //   showMode("date");
+  // };
 
   //   const showTimepicker = () => {
   //     showMode('time');
@@ -53,15 +47,14 @@ export default function ConnexionScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../../assets/images/background-2.png")}
+      source={require("../assets/images/background-2.png")}
       resizeMode="cover"
       style={styles.container}
     >
-      <View style={{ marginTop: 50 }}>
-      <KeyboardAwareScrollView>
+      <View style={{ marginTop: 50, alignItems: "center" }}>
         <View style={styles.view1}>
           {/* PAGE TITLE */}
-          <View style={{ alignSelf: "flex-start" }}>
+          <View style={{ alignSelf: "flex-start", alignItems: "center" }}>
             <Text
               style={{
                 color: "black",
@@ -75,9 +68,14 @@ export default function ConnexionScreen(props) {
               Quelques infos...
             </Text>
           </View>
-
           {/* INPUTS */}
-          <View style={{ marginTop: 80 }}>
+          <View
+            style={{
+              marginTop: 80,
+              marginRight: 20,
+              alignContent: "center",
+            }}
+          >
             <View>
               {/* <View>
                 <Button onPress={showDatepicker} title="Show date picker!" />
@@ -85,7 +83,7 @@ export default function ConnexionScreen(props) {
               {/* <View>
                 <Button onPress={showTimepicker} title="Show time picker!" />
               </View> */}
-              {show && (
+              {/* {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={date}
@@ -94,10 +92,9 @@ export default function ConnexionScreen(props) {
                   display="default"
                   onChange={onChange}
                 />
-              )}
+              )} */}
             </View>
-
-            <Text style={styles.label}>Date de naissance</Text>
+            {/* <Text style={styles.label}>Date de naissance</Text>
             <Input
               containerStyle={styles.input}
               inputStyle={{ fontSize: 13 }}
@@ -105,33 +102,16 @@ export default function ConnexionScreen(props) {
               placeholder="jj/mm/aaaa"
               onFocus={() => setShow(true)}
               value={date}
-            />
-
+            /> */}
+            {/* ────────────────────GENRE──────────────────── */}
             <Text style={styles.label}>Genre</Text>
+            <DropDownGender />
 
-            <Input
-              containerStyle={styles.input}
-              inputStyle={{ fontSize: 13 }}
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              placeholder="sélectionner votre genre"
-            />
-
-            <View>
-
-            </View>
+            {/* ────────────────────CATEGORIES──────────────────── */}
 
             <Text style={styles.label}>Catégories</Text>
-
-            <Input
-              containerStyle={styles.input}
-              inputStyle={{ fontSize: 13 }}
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              placeholder="ajouter des catégories"
-            />
-          </View>
-
-          {/* PHRASE D'EXPLICATION */}
-          <View>
+            <DropDownCategories />
+            {/* PHRASE D'EXPLICATION */}
             <Text
               style={{
                 color: "black",
@@ -139,6 +119,7 @@ export default function ConnexionScreen(props) {
                 marginTop: 10,
                 width: 320,
                 fontFamily: "Poppins_400Regular",
+                alignItems: "center",
               }}
             >
               Sélectionner les catégories dans lesquelles vous pourrez aider
@@ -150,15 +131,21 @@ export default function ConnexionScreen(props) {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => props.navigation.navigate("BottomNavigator")}
+              onPress={() => {
+                handleSubmit();
+              }}
             >
               <Text style={styles.text}>Valider</Text>
             </TouchableOpacity>
+            {/* <TouchableOpacity
+              style={styles.button}
+              onPress={() => props.navigation.navigate("MyTabs")}
+            >
+              <Text style={styles.text}>Valider</Text>
+            </TouchableOpacity> */}
           </View>
-
           {/* Fin des composants */}
         </View>
-        </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
   );
@@ -169,12 +156,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     width: "100%",
+    borderWidth: 2,
+    borderColor: "green",
   },
   view1: {
     backgroundColor: "transparent",
     alignItems: "center",
     height: "100%",
     width: "100%",
+    borderWidth: 2,
+    borderColor: "green",
   },
   button: {
     backgroundColor: "#F7CE46",
@@ -200,10 +191,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   input: {
+    justifyContent: "center",
+    alignItems: "center",
     height: 40,
     width: 330,
     fontSize: 13,
-    margin: 15,
+    // margin: 15,
     borderWidth: 2,
     paddingLeft: 15,
     borderRadius: 5,
@@ -214,12 +207,50 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     backgroundColor: "white",
     elevation: 3,
+
+    borderWidth: 2,
+    borderColor: "red",
   },
   label: {
     fontFamily: "Poppins_500Medium",
-    fontSize: 12,
+    fontSize: 14,
     marginLeft: 15,
     paddingLeft: 15,
     bottom: -10,
+  },
+  container1: {
+    alignItems: "center",
+    // justifyContent: "center",
+    height: 40,
+    width: 330,
+    fontSize: 13,
+    margin: 15,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: "#E7E7E7",
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+    elevation: 3,
+
+    borderWidth: 2,
+    borderColor: "orange",
+  },
+  select1: {
+    flex: 1,
+    margin: 2,
+    height: "100%",
+    width: 330,
+    fontSize: 13,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 0,
+    borderColor: "#E7E7E7",
+    backgroundColor: "red",
+    borderRadius: 5,
+
+    borderWidth: 2,
+    borderColor: "red",
   },
 });

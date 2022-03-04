@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Image, Input } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,33 +26,32 @@ const SignUpScreen = (props) => {
   let handleSubmit = async () => {
     //Formatage email en min
     let lowerCaseEmail;
+    lowerCaseEmail = email.toLowerCase();
+
+    //Vérification de l'email (existant ou non?)
     if (email) {
-      lowerCaseEmail = email.toLowerCase();
-    }
-
-    let response = await fetch(
-      `https://swapapp-backend.herokuapp.com/users/sign-up`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `firstName=${firstName}&lastName=${lastName}&email=${lowerCaseEmail}&password=${password}`,
+      let checkEmail = await fetch(
+        `http://localhost:3000/users/check-email/?email=${lowerCaseEmail}`
+      );
+      if (checkEmail) {
+        setErrorMessage("Email déjà utilisé");
       }
-    );
-    response = await response.json();
-
-    //En cas d'inscription validée, stockage du token en local puis ajout USER dans store
-    if (response.user.token) {
-      AsyncStorage.setItem("token", response.user.token);
-      console.log("REPONSE DU BACK ==> ", response.user);
-      props.saveUser(response.user);
-
-      //On redirige vers HOME
-      return navigation.navigate("MoreInfoScreen");
     }
 
-    //En cas de message d'erreur, on affiche ce dernier sur le front
-    if (response.message) {
-      setErrorMessage(response.message);
+    if (firstName && lastName && email && password) {
+
+      console.log("email avant REDUCER :", lowerCaseEmail);
+      //Ajout USER dans le store
+      props.saveUser({
+        firstName: firstName,
+        lastName: lastName,
+        email: lowerCaseEmail,
+        password: password,
+      });
+      //On redirige vers MOREINFOS
+      return navigation.navigate("MoreInfoScreen");
+    } else {
+      setErrorMessage("Veuillez remplir tous les champs");
     }
   };
 
@@ -83,8 +81,6 @@ const SignUpScreen = (props) => {
 
           {/* INPUTS */}
           <View style={{ marginTop: 30 }}>
-            <Text style={styles.error}>{errorMessage}</Text>
-
             <Input
               containerStyle={styles.input}
               inputStyle={{ fontSize: 13 }}
@@ -126,6 +122,7 @@ const SignUpScreen = (props) => {
               placeholder="Mot de passe"
               onChangeText={(text) => setPassword(text)}
             />
+            <Text style={styles.error}>{errorMessage}</Text>
           </View>
 
           {/* TITLE */}

@@ -8,12 +8,9 @@ import {
 
 import { Button, Text, Input } from "react-native-elements";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-
 import RNPickerSelect from "react-native-picker-select";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { useFonts } from "expo-font";
 
 export default function ComposeRequestScreen(props) {
   return (

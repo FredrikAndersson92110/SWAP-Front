@@ -15,7 +15,6 @@ import {
 //Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
-import ConnexionScreen from "./screens/ConnexionScreen";
 import CustomScreen from "./screens/CustomScreen";
 import DemoScreen from "./screens/DemoScreen";
 import DetailScreen from "./screens/DetailScreen";
@@ -23,6 +22,7 @@ import HelpScreen from "./screens/HelpScreen";
 import HomeScreen from "./screens/HomeScreen";
 import InteractionsScreen from "./screens/InteractionsScreen";
 import ListRequestScreen from "./screens/ListRequestScreen";
+import SplashScreen from "./screens/SplashScreen";
 
 import MoreInfoScreen from "./screens/MoreInfoScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -44,6 +44,9 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
+
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
 
 const store = createStore(combineReducers({ requestsReducer, userReducer }));
 
@@ -155,34 +158,36 @@ function App() {
   };
   return (
     <Provider store={store}>
-      <LoadFonts>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="DemoScreen" component={DemoScreen} />
-            <Stack.Screen name="MyTabs" component={MyTabs} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <LoadFonts>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="SplashScreen" component={SplashScreen} />
 
-            {/* <Stack.Screen name="ConnexionScreen" component={ConnexionScreen} /> */}
+              <Stack.Screen name="DemoScreen" component={DemoScreen} />
+              <Stack.Screen name="MyTabs" component={MyTabs} />
 
-            <Stack.Screen name="MoreInfoScreen" component={MoreInfoScreen} />
-            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-            <Stack.Screen name="SignInScreen" component={SignInScreen} />
+              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+              <Stack.Screen name="SignInScreen" component={SignInScreen} />
+              <Stack.Screen name="MoreInfoScreen" component={MoreInfoScreen} />
 
-            {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+              {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
 
-            <Stack.Screen
-              name="TinderScreen"
-              options={{
-                cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-              }}
-              component={TinderScreen}
-            />
-            <Stack.Screen
-              name="TransactionScreen"
-              component={TransactionScreen}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </LoadFonts>
+              <Stack.Screen
+                name="TinderScreen"
+                options={{
+                  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                }}
+                component={TinderScreen}
+              />
+              <Stack.Screen
+                name="TransactionScreen"
+                component={TransactionScreen}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </LoadFonts>
+      </ApplicationProvider>
     </Provider>
   );
 }

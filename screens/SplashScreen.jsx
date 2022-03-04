@@ -1,29 +1,20 @@
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image} from "react-native";
-
-import { useNavigation } from "@react-navigation/native";
-import Onboarding from "../components/DemoScreen/Onboarding";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 import { connect } from "react-redux";
 
-const DemoScreen = (props) => {
-
-  const [visible, setVisible] = useState(true);
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
-
-  const navigation = useNavigation();
-
-  let loadPage = false;
+const SplashScreen = (props) => {
+  AsyncStorage.clear();
+  let token;
 
   useEffect(async () => {
     // SI un token est présent en local storage ==> rredirection vers la page HOME + recupération des données USER que l'on stock dans le store
     AsyncStorage.getItem("token", async function (error, data) {
-      console.log("token sent to back ==>", data);
+      console.log("token sent to back ==>",data);
       if (data) {
+
         let response = await fetch(
           `https://swapapp-backend.herokuapp.com/users/get-user/${data}`
         );
@@ -33,25 +24,20 @@ const DemoScreen = (props) => {
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
         return props.navigation.navigate("MyTabs");
-      } else {
-        loadPage = true;
+      } else if (data == null) {
+        return props.navigation.navigate("DemoScreen");
       }
     });
   }, []);
 
 
     return (
-      <View style={styles.container}>
-        <Text
-          style={styles.skip}
-          onPress={() => {
-            props.navigation.navigate("SignUpScreen");
-          }}
-        >
-          Passer
-        </Text>
-        <Onboarding />
-        <StatusBar style="auto" />
+      <View style={styles.overlay}>
+        <Image
+          style={styles.image}
+          resizeMode={"contain"}
+          source={require("../assets/splash.png")}
+        ></Image>
       </View>
     );
   
@@ -86,8 +72,8 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
   image: {
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
 
 function mapStateToProps(state) {
@@ -101,4 +87,4 @@ function mapDispatchToProps(dispatch) {
     },
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(DemoScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
