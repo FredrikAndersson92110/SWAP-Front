@@ -57,7 +57,7 @@ export default function Conversation({
             <Text
               style={{ color: "#8B8B8B", fontFamily: "Poppins_400Regular" }}
             >
-              {lastMessage}
+              {lastMessage.message}
             </Text>
           </View>
         </ListItem>
