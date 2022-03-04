@@ -31,7 +31,7 @@ const SignUpScreen = (props) => {
     //Vérification de l'email (existant ou non?)
     if (email) {
       let checkEmail = await fetch(
-        `http://localhost:3000/users/check-email/?email=${lowerCaseEmail}`
+        `https://swapapp-backend.herokuapp.com:3000/users/check-email/?email=${lowerCaseEmail}`
       );
       if (checkEmail) {
         setErrorMessage("Email déjà utilisé");

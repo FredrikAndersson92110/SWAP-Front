@@ -29,7 +29,7 @@ const MoreInfoScreen = (props) => {
       setError(null);
 
       let response = await fetch(
-        `http://localhost:3000/users/sign-up`,
+        `https://swapapp-backend.herokuapp.com:3000/users/sign-up`,
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
