@@ -44,6 +44,7 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
+// import statusReducer from "./reducers/status.reducer";
 
 const store = createStore(combineReducers({ requestsReducer, userReducer }));
 

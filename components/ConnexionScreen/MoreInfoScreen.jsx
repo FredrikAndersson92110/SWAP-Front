@@ -151,7 +151,7 @@ export default function ConnexionScreen(props) {
           <View>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => props.navigation.navigate("BottomNavigator")}
+              // onPress={() => props.navigation.navigate("BottomNavigator")}
             >
               <Text style={styles.text}>Valider</Text>
             </TouchableOpacity>
