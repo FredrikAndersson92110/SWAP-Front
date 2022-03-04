@@ -7,22 +7,29 @@ import {
 import { ListItem, Avatar, Text } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
+// import { connect } from "react-redux";
 
+/* -----------------------------FUNCTION---------------------------------------*/
 export default function Conversation({
   name,
   useravatar,
   category,
   lastMessage,
+  request,
+  isAsker,
 }) {
   const navigation = useNavigation();
+
+var openTransaction = () => {
+  navigation.navigate('TransactionScreen')
+  console.log(request, isAsker)
+}
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
-          onPress={() => {
-            navigation.navigate("TransactionScreen");
-          }}
+          onPress={() => openTransaction()}
           Component={TouchableHighlight}
           containerStyle={{
             backgroundColor: "transparent",
@@ -71,6 +78,23 @@ export default function Conversation({
     </>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getRequestInfos: function (request, isAsker) {
+      dispatch({ type: "getRequestInfos", request, isAsker });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Conversation);
+
+
+//
+// ─────────────────────────────────────────────────── ──────────
+//   :::::: S T Y L E S : :  :   :    :     :        :          :
+// ──────────────────────────────────────────────────────────────
+//
 
 const styles = StyleSheet.create({
   container: {

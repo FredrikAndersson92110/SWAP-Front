@@ -15,7 +15,21 @@ const handleSubmit = async () => {
  return navigation.navigate("UserScreen")
 }
   
-  let source = require("../../assets/avatar.png");
+let source = require("../../assets/avatar.png");
+
+  
+// let handleSubmit = async () => {
+//   let response = await fetch(
+//     `https://swapapp-backend.herokuapp.com/users/adress/:`,
+//     {
+//       method: "PUT",
+//       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+//       body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+//       // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
+//     }
+//   );
+//   response = await response.json();
+// };
 
   return (
     <View style={styles.container}>
@@ -73,8 +87,8 @@ const handleSubmit = async () => {
 
             <TouchableOpacity
               style={styles.button2}
-              onPress={() => { setConfirm(true), {/* reducer pour changer status dans le store */} }
-              }
+              // onPress={() => { setConfirm(true), {/* reducer pour changer status dans le store */} }
+              // }
             >
               <Text style={styles.text2}>Confirmer</Text>
             </TouchableOpacity>
