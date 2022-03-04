@@ -7,13 +7,41 @@ import {
   ImageBackground,
   ScrollView,
   SafeAreaView,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Input } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+// Outils pour dynamiser le compteur 
+// import AnimateNumber from "react-native-animate-number";
+import { connect } from "react-redux";
 
 import { useFonts } from "expo-font";
 
-export default HomeScreen = (props) => {
+const UserScreen = (props) => {
+  const [adress1, setAdress1] = useState();
+  const [adress2, setAdress2] = useState();
+  const [cp1, setCp1] = useState();
+  const [cp2, setCp2] = useState();
+  const [comp1, setComp1] = useState();
+  const [comp2, setComp2] = useState();
+  const [comp3, setComp3] = useState();
+  const [comp4, setComp4] = useState();
+  const [isEditable, setIsEditable] = useState(false);
+  const [isModif, setIsModif] = useState("");
+
+  let handleSubmit = async () => {
+    let response = await fetch(
+      `http://localhost:3000/users/adress/:token`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+        // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
+      }
+    );
+    response = await response.json();
+  };
+
   const [loaded] = useFonts({
     Poppins_600SemiBold: require("../assets/fonts/Poppins-Bold.ttf"),
     Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
@@ -23,6 +51,10 @@ export default HomeScreen = (props) => {
   if (!loaded) {
     return null;
   }
+  const updateState = () => {
+    setIsEditable(!isEditable);
+    setIsModif("Informations à compléter");
+  };
 
   return (
     <ImageBackground
@@ -54,7 +86,7 @@ export default HomeScreen = (props) => {
             >
               <Avatar.Accessory size={23} />
             </Avatar>
-            <Text style={styles.boxTitle}>Atman</Text>
+            <Text style={styles.boxTitle}>{props.user.firstName}</Text>
           </View>
 
           {/* Credit Temps */}
@@ -64,10 +96,20 @@ export default HomeScreen = (props) => {
               source={require("../assets/images/HomeScreen/timeCounter.png")}
             />
             <View style={styles.absolute}>
-              <Text style={styles.title3}>3h</Text>
-              <Text style={{ fontSize: 16, fontFamily: "Poppins_500Medium" }}>
+              
+            {/* <AnimateNumber
+                value={props.user.user_credit}
+                countBy={1}
+                timing={(interval, progress) => {
+                  // slow start, slow end
+                  return interval * (1 - Math.sin(Math.PI * progress)) * 50;
+                }}
+              /> */}
+              
+              <Text style={styles.title3}>{props.user.user_credit}H</Text>
+              <Text style={{ fontSize: 14, fontFamily: "Poppins_500Medium" }}>
                 {" "}
-                crédit temps
+                Crédit temps
               </Text>
             </View>
           </View>
@@ -76,38 +118,110 @@ export default HomeScreen = (props) => {
           <View style={styles.container4}>
             <View style={styles.container4}>
               <Text style={styles.title}>
-                Mes infos <FontAwesome name="gear" size={20} color="black" />
+                Mes infos{" "}
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    updateState();
+                    handleSubmit();
+                  }}
+                >
+                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                </TouchableWithoutFeedback>
               </Text>
             </View>
 
             <View style={styles.container4}>
-              <Text style={styles.title2}>Kim Chi , 25 ans</Text>
-            </View>
-
-            <View style={styles.container4}>
-              <Text style={styles.title2}>Adresse 1 </Text>
-              <Text style={styles.text}>114 Avenue des Champs Elysées</Text>
-              <Text style={styles.text}>75008</Text>
-            </View>
-
-            <View style={styles.container4}>
-              <Text style={styles.title2}>Adresse 2 </Text>
-              <Text style={styles.text}>
-                17 Avenue du style chiant à mourir
+              <Text style={styles.title2}>
+                {" "}
+                {props.user.firstName} , {props.user.age}
               </Text>
-              <Text style={styles.text}>75004</Text>
+            </View>
+
+            <View style={styles.container4}>
+              <Text style={styles.title2}>Adresse principale </Text>
+              <Text style={styles.title2}>{isModif}</Text>
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder={"Adresse principale"}
+                onChangeText={(text) => setAdress1(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Code postal"
+                onChangeText={(text) => setCp1(text)}
+                editable={isEditable}
+              />
+            </View>
+
+            <View style={styles.container4}>
+              <Text style={styles.title2}>Adresse secondaire </Text>
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Adresse secondaire"
+                onChangeText={(text) => setAdress2(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Code postal"
+                onChangeText={(text) => setCp2(text)}
+                editable={isEditable}
+              />
             </View>
 
             <View style={styles.container4}>
               <Text style={styles.title}>
                 Mes compétences{" "}
-                <FontAwesome name="gear" size={20} color="black" />
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    updateState();
+                  }}
+                >
+                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                </TouchableWithoutFeedback>
               </Text>
 
-              <Text style={styles.text}>Bricolage </Text>
-              <Text style={styles.text}>Cours de piano</Text>
-              <Text style={styles.text}>Soutien scolaire</Text>
-              <Text style={styles.text}>Cours de piano</Text>
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Indiquez ici vos talents ! "
+                onChangeText={(text) => setComp1(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Indiquez ici vos talents ! "
+                onChangeText={(text) => setComp2(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Indiquez ici vos talents ! "
+                onChangeText={(text) => setComp3(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Indiquez ici vos talents ! "
+                onChangeText={(text) => setComp4(text)}
+                editable={isEditable}
+              />
             </View>
           </View>
         </ScrollView>
@@ -147,7 +261,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 50,
-    marginBottom: 50,
+    marginBottom: 20,
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
@@ -158,13 +272,12 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "100%",
     flex: 1,
-
     borderWidth: 0,
     borderRadius: 15,
     flexDirection: "column",
     backgroundColor: "white",
-    marginBottom: 20,
-    paddingVertical: 15,
+    marginBottom: 0,
+    paddingVertical: 5,
   },
   boxTitle: {
     fontFamily: "Poppins_600SemiBold",
@@ -203,12 +316,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 7,
   },
+  input2: {
+    padding: 0,
+    textAlign: "left",
+    // backgroundColor: "white",
+    borderRadius: 10,
+    marginLeft: 30,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+  },
   fonts: {
     marginBottom: 8,
   },
 
   timeCounter: {
-    width: "40%",
+    width: "30%",
     height: 120,
     resizeMode: "contain",
   },
@@ -221,7 +345,7 @@ const styles = StyleSheet.create({
   title2: {
     fontFamily: "Poppins_600SemiBold",
     marginVertical: 4,
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 30,
   },
   text: {
@@ -245,3 +369,9 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_600SemiBold",
   },
 });
+
+function mapStateToProps(state) {
+  return { user: state.userReducer };
+}
+
+export default connect(mapStateToProps, null)(UserScreen);

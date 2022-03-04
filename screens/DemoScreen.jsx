@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { Overlay } from "react-native-elements";
+
 import { useNavigation } from "@react-navigation/native";
 import Onboarding from "../components/DemoScreen/Onboarding";
 
@@ -9,8 +11,16 @@ import Onboarding from "../components/DemoScreen/Onboarding";
 import { connect } from "react-redux";
 
 const DemoScreen = (props) => {
-  AsyncStorage.clear();
+  // AsyncStorage.clear();
+
+  const [visible, setVisible] = useState(true);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   const navigation = useNavigation();
+
+  let loadPage = false;
 
   useEffect(async () => {
     // SI un token est présent en local storage ==> rredirection vers la page HOME + recupération des données USER que l'on stock dans le store
@@ -25,26 +35,42 @@ const DemoScreen = (props) => {
         // console.log("recuparation user grace TOKEN : ", response.user);
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
+<<<<<<< HEAD
 
         return props.navigation.navigate("MyTabs");
+=======
+        return props.navigation.navigate("MyTabs");
+      } else {
+        loadPage = true;
+>>>>>>> 4b4bae7cfb1975c81e1dd2f4a8f4dd9ed84eb5a3
       }
     });
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text
-        style={styles.skip}
-        onPress={() => {
-          props.navigation.navigate("SignUpScreen");
-        }}
-      >
-        Passer
-      </Text>
-      <Onboarding />
-      <StatusBar style="auto" />
-    </View>
-  );
+  if (loadPage === true) {
+    return (
+      <View style={styles.container}>
+        <Text
+          style={styles.skip}
+          onPress={() => {
+            props.navigation.navigate("SignUpScreen");
+          }}
+        >
+          Passer
+        </Text>
+        <Onboarding />
+        <StatusBar style="auto" />
+      </View>
+    );
+  } else {
+    return (
+      <>
+        <View style={styles.overlay}>
+        <Text style={styles.overlayText} >SWAP</Text>
+        </View>
+      </>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -63,6 +89,17 @@ const styles = StyleSheet.create({
     color: "lightgrey",
     paddingVertical: 20,
     zIndex: 10,
+  },
+  overlay: {
+    backgroundColor: "#F7CE46",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+  overlayText: {
+    fontFamily: "Poppins_700Bold",
+    fontSize: 55,
   },
 });
 

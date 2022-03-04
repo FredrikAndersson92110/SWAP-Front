@@ -124,7 +124,7 @@ export default function ComposeRequestScreen(props) {
                 });
               }}
             >
-              <Text style={styles.text}>Suivant 1/2</Text>
+              <Text style={styles.text}>Suivant</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>
