@@ -6,8 +6,6 @@ import {
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 
-import { useFonts } from "expo-font";
-
 import { useNavigation } from "@react-navigation/native";
 
 export default function Conversation({
@@ -57,7 +55,7 @@ export default function Conversation({
             <Text
               style={{ color: "#8B8B8B", fontFamily: "Poppins_400Regular" }}
             >
-              {lastMessage}
+              {lastMessage.message}
             </Text>
           </View>
         </ListItem>

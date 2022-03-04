@@ -7,13 +7,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Image, Input } from "react-native-elements";
-<<<<<<< HEAD
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-=======
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useFonts } from "expo-font";
->>>>>>> c68b2044b62320f634f8b567161de03fbc1b9e43
 
 export default function LoginScreen(props) {
   const navigation = useNavigation();

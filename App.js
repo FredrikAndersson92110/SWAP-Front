@@ -44,11 +44,18 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
+import willingReducer from "./reducers/willing.reducer";
+import userDetailsReducer from "./reducers/userDetails.reducer";
+// import statusReducer from "./reducers/status.reducer";
 
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
-
-const store = createStore(combineReducers({ requestsReducer, userReducer }));
+const store = createStore(
+  combineReducers({
+    requestsReducer,
+    userReducer,
+    willingReducer,
+    userDetailsReducer,
+  })
+);
 
 //Navigation
 const Tab = createBottomTabNavigator();

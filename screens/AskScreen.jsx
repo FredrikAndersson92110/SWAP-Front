@@ -1,20 +1,76 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   ImageBackground,
   ScrollView,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
-import { Feather, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
-import { useFonts } from "expo-font";
+import { useIsFocused } from "@react-navigation/native";
 
-export default function AskScreen(props) {
+import Request from "../components/AskScreen/Request";
+import { connect } from "react-redux";
+
+function AskScreen({
+  onAddRequestWillingUsers,
+  navigation,
+  willingUserRequests,
+}) {
+  const isFocused = useIsFocused();
+
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (isFocused) {
+      async function getRequests() {
+        let request = await fetch(
+          "https://swapapp-backend.herokuapp.com/get-willing-users/jCtcpVHel4JXMvk57FuELUxmHPyZit21"
+        );
+        let response = await request.json();
+        if (response.status) {
+          onAddRequestWillingUsers(response.requests);
+        } else {
+          setMessage(response.message);
+        }
+      }
+      getRequests();
+    }
+  }, [isFocused]);
+
+  let requests = [];
+  willingUserRequests.forEach((req) => {
+    let tempUsers = req.willing_users.map((user) => {
+      return {
+        ...user,
+        category: req.category,
+        requestId: req._id,
+      };
+    });
+    requests = requests.concat(tempUsers);
+  });
+  let requestList = requests.map((req, i) => {
+    return (
+      <Request
+        key={i}
+        isAsker={true}
+        requestId={req.requestId}
+        currentRequest={req}
+        location={req.userAddresses[0].address_city}
+        willingUserToken={req.token}
+        name={req.firstName}
+        useravatar={req.user_img}
+        category={
+          req.category.sub_category
+            ? req.category.sub_category
+            : req.category.category
+        }
+      />
+    );
+  });
 
   return (
     <ImageBackground
@@ -26,7 +82,7 @@ export default function AskScreen(props) {
         <View styles={{ marginTop: 50 }}>
           <TouchableWithoutFeedback
             onPress={() => {
-              props.navigation.navigate("ComposeRequestScreen", {
+              navigation.navigate("ComposeRequestScreen", {
                 screen: "ComposeRequestScreen",
               });
             }}
@@ -36,7 +92,7 @@ export default function AskScreen(props) {
 
           <Input
             onPressIn={() => {
-              props.navigation.navigate("ComposeRequestScreen", {
+              navigation.navigate("ComposeRequestScreen", {
                 screen: "ComposeRequestScreen",
               });
             }}
@@ -51,7 +107,7 @@ export default function AskScreen(props) {
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
             onPressIn={() => {
-              props.navigation.navigate("ComposeRequestScreen");
+              navigation.navigate("ComposeRequestScreen");
             }}
           />
         </View>
@@ -66,158 +122,30 @@ export default function AskScreen(props) {
           {/* PAGE TITLE */}
           <View style={{ paddingHorizontal: 10 }}>
             <Text style={styles.pageTitle}>Mes demandes</Text>
-            <Text
-              style={{
-                paddingRight: 30,
-                marginBottom: 20,
-                fontFamily: "Poppins_400Regular",
-                fontSize: 12,
-              }}
-            >
-              Accepte des missions pour ajouter du temps à ton compteur
-            </Text>
           </View>
-
-          <Text
-            style={{
-              paddingLeft: 10,
-              marginBottom: 10,
-              fontFamily: "Poppins_600SemiBold",
-            }}
-          >
-            Demande de cours de Chinois
-          </Text>
-
-          {/* CARD */}
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
-              <View>
-                <Text style={styles.cardTitle}>Théo</Text>
-                <Text style={styles.bodyText}>
-                  Propose des cours de chinois
-                </Text>
-
-                {/* CITY */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: 8,
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="map-marker-radius"
-                    size={16}
-                    color="#F7CE46"
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={styles.bodyText}>Courbevoie (6 km)</Text>
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                props.navigation.navigate("DetailScreen", {
-                  screen: "DetailScreen",
-                });
-              }}
-            >
-              <Text style={styles.text}>Détails</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* CARD */}
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
-              <View>
-                <Text style={styles.cardTitle}>Théo</Text>
-                <Text style={styles.bodyText}>
-                  Propose des cours de chinois
-                </Text>
-
-                {/* CITY */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: 8,
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="map-marker-radius"
-                    size={16}
-                    color="#F7CE46"
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={styles.bodyText}>Courbevoie (6 km)</Text>
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                props.navigation.navigate("DetailScreen", {
-                  screen: "DetailScreen",
-                });
-              }}
-            >
-              <Text style={styles.text}>Détails</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* CARD */}
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
-              <View>
-                <Text style={styles.cardTitle}>Théo</Text>
-                <Text style={styles.bodyText}>
-                  Propose des cours de chinois
-                </Text>
-
-                {/* CITY */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: 8,
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="map-marker-radius"
-                    size={16}
-                    color="#F7CE46"
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={styles.bodyText}>Courbevoie (6 km)</Text>
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                props.navigation.navigate("DetailScreen", {
-                  screen: "DetailScreen",
-                });
-              }}
-            >
-              <Text style={styles.text}>Détails</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Request */}
+          {requestList}
+          {/* end */}
         </ScrollView>
       </View>
+      <View style={{ marginBottom: 70 }}></View>
     </ImageBackground>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAddRequestWillingUsers(data) {
+      dispatch({ type: "user::willingusers", requests: data });
+    },
+  };
+}
+
+function mapStatetoProps(state) {
+  return { willingUserRequests: state.willingReducer };
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(AskScreen);
 
 const styles = StyleSheet.create({
   container: {
