@@ -1,19 +1,3 @@
-//
-// ──────────────────────────────────────────────────────────────────────── I ──────────
-//   :::::: FONTS : :  :   :    :     :        :          :
-// ──────────────────────────────────────────────────────────────────────────────────
-//
-
-const [loaded] = useFonts({
-  Poppins_700Bold: require("../assets/fonts/Poppins-Bold.ttf"),
-  Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-  Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  Poppins_600SemiBold: require("../../assets/fonts/Poppins-SemiBold.ttf"),
-});
-
-if (!loaded) {
-  return null;
-}
 
 //
 // ─── YELLOW BUTTONS ─────────────────────────────────────────────────────────────
@@ -61,21 +45,3 @@ const styles = StyleSheet.create({
   },
 });
 
-//
-// ────────────────────────────────────────────────── I ──────────
-//   :::::: F O N T S : :  :   :    :     :        :          :
-// ────────────────────────────────────────────────────────────
-//
-import { useFonts } from "expo-font";
-
-const [loaded] = useFonts({
-  Poppins_700Bold: require("../assets/fonts/Poppins-Bold.ttf"),
-  Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-  Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  ChivoBlack: require("../assets/fonts/Chivo-Black.ttf"),
-  ChivoBold: require("../assets/fonts/Chivo-Bold.ttf"),
-});
-
-if (!loaded) {
-  return null;
-}
