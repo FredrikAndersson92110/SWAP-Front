@@ -35,14 +35,9 @@ const DemoScreen = (props) => {
         // console.log("recuparation user grace TOKEN : ", response.user);
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
-<<<<<<< HEAD
-
-        return props.navigation.navigate("MyTabs");
-=======
         return props.navigation.navigate("MyTabs");
       } else {
         loadPage = true;
->>>>>>> 4b4bae7cfb1975c81e1dd2f4a8f4dd9ed84eb5a3
       }
     });
   }, []);
@@ -66,7 +61,7 @@ const DemoScreen = (props) => {
     return (
       <>
         <View style={styles.overlay}>
-        <Text style={styles.overlayText} >SWAP</Text>
+          <Text style={styles.overlayText}>SWAP</Text>
         </View>
       </>
     );
