@@ -14,15 +14,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
 export default function HelpScreen(props) {
-  const [loaded] = useFonts({
-    Poppins_700Bold: require("../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
 
-  if (!loaded) {
-    return null;
-  }
   return (
     <ImageBackground
       style={styles.ImageBackground}

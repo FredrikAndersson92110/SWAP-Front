@@ -9,7 +9,6 @@ import {
 
 import Conversation from "../components/InteractionScreeen/Conversation";
 
-import { useFonts } from "expo-font";
 
 import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
@@ -38,15 +37,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     }
   }, [isFocused]);
 
-  const [loaded] = useFonts({
-    Poppins_700Bold: require("../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
 
-  if (!loaded) {
-    return null;
-  }
 
   let conversations = [];
   requests.forEach((req) => {
@@ -131,12 +122,12 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
         </View>
         <View style={styles.box}>{requestList}</View>
       </ScrollView>
-      <Button
+      {/* <Button
         title={"errorScreen"}
         onPress={() => {
           navigation.navigate("ErrorScreen", { screen: "ErrorScreen" });
         }}
-      />
+      /> */}
     </ImageBackground>
   );
 }

@@ -18,15 +18,6 @@ export default function Conversation({
 }) {
   const navigation = useNavigation();
 
-  const [loaded] = useFonts({
-    Poppins_700Bold: require("../../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../../assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
   return (
     <>
       <TouchableWithoutFeedback>
