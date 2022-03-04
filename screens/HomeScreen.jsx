@@ -73,7 +73,7 @@ const HomeScreen = (props) => {
                 { fontSize: 25, fontFamily: "Poppins_600SemiBold" })
               }
             >
-              {props.user.user_credit}h
+              {props.user.user_credit ? props.user.user_credit : "1"}h
             </Text>
             <Text
               style={
@@ -125,14 +125,17 @@ const HomeScreen = (props) => {
               />
             </TouchableWithoutFeedback>
             <Image
-              source={require("../assets/avatar.png")}
+              source={{
+                uri: props.user.user_img
+              }}
               style={{
                 borderRadius: 50,
                 height: 55,
                 width: 55,
                 position: "relative",
-                left: "42.5%",
-                bottom: "70%",
+                left: "50%",
+                marginLeft: -27,
+                bottom: "64%",
               }}
             />
           </View>

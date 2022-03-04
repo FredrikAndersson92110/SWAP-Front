@@ -8,11 +8,17 @@ import {
 
 import { Button, Text, Input } from "react-native-elements";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
+import { Dropdown } from "react-native-element-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 export default function ComposeRequestScreen(props) {
+const data = [
+  { label: "Femme", value: "female" },
+  { label: "Homme", value: "male" },
+  { label: "Non Binaire", value: "non binary" },
+];
+
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -68,7 +74,26 @@ export default function ComposeRequestScreen(props) {
           <Text style={styles.textTitle}>Lieu</Text>
 
           <View style={styles.card}>
-            <RNPickerSelect
+            <Dropdown
+              style={styles.input}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              dropdownPosition="auto"
+              search={false}
+              data={data}
+              labelField="label"
+              valueField="value"
+              placeholder={selected.label}
+              value={selected}
+              onChange={(item) => {
+                setSelected(item);
+              }}
+              selectedStyle={styles.selectedStyle}
+              containerStyle={styles.dropContainer}
+            />
+            {/* <RNPickerSelect
               style={styles.input}
               placeholder={{
                 label: "Sélectionnez votre position",
@@ -86,7 +111,7 @@ export default function ComposeRequestScreen(props) {
                   value: "Adresse principale",
                 },
               ]}
-            />
+            /> */}
           </View>
 
           <Text style={styles.textTitle}>Mes disponibilités</Text>

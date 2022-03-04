@@ -15,7 +15,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
 
-import { useFonts } from "expo-font";
 
 const UserScreen = (props) => {
   const [adress1, setAdress1] = useState();
@@ -42,15 +41,6 @@ const UserScreen = (props) => {
     response = await response.json();
   };
 
-  const [loaded] = useFonts({
-    Poppins_600SemiBold: require("../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
   const updateState = () => {
     setIsEditable(!isEditable);
     setIsModif("Informations à compléter");
@@ -79,7 +69,7 @@ const UserScreen = (props) => {
               size={64}
               rounded
               source={{
-                uri: "https://www.brain-magazine.fr/m/posts/51944/originals/dragisbeautiful.jpg",
+                uri: props.user.user_img,
               }}
               title="KIM CHI"
               containerStyle={{ backgroundColor: "grey" }}
@@ -96,8 +86,7 @@ const UserScreen = (props) => {
               source={require("../assets/images/HomeScreen/timeCounter.png")}
             />
             <View style={styles.absolute}>
-              
-            {/* <AnimateNumber
+              {/* <AnimateNumber
                 value={props.user.user_credit}
                 countBy={1}
                 timing={(interval, progress) => {
@@ -105,10 +94,10 @@ const UserScreen = (props) => {
                   return interval * (1 - Math.sin(Math.PI * progress)) * 50;
                 }}
               /> */}
-              
+
               <Text style={styles.title3}>{props.user.user_credit}H</Text>
               <Text style={{ fontSize: 14, fontFamily: "Poppins_500Medium" }}>
-                {" "}
+
                 Crédit temps
               </Text>
             </View>
@@ -118,14 +107,14 @@ const UserScreen = (props) => {
           <View style={styles.container4}>
             <View style={styles.container4}>
               <Text style={styles.title}>
-                Mes infos{" "}
+                Mes infos
                 <TouchableWithoutFeedback
                   onPress={() => {
                     updateState();
                     handleSubmit();
                   }}
                 >
-                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                  <FontAwesome name="gear" size={30} color="#F7CE46" />
                 </TouchableWithoutFeedback>
               </Text>
             </View>
@@ -186,7 +175,7 @@ const UserScreen = (props) => {
                     updateState();
                   }}
                 >
-                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                  <FontAwesome name="gear" size={30} color="#F7CE46" />
                 </TouchableWithoutFeedback>
               </Text>
 
@@ -277,6 +266,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     marginBottom: 0,
+    justifyContent: "center",
     paddingVertical: 5,
   },
   boxTitle: {
@@ -332,8 +322,8 @@ const styles = StyleSheet.create({
   },
 
   timeCounter: {
-    width: "30%",
-    height: 120,
+    width: "38%",
+    height: 130,
     resizeMode: "contain",
   },
   title: {
@@ -341,6 +331,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     fontSize: 18,
     marginLeft: 30,
+    justifyContent: "center"
   },
   title2: {
     fontFamily: "Poppins_600SemiBold",
