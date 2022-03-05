@@ -14,10 +14,13 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // Outils pour dynamiser le compteur 
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-import { useFonts } from "expo-font";
 
 const UserScreen = (props) => {
+  const navigation = useNavigation();
+
   const [adress1, setAdress1] = useState();
   const [adress2, setAdress2] = useState();
   const [cp1, setCp1] = useState();
@@ -42,15 +45,18 @@ const UserScreen = (props) => {
     response = await response.json();
   };
 
-  const [loaded] = useFonts({
-    Poppins_600SemiBold: require("../assets/fonts/Poppins-Bold.ttf"),
-    Poppins_400Regular: require("../assets/fonts/Poppins-Regular.ttf"),
-    Poppins_500Medium: require("../assets/fonts/Poppins-Medium.ttf"),
-  });
+  const logOut = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+    } catch (e) {
+      console.log(e)
+      // clear error
+    }
 
-  if (!loaded) {
-    return null;
+    console.log("Token removed from local storage (userScreen File)");
+    navigation.navigate("SignInScreen");
   }
+
   const updateState = () => {
     setIsEditable(!isEditable);
     setIsModif("Informations à compléter");
@@ -79,7 +85,7 @@ const UserScreen = (props) => {
               size={64}
               rounded
               source={{
-                uri: "https://www.brain-magazine.fr/m/posts/51944/originals/dragisbeautiful.jpg",
+                uri: props.user.user_img,
               }}
               title="KIM CHI"
               containerStyle={{ backgroundColor: "grey" }}
@@ -87,6 +93,18 @@ const UserScreen = (props) => {
               <Avatar.Accessory size={23} />
             </Avatar>
             <Text style={styles.boxTitle}>{props.user.firstName}</Text>
+
+            <Text
+              style={{
+                position: "absolute",
+                right: 40,
+                fontFamily: "Poppins_600SemiBold",
+                fontSize: 14,
+              }}
+              onPress={ ()=> logOut() }
+            >
+              Deconnexion
+            </Text>
           </View>
 
           {/* Credit Temps */}
@@ -96,8 +114,7 @@ const UserScreen = (props) => {
               source={require("../assets/images/HomeScreen/timeCounter.png")}
             />
             <View style={styles.absolute}>
-              
-            {/* <AnimateNumber
+              {/* <AnimateNumber
                 value={props.user.user_credit}
                 countBy={1}
                 timing={(interval, progress) => {
@@ -105,27 +122,26 @@ const UserScreen = (props) => {
                   return interval * (1 - Math.sin(Math.PI * progress)) * 50;
                 }}
               /> */}
-              
+
               <Text style={styles.title3}>{props.user.user_credit}H</Text>
               <Text style={{ fontSize: 14, fontFamily: "Poppins_500Medium" }}>
-                {" "}
                 Crédit temps
               </Text>
             </View>
           </View>
 
           {/* Informations User */}
-          <View style={styles.container4}>
+          <View style={styles.card}>
             <View style={styles.container4}>
               <Text style={styles.title}>
-                Mes infos{" "}
+                Mes infos
                 <TouchableWithoutFeedback
                   onPress={() => {
                     updateState();
                     handleSubmit();
                   }}
                 >
-                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                  <FontAwesome name="gear" size={30} color="#F7CE46" />
                 </TouchableWithoutFeedback>
               </Text>
             </View>
@@ -186,7 +202,7 @@ const UserScreen = (props) => {
                     updateState();
                   }}
                 >
-                  <FontAwesome name="gear" size={40} color="#F7CE46" />
+                  <FontAwesome name="gear" size={30} color="#F7CE46" />
                 </TouchableWithoutFeedback>
               </Text>
 
@@ -237,11 +253,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 0,
     flexDirection: "row",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
   },
 
   container2: {
@@ -262,10 +273,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
     marginBottom: 20,
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
     marginLeft: 25,
   },
   container4: {
@@ -277,7 +284,25 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     marginBottom: 0,
+    justifyContent: "center",
     paddingVertical: 5,
+  },
+  card: {
+    width: "90%",
+    height: "100%",
+    flex: 1,
+    borderWidth: 0,
+    borderRadius: 15,
+    flexDirection: "column",
+    backgroundColor: "white",
+    marginBottom: 0,
+    justifyContent: "center",
+    paddingVertical: 5,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+    elevation: 6
   },
   boxTitle: {
     fontFamily: "Poppins_600SemiBold",
@@ -332,8 +357,8 @@ const styles = StyleSheet.create({
   },
 
   timeCounter: {
-    width: "30%",
-    height: 120,
+    width: "38%",
+    height: 130,
     resizeMode: "contain",
   },
   title: {
@@ -341,6 +366,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     fontSize: 18,
     marginLeft: 30,
+    justifyContent: "center",
   },
   title2: {
     fontFamily: "Poppins_600SemiBold",

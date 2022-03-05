@@ -4,11 +4,8 @@ import {
   ImageBackground,
   StyleSheet,
   ScrollView,
-  Button,
 } from "react-native";
-
 import Conversation from "../components/InteractionScreeen/Conversation";
-
 import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
@@ -18,6 +15,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
 
   const [message, setMessage] = useState("");
 
+  // chercher les matches de requêtes
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -36,6 +34,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     }
   }, [isFocused]);
 
+  // tri des données du requestSchema à récupérer
+  //  if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les autres plutôt que ma vignette.
   let conversations = [];
   requests.forEach((req) => {
     if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
@@ -65,10 +65,12 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     }
   });
 
+  //  maps générant les échanges à partir du tableau conversation créé au dessus. (contient les messages tchat notamment)
   let requestList = conversations.map((conversation, i) => {
     if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
       return (
         <Conversation
+          request={conversation}
           key={i}
           isAsker={true}
           name={conversation.conversation_id.firstName}
@@ -88,6 +90,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     } else {
       return (
         <Conversation
+          request={conversation}
           key={i}
           isAsker={false}
           name={conversation.asker.firstName}
@@ -113,9 +116,51 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       source={require("../assets/images/background-2.png")}
       resizeMode="cover"
     >
+      <View style={{ marginTop: 50 }}>
+        <Text style={styles.boxTitle}>Mes échanges</Text>
+      </View>
       <ScrollView style={{ paddingBottom: 50, flex: 1 }}>
-        <View style={{ marginTop: 50 }}>
-          <Text style={styles.boxTitle}>Mes échanges</Text>
+        <View style={styles.legendView}>
+          <View
+            style={{
+              height: 12,
+              width: 27,
+              backgroundColor: "#F7CE46",
+              borderRadius: 10,
+              marginLeft: 20,
+              marginTop: 10,
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: "Poppins_400Regular",
+              marginLeft: 15,
+              marginTop: 10,
+            }}
+          >
+            Mes demandes d'aide
+          </Text>
+        </View>
+        <View style={styles.legendView}>
+          <View
+            style={{
+              height: 12,
+              width: 27,
+              backgroundColor: "#253a78",
+              borderRadius: 10,
+              marginLeft: 20,
+              marginTop: 5,
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: "Poppins_400Regular",
+              marginLeft: 15,
+              marginTop: 5,
+            }}
+          >
+            Mes missions
+          </Text>
         </View>
         <View style={styles.box}>{requestList}</View>
       </ScrollView>
@@ -197,5 +242,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     // fontFamily: "Poppins"
+  },
+  legendView: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

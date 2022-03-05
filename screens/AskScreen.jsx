@@ -108,9 +108,7 @@ function AskScreen({
             leftIcon={
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
-            onPressIn={() => {
-              navigation.navigate("ComposeRequestScreen");
-            }}
+            disabled
           />
         </View>
         <ScrollView
@@ -227,7 +225,7 @@ const styles = StyleSheet.create({
     paddingLeft: 13,
     textAlign: "left",
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 50,
     color: "lightgrey",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },

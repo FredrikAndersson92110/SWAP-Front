@@ -9,7 +9,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
   CardStyleInterpolators,
-  TransitionSpecs,
 } from "@react-navigation/stack";
 
 //Screens
@@ -44,6 +43,7 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
+// import transactionReducer from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
 import categoriesReducer from "./reducers/categories.reducer";

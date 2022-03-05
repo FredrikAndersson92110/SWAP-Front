@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -5,14 +6,30 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-
 import { Button, Text, Input } from "react-native-elements";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
+import { Dropdown } from "react-native-element-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ComposeRequestScreen(props) {
+  const isFocused = useIsFocused();
+
+  const searchInputRef = React.useRef(null);
+
+  const [selected, setSelected] = useState("");
+  const data = [
+    { label: "Femme", value: "female" },
+    { label: "Homme", value: "male" },
+    { label: "Non Binaire", value: "non binary" },
+  ];
+
+  useEffect(() => {
+    if (isFocused) {
+      searchInputRef.current.focus();
+    }
+  }, [isFocused]);
+
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -29,9 +46,7 @@ export default function ComposeRequestScreen(props) {
           >
             <TouchableOpacity
               onPress={() => {
-                props.navigation.navigate("AskScreen", {
-                  screen: "AskScreen",
-                });
+                props.navigation.goBack()
               }}
             >
               <AntDesign name="close" size={24} color="black" />
@@ -51,6 +66,7 @@ export default function ComposeRequestScreen(props) {
             leftIcon={
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
+            ref={searchInputRef}
             placeholderTextColor={{ color: "blue" }}
           />
           <Text style={styles.textTitle}>Description</Text>
@@ -68,7 +84,26 @@ export default function ComposeRequestScreen(props) {
           <Text style={styles.textTitle}>Lieu</Text>
 
           <View style={styles.card}>
-            <RNPickerSelect
+            <Dropdown
+              style={styles.input}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              dropdownPosition="auto"
+              search={false}
+              data={data}
+              labelField="label"
+              valueField="value"
+              placeholder={selected.label}
+              value={selected}
+              onChange={(item) => {
+                setSelected(item);
+              }}
+              selectedStyle={styles.selectedStyle}
+              containerStyle={styles.dropContainer}
+            />
+            {/* <RNPickerSelect
               style={styles.input}
               placeholder={{
                 label: "Sélectionnez votre position",
@@ -86,7 +121,7 @@ export default function ComposeRequestScreen(props) {
                   value: "Adresse principale",
                 },
               ]}
-            />
+            /> */}
           </View>
 
           <Text style={styles.textTitle}>Mes disponibilités</Text>
@@ -148,7 +183,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     textAlign: "left",
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 50,
     color: "black",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
