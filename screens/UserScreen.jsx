@@ -14,9 +14,13 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // Outils pour dynamiser le compteur 
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 
 const UserScreen = (props) => {
+  const navigation = useNavigation();
+
   const [adress1, setAdress1] = useState();
   const [adress2, setAdress2] = useState();
   const [cp1, setCp1] = useState();
@@ -40,6 +44,18 @@ const UserScreen = (props) => {
     );
     response = await response.json();
   };
+
+  const logOut = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+    } catch (e) {
+      console.log(e)
+      // clear error
+    }
+
+    console.log("Token removed from local storage (userScreen File)");
+    navigation.navigate("SignInScreen");
+  }
 
   const updateState = () => {
     setIsEditable(!isEditable);
@@ -77,6 +93,18 @@ const UserScreen = (props) => {
               <Avatar.Accessory size={23} />
             </Avatar>
             <Text style={styles.boxTitle}>{props.user.firstName}</Text>
+
+            <Text
+              style={{
+                position: "absolute",
+                right: 40,
+                fontFamily: "Poppins_600SemiBold",
+                fontSize: 14,
+              }}
+              onPress={ ()=> logOut() }
+            >
+              Deconnexion
+            </Text>
           </View>
 
           {/* Credit Temps */}
@@ -97,14 +125,13 @@ const UserScreen = (props) => {
 
               <Text style={styles.title3}>{props.user.user_credit}H</Text>
               <Text style={{ fontSize: 14, fontFamily: "Poppins_500Medium" }}>
-
                 Crédit temps
               </Text>
             </View>
           </View>
 
           {/* Informations User */}
-          <View style={styles.container4}>
+          <View style={styles.card}>
             <View style={styles.container4}>
               <Text style={styles.title}>
                 Mes infos
@@ -226,11 +253,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 0,
     flexDirection: "row",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
   },
 
   container2: {
@@ -251,10 +273,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
     marginBottom: 20,
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
     marginLeft: 25,
   },
   container4: {
@@ -268,6 +286,23 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     justifyContent: "center",
     paddingVertical: 5,
+  },
+  card: {
+    width: "90%",
+    height: "100%",
+    flex: 1,
+    borderWidth: 0,
+    borderRadius: 15,
+    flexDirection: "column",
+    backgroundColor: "white",
+    marginBottom: 0,
+    justifyContent: "center",
+    paddingVertical: 5,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+    elevation: 6
   },
   boxTitle: {
     fontFamily: "Poppins_600SemiBold",
@@ -331,7 +366,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     fontSize: 18,
     marginLeft: 30,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   title2: {
     fontFamily: "Poppins_600SemiBold",

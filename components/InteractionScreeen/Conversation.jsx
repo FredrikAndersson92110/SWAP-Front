@@ -1,16 +1,16 @@
 import {
   StyleSheet,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 /* -----------------------------FUNCTION---------------------------------------*/
-export default function Conversation({
+function Conversation({
   name,
   useravatar,
   category,
@@ -30,7 +30,7 @@ var openTransaction = () => {
       <TouchableWithoutFeedback>
         <ListItem
           onPress={() => openTransaction()}
-          Component={TouchableHighlight}
+          Component={TouchableOpacity}
           containerStyle={{
             backgroundColor: "transparent",
           }}

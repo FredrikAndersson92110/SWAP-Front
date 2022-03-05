@@ -4,7 +4,6 @@ import {
   ImageBackground,
   StyleSheet,
   ScrollView,
-  Button,
 } from "react-native";
 
 import Conversation from "../components/InteractionScreeen/Conversation";
@@ -12,7 +11,6 @@ import Conversation from "../components/InteractionScreeen/Conversation";
 import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-
 
 function InteractionsScreen({ requests, onAddRequests, navigation }) {
   const isFocused = useIsFocused();
@@ -37,7 +35,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       getRequests();
     }
   }, [isFocused]);
-
 
   // tri des données du requestSchema à récupérer
   //  if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les autres plutôt que ma vignette.
@@ -121,10 +118,10 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       source={require("../assets/images/background-2.png")}
       resizeMode="cover"
     >
-      <ScrollView style={{ paddingBottom: 50, flex: 1 }}>
         <View style={{ marginTop: 50 }}>
           <Text style={styles.boxTitle}>Mes échanges</Text>
         </View>
+      <ScrollView style={{ paddingBottom: 50, flex: 1 }}>
         <View style={styles.box}>{requestList}</View>
       </ScrollView>
       {/* <Button
@@ -150,8 +147,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InteractionsScreen);
-
-
 
 //STYLES
 const styles = StyleSheet.create({

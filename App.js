@@ -9,7 +9,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
   CardStyleInterpolators,
-  TransitionSpecs,
 } from "@react-navigation/stack";
 
 //Screens

@@ -10,7 +10,6 @@ import { Image, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useFonts } from "expo-font";
 
 export default function LoginScreen(props) {
   const navigation = useNavigation();
