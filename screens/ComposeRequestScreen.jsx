@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -5,19 +6,29 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-
 import { Button, Text, Input } from "react-native-elements";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ComposeRequestScreen(props) {
-const data = [
-  { label: "Femme", value: "female" },
-  { label: "Homme", value: "male" },
-  { label: "Non Binaire", value: "non binary" },
-];
+  const isFocused = useIsFocused();
+
+  const searchInputRef = React.useRef(null);
+
+  const [selected, setSelected] = useState("");
+  const data = [
+    { label: "Femme", value: "female" },
+    { label: "Homme", value: "male" },
+    { label: "Non Binaire", value: "non binary" },
+  ];
+
+  useEffect(() => {
+    if (isFocused) {
+      searchInputRef.current.focus();
+    }
+  }, [isFocused]);
 
   return (
     <ImageBackground
@@ -35,9 +46,7 @@ const data = [
           >
             <TouchableOpacity
               onPress={() => {
-                props.navigation.navigate("AskScreen", {
-                  screen: "AskScreen",
-                });
+                props.navigation.goBack()
               }}
             >
               <AntDesign name="close" size={24} color="black" />
@@ -57,6 +66,7 @@ const data = [
             leftIcon={
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
+            ref={searchInputRef}
             placeholderTextColor={{ color: "blue" }}
           />
           <Text style={styles.textTitle}>Description</Text>
@@ -173,7 +183,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     textAlign: "left",
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 50,
     color: "black",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },

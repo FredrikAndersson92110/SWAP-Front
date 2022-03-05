@@ -38,7 +38,15 @@ var openTransaction = () => {
           disabledStyle={{ opacity: 0.5 }}
           pad={20}
         >
-          <Avatar rounded size="medium" source={{ uri: useravatar }} />
+          <Avatar
+            rounded
+            size="medium"
+            source={{ uri: useravatar }}
+            avatarStyle={{
+              borderWidth: 3,
+              borderColor: isAsker ? "#F7CE46" : "#253a78",
+            }}
+          />
           <View style={{ flex: 1, justifyContent: "space-around" }}>
             <View
               style={{
@@ -53,7 +61,7 @@ var openTransaction = () => {
                   flexDirection: "row",
                 }}
               >
-                <Text style={{ color: "#8B8B8B" }}>Demande: </Text>
+                <Text style={{ color: "#8B8B8B" }}>{isAsker ? "Demande:" : "Mission:"} </Text>
                 <Text style={{ fontFamily: "Poppins_700Bold" }}>
                   {category}
                 </Text>

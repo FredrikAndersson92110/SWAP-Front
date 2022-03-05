@@ -102,6 +102,7 @@ const HomeScreen = (props) => {
                 <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
               }
               placeholderTextColor={{ color: "blue" }}
+              disabled
               onPressIn={() => {
                 props.navigation.navigate("ComposeRequestScreen", {
                   screen: "ComposeRequestScreen",
@@ -126,7 +127,7 @@ const HomeScreen = (props) => {
             </TouchableWithoutFeedback>
             <Image
               source={{
-                uri: props.user.user_img
+                uri: props.user.user_img,
               }}
               style={{
                 borderRadius: 50,
