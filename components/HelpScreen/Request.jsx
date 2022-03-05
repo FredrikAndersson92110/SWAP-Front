@@ -1,74 +1,83 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Avatar } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 
+import { FontAwesome } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
 
 function Request({
   isAsker,
-  name,
-  useravatar,
-  category,
   currentRequest,
   onGetDetails,
-  location,
   requestId,
-  request,
+  category,
+  askerName,
+  useravatar,
+  location,
 }) {
   const navigation = useNavigation();
+
   const handleDetails = () => {
-    onGetDetails(isAsker, currentRequest, requestId, request);
+    let user = "";
+    onGetDetails(isAsker, currentRequest, requestId, user);
     navigation.navigate("DetailScreen");
   };
 
   return (
-    <View style={{ borderColor: "red", borderWidth: 2, width: "100%" }}>
-      <Text
+    <View style={styles.card}>
+      <View
         style={{
-          paddingLeft: 10,
-          marginBottom: 10,
-          fontFamily: "Poppins_600SemiBold",
+          flexDirection: "row",
+          alignItems: "flex-start",
+          width: "100%",
         }}
       >
-        Demande de cours de {category}
-      </Text>
-
-      {/* CARD */}
-      <View style={styles.card}>
-        <View style={{ flexDirection: "row" }}>
-          <Avatar
-            rounded
-            size="medium"
-            source={{ uri: useravatar }}
-            containerStyle={styles.avatar}
-          />
-          <View>
-            <Text style={styles.cardTitle}>{name}</Text>
-            <Text style={styles.bodyText}>Propose des cours de {category}</Text>
-
-            {/* CITY */}
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 8,
-              }}
-            >
-              <MaterialCommunityIcons
-                name="map-marker-radius"
-                size={16}
-                color="#F7CE46"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={styles.bodyText}>{location} (6 km)</Text>
-            </View>
+        <Avatar
+          rounded
+          size="medium"
+          source={{ uri: useravatar }}
+          containerStyle={styles.avatar}
+        />
+        <View>
+          <Text style={styles.cardTitle}>{askerName}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../../assets/images/categories/bricolage.png")}
+              style={{ width: 21, height: 21, marginRight: 10 }}
+            ></Image>
+            <Text style={styles.cardTitle}>
+              {category.charAt(0).toUpperCase() + category.substring(1)}
+            </Text>
+          </View>
+          {/* CITY */}
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 8,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="map-marker-radius"
+              size={16}
+              color="#F7CE46"
+              style={{ marginRight: 10 }}
+            />
+            <Text style={styles.bodyText}>{location} (6 km)</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleDetails}>
-          <Text style={styles.text}>Détails</Text>
-        </TouchableOpacity>
       </View>
+
+      <TouchableOpacity style={styles.button} onPress={handleDetails}>
+        <Text style={styles.buttonTitle}>Détails</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     alignItems: "center",
-    padding: 15,
+    padding: 20,
     paddingBottom: 0,
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
@@ -138,7 +147,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 30,
     elevation: 6,
-    marginHorizontal: 15,
   },
   pageTitle: {
     fontSize: 24,
@@ -157,7 +165,6 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 20,
-    marginLeft: 20,
   },
   input: {
     paddingLeft: 13,

@@ -46,6 +46,7 @@ import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
+import categoriesReducer from "./reducers/categories.reducer";
 // import statusReducer from "./reducers/status.reducer";
 
 const store = createStore(
@@ -54,6 +55,7 @@ const store = createStore(
     userReducer,
     willingReducer,
     userDetailsReducer,
+    categoriesReducer,
   })
 );
 
@@ -165,34 +167,34 @@ function App() {
   };
   return (
     <Provider store={store}>
-        <LoadFonts>
-          <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <LoadFonts>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SplashScreen" component={SplashScreen} />
 
-              <Stack.Screen name="DemoScreen" component={DemoScreen} />
-              <Stack.Screen name="MyTabs" component={MyTabs} />
+            <Stack.Screen name="DemoScreen" component={DemoScreen} />
+            <Stack.Screen name="MyTabs" component={MyTabs} />
 
-              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-              <Stack.Screen name="SignInScreen" component={SignInScreen} />
-              <Stack.Screen name="MoreInfoScreen" component={MoreInfoScreen} />
+            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+            <Stack.Screen name="SignInScreen" component={SignInScreen} />
+            <Stack.Screen name="MoreInfoScreen" component={MoreInfoScreen} />
 
-              {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+            {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
 
-              <Stack.Screen
-                name="TinderScreen"
-                options={{
-                  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-                }}
-                component={TinderScreen}
-              />
-              <Stack.Screen
-                name="TransactionScreen"
-                component={TransactionScreen}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </LoadFonts>
+            <Stack.Screen
+              name="TinderScreen"
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+              }}
+              component={TinderScreen}
+            />
+            <Stack.Screen
+              name="TransactionScreen"
+              component={TransactionScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </LoadFonts>
     </Provider>
   );
 }

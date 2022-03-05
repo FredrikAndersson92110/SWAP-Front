@@ -1,19 +1,63 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   ImageBackground,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
-import { FontAwesome } from "@expo/vector-icons";
 
-import { useFonts } from "expo-font";
+import Request from "../components/HelpScreen/Request";
 
-export default function HelpScreen(props) {
+import { connect } from "react-redux";
+
+import { useIsFocused } from "@react-navigation/native";
+
+function HelpScreen({ onMatchCategories, categoryMatches, navigation }) {
+  const [message, setMessage] = useState("");
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      async function getRequests() {
+        let request = await fetch(
+          "https://swapapp-backend.herokuapp.com/match-categories/CyfMgR7UvrILzTVS5keCCY2gPaqy9njx"
+        );
+        let response = await request.json();
+        if (response.status) {
+          onMatchCategories(response.matchingRequests);
+        } else {
+          setMessage(response.message);
+        }
+      }
+      getRequests();
+    }
+  }, [isFocused]);
+
+  let requestList = categoryMatches.map((request, i) => {
+    return (
+      <Request
+        key={i}
+        isAsker={false}
+        useravatar={request.asker.user_img}
+        currentRequest={request}
+        requestId={request._id}
+        askerName={request.asker.firstName}
+        location={
+          request.asker.userAddresses[0]
+            ? request.asker.userAddresses[0].address_city
+            : ""
+        }
+        category={
+          request.category.category.sub_category
+            ? request.category.category.sub_category
+            : request.category.category
+        }
+      />
+    );
+  });
 
   return (
     <ImageBackground
@@ -46,56 +90,26 @@ export default function HelpScreen(props) {
           showsVerticalScrollIndicator={false}
         >
           {/* CARD */}
-          <View style={styles.card}>
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <Image
-                  source={require("../assets/images/categories/bricolage.png")}
-                  style={{ width: 21, height: 21, marginRight: 10 }}
-                ></Image>
-                <Text style={styles.cardTitle}>Bricolage</Text>
-              </View>
-
-              <Text style={styles.bodyText}>
-                Célia à besoin d'aide pour fixer une étagère
-              </Text>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 8,
-                }}
-              >
-                <FontAwesome
-                  name="map-marker"
-                  style={{ marginRight: 10 }}
-                  size={16}
-                  color="#F7CE46"
-                />
-                <Text style={styles.bodyText}>5Km (Paris 11eme)</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                props.navigation.navigate("DetailScreen", {
-                  screen: "DetailScreen",
-                });
-              }}
-            >
-              <Text style={styles.buttonTitle}>Détails</Text>
-            </TouchableOpacity>
-          </View>
+          {requestList}
         </ScrollView>
       </View>
     </ImageBackground>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onMatchCategories: function (data) {
+      dispatch({ type: "user::categoryMatches", matches: data });
+    },
+  };
+}
+
+function mapStateToProps(state) {
+  return { categoryMatches: state.categoriesReducer };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HelpScreen);
 
 const styles = StyleSheet.create({
   container: {
