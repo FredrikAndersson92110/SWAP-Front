@@ -28,7 +28,7 @@ function AskScreen({
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-willing-users/jCtcpVHel4JXMvk57FuELUxmHPyZit21"
+          "https://swapapp-backend.herokuapp.com/get-willing-users/ag-ycmO_B35I-AqJhCMFZNiVBmotaPAc"
         );
         let response = await request.json();
         if (response.status) {

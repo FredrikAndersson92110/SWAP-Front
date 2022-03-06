@@ -25,12 +25,13 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import Conversation from "../components/InteractionScreeen/Conversation";
+import { connect } from "react-redux";
 
 import RNPickerSelect from "react-native-picker-select";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function ListRequestScreen(props) {
+function ListRequestScreen(props) {
   const [check4, setCheck4] = useState(false);
   const [check3, setCheck3] = useState(false);
   const [check2, setCheck2] = useState(false);
@@ -289,6 +290,21 @@ export default function ListRequestScreen(props) {
     </ImageBackground>
   );
 }
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAddRequests: function (data) {
+      dispatch({ type: "user::requests", requests: data });
+    },
+  };
+}
+
+function mapStateToProps(state) {
+  return { requests: state.requestsReducer };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 
 //
 // ─────────────────────────────────────────────────── ──────────

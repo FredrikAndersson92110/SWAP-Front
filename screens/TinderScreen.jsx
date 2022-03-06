@@ -16,11 +16,12 @@ import SwipeCards from "react-native-swipe-cards-deck";
 function Card({ data }) {
   return (
     <View style={[styles.card, { backgroundColor: data.backgroundColor }]}>
-      <Text>{data.text}</Text>
+      
       <Image
         source={require("../assets/images/categories/bricolage.png")}
         style={{ width: 100, height: 100, marginLeft: 10, marginBottom: 70, marginTop: 20, }}
       ></Image>
+      <Text>{data.text}</Text>
       <Text>{data.title}</Text>
       <Text>{data.age}</Text>
       <Text>{data.distance}</Text>

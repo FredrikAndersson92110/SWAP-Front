@@ -31,7 +31,7 @@ const UserScreen = (props) => {
 
   let handleSubmit = async () => {
     let response = await fetch(
-      `https://swapapp-backend.herokuapp.com:3000/users/adress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
+      `http://192.168.10.115:3000/users/adress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -39,7 +39,10 @@ const UserScreen = (props) => {
         // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
       }
     );
-    response = await response.json();
+   
+    let jresponse = await response.json();
+    console.log(adress1);
+    console.log(cp1);
   };
 
   const [loaded] = useFonts({

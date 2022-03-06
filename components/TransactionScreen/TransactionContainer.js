@@ -35,7 +35,7 @@ const handleSubmit = async () => {
  return navigation.navigate("InteractionsScreen")
 }
 
-  const [status, setStatus] = useState(2);
+  const [status, setStatus] = useState(1);
   const [active, setActive] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
   const [listMessage, setListMessage] = useState([]);
