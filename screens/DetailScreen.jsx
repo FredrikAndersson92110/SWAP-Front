@@ -19,7 +19,7 @@ function DetailScreen({
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/.168.1.25:3000/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
+        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "PUT",
         }
