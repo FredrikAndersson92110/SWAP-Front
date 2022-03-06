@@ -24,10 +24,10 @@ function Request({
   };
 
   return (
-    <View style={{ borderColor: "red", borderWidth: 2, width: "100%" }}>
+    <View style={{width: "100%" }}>
       <Text
         style={{
-          paddingLeft: 10,
+          paddingLeft: 20,
           marginBottom: 10,
           fontFamily: "Poppins_600SemiBold",
         }}
@@ -37,7 +37,7 @@ function Request({
 
       {/* CARD */}
       <View style={styles.card}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", width: "100%", padding: 7 }}>
           <Avatar
             rounded
             size="medium"

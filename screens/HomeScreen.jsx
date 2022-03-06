@@ -102,7 +102,6 @@ const HomeScreen = (props) => {
                 <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
               }
               placeholderTextColor={{ color: "blue" }}
-              disabled
               onPressIn={() => {
                 props.navigation.navigate("ComposeRequestScreen", {
                   screen: "ComposeRequestScreen",

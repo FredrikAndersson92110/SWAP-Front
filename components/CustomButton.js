@@ -104,6 +104,7 @@ const CustomButton = () => {
                   fontSize: 18,
                   zIndex: 10,
                 }}
+                onPress={() => setModalVisible(!modalVisible)}
               >
                 SWAP
               </Text>

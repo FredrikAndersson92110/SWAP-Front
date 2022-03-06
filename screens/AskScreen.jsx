@@ -7,11 +7,9 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
+import { Button, Input } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
-
 import { useIsFocused } from "@react-navigation/native";
-
 import Request from "../components/AskScreen/Request";
 import { connect } from "react-redux";
 
@@ -70,6 +68,7 @@ function AskScreen({
             ? req.category.sub_category
             : req.category.category
         }
+        categoryImage={require("../assets/images/categories/bricolage.png")}
       />
     );
   });
@@ -108,15 +107,15 @@ function AskScreen({
             leftIcon={
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
-            disabled
           />
         </View>
         <ScrollView
           style={{
             flex: 1,
             marginTop: 0,
+            width: "100%",
           }}
-          contentContainerStyle={{ width: "100%" }}
+
           showsVerticalScrollIndicator={false}
         >
           {/* PAGE TITLE */}
@@ -202,7 +201,8 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 24,
     fontFamily: "Poppins_700Bold",
-    marginLeft: 0,
+    marginLeft: 20,
+    marginBottom: 20
   },
   cardTitle: {
     fontSize: 16,
