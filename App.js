@@ -47,6 +47,7 @@ import userReducer from "./reducers/user.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
 import categoriesReducer from "./reducers/categories.reducer";
+import locationReducer from "./reducers/location.reducer";
 // import statusReducer from "./reducers/status.reducer";
 
 const store = createStore(
@@ -56,6 +57,7 @@ const store = createStore(
     willingReducer,
     userDetailsReducer,
     categoriesReducer,
+    locationReducer,
   })
 );
 

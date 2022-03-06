@@ -16,6 +16,7 @@ function Request({
   location,
   requestId,
   request,
+  distance,
 }) {
   const navigation = useNavigation();
   const handleDetails = () => {
@@ -61,7 +62,7 @@ function Request({
                 color="#F7CE46"
                 style={{ marginRight: 10 }}
               />
-              <Text style={styles.bodyText}>{location} (6 km)</Text>
+              <Text style={styles.bodyText}>{location} ( km)</Text>
             </View>
           </View>
         </View>
