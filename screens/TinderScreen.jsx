@@ -19,7 +19,13 @@ function Card({ data }) {
       
       <Image
         source={require("../assets/images/categories/bricolage.png")}
-        style={{ width: 100, height: 100, marginLeft: 10, marginBottom: 70, marginTop: 20, }}
+        style={{
+          width: 100,
+          height: 100,
+          marginLeft: 10,
+          marginBottom: 70,
+          marginTop: 20,
+        }}
       ></Image>
       <Text>{data.text}</Text>
       <Text>{data.title}</Text>
@@ -45,15 +51,39 @@ export default function TinderScreen(props) {
       setCards([
         {
           text: "Ready for SWAP ? ",
-          backgroundColor: "#F7CE46"
+          backgroundColor: "#FFF",
         },
-        { text: "Un plombier Hot ?", backgroundColor: "#F7CE46", title: "Bernard", age: "56 ans", distance: "1Km" },
-        { text: "Cours de langue avec une italienne ? ", backgroundColor: "#F7CE46", title: "Monique", age: "87 ans", distance: "Déjà chez vous ! " },
-        { text: "Déménageur aux gros bras ?", backgroundColor: "#F7CE46", title: "Thomas", age: "32 ans", distance: "18Km" },
-        { text: "Se faire promener en laisse ?", backgroundColor: "#F7CE46", title: "Etienne et Géraldine", age: "107 à eux deux ", distance: "3Km" },
+        {
+          text: "Un plombier Hot ?",
+          backgroundColor: "#FFF",
+          title: "Bernard",
+          age: "56 ans",
+          distance: "1Km",
+        },
+        {
+          text: "Cours de langue avec une italienne ? ",
+          backgroundColor: "#FFF",
+          title: "Monique",
+          age: "87 ans",
+          distance: "Déjà chez vous ! ",
+        },
+        {
+          text: "Déménageur aux gros bras ?",
+          backgroundColor: "#FFF",
+          title: "Thomas",
+          age: "32 ans",
+          distance: "18Km",
+        },
+        {
+          text: "Se faire promener en laisse ?",
+          backgroundColor: "#FFF",
+          title: "Etienne et Géraldine",
+          age: "107 à eux deux ",
+          distance: "3Km",
+        },
         {
           text: "You better SWAP bitch ! ",
-          backgroundColor: "#F7CE46",
+          backgroundColor: "#FFF",
         },
       ]);
     }, 3000);
@@ -81,21 +111,19 @@ export default function TinderScreen(props) {
       {/* PAGE TITLE */}
 
       <View style={styles.container}>
-        <View style={{ paddingHorizontal: 20, marginTop: 50, marginLeft: 50 }}>
+        <View
+          style={{ paddingHorizontal: 20, marginTop: 20, flexDirection: "row" }}
+        >
+          <Text style={styles.pageTitle}>Demandes à proximité</Text>
           <TouchableWithoutFeedback
             onPress={() => {
-              props.navigation.navigate("Home", {
-                screen: "HomeScreen",
-              });
-              
+              props.navigation.goBack();
             }}
           >
             <View style={styles.container3}>
               <AntDesign name="close" size={35} color="black" />
             </View>
           </TouchableWithoutFeedback>
-
-          <Text style={styles.pageTitle}>Demandes à proximité</Text>
         </View>
 
         <View
@@ -113,7 +141,9 @@ export default function TinderScreen(props) {
                 cards={cards}
                 renderCard={(cardData) => <Card data={cardData} />}
                 keyExtractor={(cardData) => String(cardData.text)}
-                renderNoMoreCards={() => <StatusCard text="Vous avez épuisé tout nos Helpers ! " />}
+                renderNoMoreCards={() => (
+                  <StatusCard text="Vous avez épuisé tout nos Helpers ! " />
+                )}
                 actions={{
                   nope: { onAction: handleNope },
                   OMG: { onAction: handleYup },
@@ -242,7 +272,8 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
   container3: {
-    marginLeft: 250,
+    position: "absolute",
+    right: 40,
   },
   button: {
     color: "black",

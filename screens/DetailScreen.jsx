@@ -14,7 +14,7 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.request.token}`,
+        `http://192.168.10.108:3000/accept-helper/${userDetails.requestId}/${userDetails.request.token}`,
         {
           method: "PUT",
         }
@@ -26,7 +26,7 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
   const handleRefuse = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `http://192.168.10.132:3000/delete-willing-user/${userDetails.requestId}/${userDetails.request.token}`,
+        `https://swapapp-backend.herokuapp.com/delete-willing-user/${userDetails.requestId}/${userDetails.request.token}`,
         {
           method: "DELETE",
         }
@@ -38,6 +38,14 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
     }
   };
 
+  let data;
+  if (userDetails.isAsker) {
+    data = userDetails.user;
+  } else {
+    data = userDetails.request.asker;
+  }
+
+  console.log("DATA", data);
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -60,29 +68,19 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
                   alignItems: "center",
                 }}
               >
-                <Avatar
-                  rounded
-                  size="large"
-                  source={{ uri: userDetails.request.user_img }}
-                />
+                <Avatar rounded size="large" source={{ uri: data.user_img }} />
                 <View style={{ marginLeft: 20, justifyContent: "center" }}>
                   <Text style={{ fontSize: 22, fontFamily: "Poppins_700Bold" }}>
-                    {userDetails.request.firstName}
+                    {data.firstName}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <MaterialIcons
                       name="verified"
                       size={14}
-                      color={
-                        userDetails.request.verified_profile
-                          ? "#F7CE46"
-                          : "#8B8B8B"
-                      }
+                      color={data.verified_profile ? "#F7CE46" : "#8B8B8B"}
                     />
                     <Text style={{ marginLeft: 5 }}>
-                      {userDetails.request.verified_profile
-                        ? "Profil verifie"
-                        : ""}
+                      {data.verified_profile ? "Profil verifie" : ""}
                     </Text>
                   </View>
                 </View>
@@ -98,7 +96,7 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
             {/* divider */}
             <View style={styles.divider} />
             {/* Content */}
-            {userDetails.request.categories.map((category, i) => {
+            {data.categories.map((category, i) => {
               return (
                 <View
                   key={i}
@@ -132,22 +130,18 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
                 style={{ marginLeft: 7 }}
               />
               <Text style={styles.bodyText}>
-                5Km ({userDetails.request.userAddresses[0].address_city})
+                5Km ({data.userAddresses[0].address_city})
               </Text>
             </View>
 
             <View>
               <Text style={styles.textStyle}>Infos</Text>
-              <Text style={styles.bodyText}>
-                {userDetails.request.description}
-              </Text>
+              <Text style={styles.bodyText}>{data.description}</Text>
             </View>
 
             <View>
               <Text style={styles.textStyle}>Disponibilites</Text>
-              <Text style={styles.bodyText}>
-                {userDetails.request.disponibility}
-              </Text>
+              <Text style={styles.bodyText}>{data.disponibility}</Text>
             </View>
           </View>
         </View>

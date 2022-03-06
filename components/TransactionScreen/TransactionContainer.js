@@ -127,9 +127,7 @@ const handleSubmit = async () => {
               Statut de la demande
             </Text>
 
-            <TouchableWithoutFeedback
-              onPress={() => handleSubmit() }
-            >
+            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
               <AntDesign
                 name="close"
                 size={30}
@@ -313,10 +311,10 @@ const handleSubmit = async () => {
                   {/* CHAT ZONE MESSAGES - SMALL OVERLAY */}
                   <ScrollView style={styles.smallScrollZone}>
                     <View style={{ alignItems: "flex-end" }}>
-                      <ListItem>
+                      <ListItem style={{ borderRadius: 8 }}>
                         <Text style={styles.chatBubbles}>Coucou!</Text>
                       </ListItem>
-                      <ListItem>
+                      <ListItem >
                         <Text style={styles.chatBubbles}>
                           Merci pour d'avoir accepté ma demande :. Tu serais
                           disponible quand?
@@ -533,8 +531,12 @@ const styles = StyleSheet.create({
   },
   chatBubbles: {
     maxWidth: 250,
+    borderRadius: 15,
     backgroundColor: "#F7CE46",
-    borderRadius: 17,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
     paddingHorizontal: 10,
     paddingVertical: 6,
     fontFamily: "Poppins_400Regular",
@@ -546,10 +548,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     height: "30%",
-    width: 400,
+    width: "100%",
     elevation: 20,
     position: "absolute",
     bottom: 0,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
   },
   overlayFull: {
     borderTopLeftRadius: 20,
@@ -561,6 +567,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderColor: "#DDDDDD",
     borderWidth: 1,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
   },
   smallScrollZone: {
     maxHeight: 130,

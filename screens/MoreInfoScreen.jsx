@@ -15,7 +15,6 @@ import InputBirthDate from "../components/MoreInfoScreen/InputBirthDate";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const MoreInfoScreen = (props) => {
   //
   // ─── VALIDATION DU FORMULAIRE ───────────────────────────────────────────────────
@@ -29,7 +28,7 @@ const MoreInfoScreen = (props) => {
       setError(null);
 
       let response = await fetch(
-        `https://swapapp-backend.herokuapp.com:3000/users/sign-up`,
+        `https://swapapp-backend.herokuapp.com/users/sign-up`,
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -48,7 +47,7 @@ const MoreInfoScreen = (props) => {
       if (response.message) {
         setErrorMessage(response.message);
       }
-
+      console.log("navigation");
       return props.navigation.navigate("MyTabs");
     }
   };

@@ -10,7 +10,6 @@ import { Image, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useFonts } from "expo-font";
 
 export default function LoginScreen(props) {
   const navigation = useNavigation();
@@ -28,11 +27,22 @@ export default function LoginScreen(props) {
     }
 
     // Véririfcation du couple Mail/MDP en backend
+<<<<<<< HEAD
     let response = await fetch(`https://swapapp-backend.herokuapp.com/users/sign-in`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${lowerCaseEmail}&password=${password}`,
     });
+=======
+    let response = await fetch(
+      `https://swapapp-backend.herokuapp.com/users/sign-in`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `email=${lowerCaseEmail}&password=${password}`,
+      }
+    );
+>>>>>>> 364f9e74c56d287bb9eaa1b99ccf0abfc2172597
     response = await response.json();
 
     // Si le couple Mail/MDP est valide

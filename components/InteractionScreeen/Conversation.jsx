@@ -1,29 +1,36 @@
 import {
   StyleSheet,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
 
-export default function Conversation({
+/* -----------------------------FUNCTION---------------------------------------*/
+function Conversation({
   name,
   useravatar,
   category,
   lastMessage,
+  request,
+  isAsker,
 }) {
   const navigation = useNavigation();
+
+var openTransaction = () => {
+  navigation.navigate('TransactionScreen')
+  console.log(request, isAsker)
+}
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
-          onPress={() => {
-            navigation.navigate("TransactionScreen");
-          }}
-          Component={TouchableHighlight}
+          onPress={() => openTransaction()}
+          Component={TouchableOpacity}
           containerStyle={{
             backgroundColor: "transparent",
           }}
@@ -31,7 +38,15 @@ export default function Conversation({
           disabledStyle={{ opacity: 0.5 }}
           pad={20}
         >
-          <Avatar rounded size="medium" source={{ uri: useravatar }} />
+          <Avatar
+            rounded
+            size="medium"
+            source={{ uri: useravatar }}
+            avatarStyle={{
+              borderWidth: 3,
+              borderColor: isAsker ? "#F7CE46" : "#253a78",
+            }}
+          />
           <View style={{ flex: 1, justifyContent: "space-around" }}>
             <View
               style={{
@@ -46,7 +61,7 @@ export default function Conversation({
                   flexDirection: "row",
                 }}
               >
-                <Text style={{ color: "#8B8B8B" }}>Demande: </Text>
+                <Text style={{ color: "#8B8B8B" }}>{isAsker ? "Demande:" : "Mission:"} </Text>
                 <Text style={{ fontFamily: "Poppins_700Bold" }}>
                   {category}
                 </Text>
@@ -71,6 +86,23 @@ export default function Conversation({
     </>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getRequestInfos: function (request, isAsker) {
+      dispatch({ type: "getRequestInfos", request, isAsker });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Conversation);
+
+
+//
+// ─────────────────────────────────────────────────── ──────────
+//   :::::: S T Y L E S : :  :   :    :     :        :          :
+// ──────────────────────────────────────────────────────────────
+//
 
 const styles = StyleSheet.create({
   container: {

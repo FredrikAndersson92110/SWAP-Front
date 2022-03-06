@@ -28,7 +28,7 @@ function AskScreen({
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-willing-users/ag-ycmO_B35I-AqJhCMFZNiVBmotaPAc"
+          "https://swapapp-backend.herokuapp.com/get-willing-users/CyfMgR7UvrILzTVS5keCCY2gPaqy9njx"
         );
         let response = await request.json();
         if (response.status) {
@@ -48,6 +48,7 @@ function AskScreen({
         ...user,
         category: req.category,
         requestId: req._id,
+        request: req,
       };
     });
     requests = requests.concat(tempUsers);
@@ -58,7 +59,8 @@ function AskScreen({
         key={i}
         isAsker={true}
         requestId={req.requestId}
-        currentRequest={req}
+        currentRequest={req.request}
+        request={req}
         location={req.userAddresses[0].address_city}
         willingUserToken={req.token}
         name={req.firstName}
@@ -106,23 +108,22 @@ function AskScreen({
             leftIcon={
               <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
             }
-            onPressIn={() => {
-              navigation.navigate("ComposeRequestScreen");
-            }}
+            disabled
           />
         </View>
         <ScrollView
           style={{
             flex: 1,
-            padding: 15,
             marginTop: 0,
           }}
+          contentContainerStyle={{ width: "100%" }}
           showsVerticalScrollIndicator={false}
         >
           {/* PAGE TITLE */}
-          <View style={{ paddingHorizontal: 10 }}>
+          <View>
             <Text style={styles.pageTitle}>Mes demandes</Text>
           </View>
+          {message !== "" ? <Text>{message}</Text> : null}
           {/* Request */}
           {requestList}
           {/* end */}
@@ -152,6 +153,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 70,
     alignItems: "center",
+    width: "100%",
   },
   button: {
     justifyContent: "center",
@@ -195,6 +197,7 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     borderRadius: 15,
     marginBottom: 30,
+    elevation: 6,
   },
   pageTitle: {
     fontSize: 24,
@@ -222,7 +225,7 @@ const styles = StyleSheet.create({
     paddingLeft: 13,
     textAlign: "left",
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 50,
     color: "lightgrey",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
