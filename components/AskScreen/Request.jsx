@@ -4,7 +4,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
+import getDistance from "../helpers";
+import * as Location from "expo-location";
+import { useEffect } from "react";
 
 function Request({
   isAsker,
@@ -16,16 +20,19 @@ function Request({
   location,
   requestId,
   request,
+  userLocation,
   distance,
 }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
   const handleDetails = () => {
     onGetDetails(isAsker, currentRequest, requestId, request);
     navigation.navigate("DetailScreen");
   };
 
   return (
-    <View style={{width: "100%" }}>
+    <View style={{ width: "100%" }}>
       <Text
         style={{
           paddingLeft: 20,
@@ -62,7 +69,9 @@ function Request({
                 color="#F7CE46"
                 style={{ marginRight: 10 }}
               />
-              <Text style={styles.bodyText}>{location} ( km)</Text>
+              <Text style={styles.bodyText}>
+                {location} ({distance} km)
+              </Text>
             </View>
           </View>
         </View>
@@ -72,6 +81,10 @@ function Request({
       </View>
     </View>
   );
+}
+
+function mapStateToProps(state) {
+  return { userLocation: state.locationReducer };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -88,7 +101,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(Request);
+export default connect(mapStateToProps, mapDispatchToProps)(Request);
 
 const styles = StyleSheet.create({
   container: {
