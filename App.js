@@ -17,6 +17,7 @@ import categoriesReducer from "./reducers/categories.reducer";
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
+import locationReducer from "./reducers/location.reducer";
 // import transactionReducer from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 //Screens

@@ -1,25 +1,21 @@
 import { Feather } from "@expo/vector-icons";
-import React from "react";
-import React, { useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import * as Location from "expo-location";
+import { StatusBar } from "expo-status-bar";
+import  React, {useEffect} from "react";
 import {
   Image,
   ImageBackground,
   ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
-import { Input } from "react-native-elements";
-
-import { Feather, Entypo } from "@expo/vector-icons";
-
-import Suggestions from "../components/HomeScreen/Suggestions";
-
 import { connect } from "react-redux";
 import Suggestions from "../components/HomeScreen/Suggestions";
 import InputButton from "../components/InputButton";
-import { StatusBar } from "expo-status-bar";
 
-import { useIsFocused } from "@react-navigation/native";
 
-import * as Location from "expo-location";
+
+
+
 
 const HomeScreen = ({ onSetLocation, user, navigation }) => {
   const isFocused = useIsFocused();
