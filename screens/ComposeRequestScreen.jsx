@@ -1,24 +1,83 @@
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  ImageBackground, StyleSheet, TextInput, TouchableOpacity, View
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
-export default function ComposeRequestScreen(props) {
+import * as Location from "expo-location";
+import { connect } from "react-redux";
+
+const ComposeRequestScreen = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [selected, setSelected] = useState("");
-
-  const [selectedCat, setSelectedCat] = useState(null);
   let categoriesSelected = [];
+
   const data = [
-    { label: "Ma poistion actuelle", value: "geolocation" },
-    { label: "Adresse 1 (à dyna)", value: "adresse-1" },
-    { label: "Adresse 2 (à dyna)", value: "adresse-2" },
+    { label: "Ma position actuelle", value: "geolocation" },
+    { label: "Adresse 1 (à dyna)", value: "address1" },
+    { label: "Adresse 2 (à dyna)", value: "address2" },
   ];
+
+  // 4 valeurs INPUTS
+  let addressObj;
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [description, setDescription] = useState("");
+  const [disponibility, setDisponibility] = useState("");
+  const [selectedCat, setSelectedCat] = useState("");
+
+  const handleLocation = async (location) => {
+    if (location.value == "geolocation") {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status == "granted") {
+        let geocode = await Location.getCurrentPositionAsync();
+        let address = await Location.reverseGeocodeAsync({
+          latitude: geocode.coords.latitude,
+          longitude: geocode.coords.longitude,
+        });
+        addressObj = {
+          address_street_1: address[0].name,
+          address_zipcode: address[0].postalCode,
+          address_city: address[0].city,
+        };
+        setSelectedAddress(addressObj);
+        console.log("choix localisation =>", addressObj);
+      }
+    } else if (location.value == "address1") {
+      console.log("choix 1 =>", location.value);
+    } else if (location.value == "address2") {
+      console.log("choix 2 =>", location.value);
+    }
+  };
+  const handleSubmit = () => {
+              selectedCat.length > 1
+                ? setErrorMessage(
+                    "Vous ne pouvez choisir qu'une seul categorie"
+                  )
+                : null;
+
+    if (selectedAddress == "" || description == "" || disponibility == "" || selectedCat == "") {
+      setErrorMessage("Merci de remplir tous les champs")
+    } else {
+      let data = {
+        description : description,
+        disponibility: disponibility,
+        category: selectedCat[0],
+        address_street_1: selectedAddress.address_street_1,
+        address_city: selectedAddress.address_city,
+        address_zipcode: selectedAddress.address_zipcode,
+      };
+      console.log(data);
+      props.onComposeRequest(data);
+    }
+  };
 
   return (
     <ImageBackground
@@ -44,17 +103,43 @@ export default function ComposeRequestScreen(props) {
           </TouchableOpacity>
         </View>
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-          
+          {/* ==== LIEU ==== */}
+          <Text style={styles.textTitle}>Lieu</Text>
+
+          <View>
+            <Dropdown
+              style={[styles.card]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              dropdownPosition="auto"
+              search={false}
+              data={data}
+              labelField="label"
+              valueField="value"
+              placeholder={selected.label}
+              onChange={(item) => {
+                setSelected(item);
+                handleLocation(item);
+              }}
+              containerStyle={[styles.dropContainer,{height: 0}]}
+            />
+          </View>
+
           {/* ==== CATEGORIES ==== */}
-          <Text style={styles.textTitle}>Catégorie</Text>
-          <Text>{errorMessage}</Text>
+          <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
 
           <DropDownCategories
             placeHolder={"Choisissez une catégorie"}
             containerStyle={[
               styles.card,
-              { height: 100, marginBottom: 200, width: "77%",     paddingHorizontal: 20,
-    paddingVertical: 10, },
+              {
+                height: 100,
+                marginBottom: 200,
+                width: "77%",
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+              },
             ]}
             style={{
               width: "100%",
@@ -73,10 +158,7 @@ export default function ComposeRequestScreen(props) {
               categoriesSelected = [];
               categoriesSelected.push(item);
               setSelectedCat();
-              setSelected(item);
-              // if (selectedCat[1]) {
-              //   setErrorMessage("Vous ne pouvez choisir qu'une catégorie");
-              // }
+              setSelectedCat(item);
               console.log("selectedCat", selectedCat);
               // handleCategories();
             }}
@@ -93,30 +175,10 @@ export default function ComposeRequestScreen(props) {
             placeholderTextColor="grey"
             numberOfLines={7}
             multiline={true}
+            onChangeText={(text) => {
+              setDescription(text.trim());
+            }}
           />
-
-          {/* ==== LIEU ==== */}
-          <Text style={styles.textTitle}>Lieu</Text>
-
-          <View>
-            <Dropdown
-              style={styles.card}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              dropdownPosition="auto"
-              search={false}
-              data={data}
-              labelField="label"
-              valueField="value"
-              placeholder={selected.label}
-              value={selected}
-              onChange={(item) => {
-                setSelected(item);
-              }}
-              containerStyle={styles.dropContainer}
-            />
-          </View>
 
           {/* ==== DISPONIBILITES ==== */}
           <Text style={styles.textTitle}>Mes disponibilités</Text>
@@ -128,25 +190,42 @@ export default function ComposeRequestScreen(props) {
             placeholderTextColor="grey"
             numberOfLines={3}
             multiline={true}
+            onChangeText={(text) => setDisponibility(text.trim())}
           />
-
-          <View style={{ alignItems: "center" }}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                props.navigation.navigate("ListRequestScreen", {
-                  screen: "ListRequestScreen",
-                });
-              }}
-            >
-              <Text style={styles.text}>Suivant</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.error}>{errorMessage}</Text>
         </KeyboardAwareScrollView>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleSubmit();
+              props.navigation.navigate("ListRequestScreen", {
+                screen: "ListRequestScreen",
+              });
+            }}
+          >
+            <Text style={styles.text}>Suivant</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ImageBackground>
   );
+};
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onComposeRequest: function (newRequest) {
+      dispatch({ type: "composeRequest::newRequest", newRequest });
+    },
+
+  };
 }
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ComposeRequestScreen);
 
 //
 // ─────────────────────────────────────────────────── ──────────
@@ -203,8 +282,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderRadius: 8,
-    marginTop: 40,
-    marginBottom: 60,
+    marginBottom: 45,
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
@@ -292,5 +370,14 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     color: "grey",
     fontSize: 14,
+  },
+  error: {
+    fontFamily: "Poppins_400Regular",
+    fontSize: 12,
+    marginLeft: 15,
+    marginTop: 10,
+    paddingLeft: 15,
+    bottom: -10,
+    color: "red",
   },
 });

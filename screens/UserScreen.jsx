@@ -12,7 +12,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 
 
-const UserScreen = (props) => {
+const UserScreen = (props, request) => {
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -28,9 +28,12 @@ const UserScreen = (props) => {
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
 
+
+
+
   let handleSubmit = async () => {
     let response = await fetch(
-      `https://swapapp-backend.herokuapp.com/users/updateAdress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
+      `https://swapapp-backend.herokuapp.com/users/updateAdress/${props.user.token}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -159,7 +162,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={"Adresse principale"}
+                placeholder={props.user.userAddresses[0].address_street_1}
                 onChangeText={(text) => setAdress1(text)}
                 editable={isEditable}
               />
@@ -167,7 +170,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={"Ville"}
+                placeholder={props.user.userAddresses[0].address_city}
                 onChangeText={(text) => setCity1(text)}
                 editable={isEditable}
               />
@@ -175,7 +178,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Code postal"
+                placeholder={props.user.userAddresses[0].address_zipcode}
                 onChangeText={(text) => setCp1(text)}
                 editable={isEditable}
               />
@@ -187,7 +190,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Adresse secondaire"
+                placeholder={props.user.userAddresses[1].address_street_1}
                 onChangeText={(text) => setAdress2(text)}
                 editable={isEditable}
               />
@@ -195,7 +198,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={"Ville"}
+                placeholder={props.user.userAddresses[1].address_city}
                 onChangeText={(text) => setCity2(text)}
                 editable={isEditable}
               />
@@ -203,7 +206,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Code postal"
+                placeholder={props.user.userAddresses[1].address_zipcode}
                 onChangeText={(text) => setCp2(text)}
                 editable={isEditable}
               />
@@ -225,7 +228,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
+                placeholder={request.category}
                 onChangeText={(text) => setComp1(text)}
                 editable={isEditable}
               />
@@ -412,7 +415,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return { user: state.userReducer };
+ 
+  return { user: state.userReducer, request:  state.newRequest };
+ 
 }
 
 export default connect(mapStateToProps, null)(UserScreen);

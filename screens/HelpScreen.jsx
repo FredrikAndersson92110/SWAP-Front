@@ -21,8 +21,9 @@ function HelpScreen({ onMatchCategories, categoryMatches, userLocation }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/match-categories/CyfMgR7UvrILzTVS5keCCY2gPaqy9njx"
+          "https://swapapp-backend.herokuapp.com/match-categories/WK5zB1AX-ajwRoAnDpeeowN4D96COfQ4"
         );
+        // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
         let response = await request.json();
         if (response.status) {
           try {
@@ -60,6 +61,20 @@ function HelpScreen({ onMatchCategories, categoryMatches, userLocation }) {
   }, [isFocused]);
 
   let requestList = categoryMatches.map((request, i) => {
+    let path = `https://theoduvivier.com/swap/${
+      request.category.category.sub_category
+        ? request.category.category.sub_category
+            .replace(/\s/g, "_")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+        : request.category.category
+            .replace(/\s/g, "_")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+    }.png`;
+    console.log("PATH", path);
+    //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663953/montage_de_meubles.png
+    //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663954/montage_de_meubles.png
     return (
       <Request
         key={i}
@@ -79,6 +94,7 @@ function HelpScreen({ onMatchCategories, categoryMatches, userLocation }) {
             ? request.category.category.sub_category
             : request.category.category
         }
+        categoryImage={{ uri: path }}
       />
     );
   });

@@ -69,7 +69,7 @@ function ListRequestScreen(props) {
               marginTop: 7,
               marginHorizontal: 15,
             }}
-            placeHolder={"Dynamiser la Cat séléctionnée"}
+            placeHolder={props.requests.category}
           />
 
           <TouchableOpacity
@@ -310,8 +310,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { requests: state.requestsReducer };
+  return { user: state.userReducer, requests: state.requestsReducer, request:  state.newRequest };
 }
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 

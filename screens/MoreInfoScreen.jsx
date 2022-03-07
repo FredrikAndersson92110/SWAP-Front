@@ -1,14 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
-  ImageBackground, StyleSheet, Text, TouchableOpacity, View
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 //Composants
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 import DropDownGender from "../components/MoreInfoScreen/DropDownGender";
 import InputBirthDate from "../components/MoreInfoScreen/InputBirthDate";
-
 
 const MoreInfoScreen = (props) => {
   //
@@ -17,34 +20,35 @@ const MoreInfoScreen = (props) => {
 
   const [error, setError] = useState(null);
   const handleSubmit = async () => {
-    if (!props.user.categories) {
-      setError("Vous devez selectionner au moins une catégorie");
-    } else {
-      setError(null);
+    // if (!props.user.categories) {
+    //   setError("Vous devez selectionner au moins une catégorie");
+    // } else {
+    setError(null);
 
-      let response = await fetch(
-        `https://swapapp-backend.herokuapp.com/users/sign-up`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `firstName=${props.user.firstName}&lastName=${props.user.lastName}&email=${props.user.email}&password=${props.user.password}&birth_date=${props.user.birth_date}&gender=${props.user.gender}&categories=${props.user.categories}`,
-        }
-      );
-      response = await response.json();
-
-      //En cas d'inscription validée, stockage du token en local puis ajout USER dans store
-      if (response.user.token) {
-        AsyncStorage.setItem("token", response.user.token);
-        console.log("REPONSE DU BACK ==> ", response.user);
+    let response = await fetch(
+      `https://swapapp-backend.herokuapp.com/users/sign-up`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `firstName=${props.user.firstName}&lastName=${props.user.lastName}&email=${props.user.email}&password=${props.user.password}&birth_date=${props.user.birth_date}&gender=${props.user.gender}`,
+        // &categories=${props.user.categories}
       }
+    );
+    response = await response.json();
 
-      //En cas de message d'erreur, on affiche ce dernier sur le front
-      if (response.message) {
-        setErrorMessage(response.message);
-      }
-      console.log("navigation");
-      return props.navigation.navigate("MyTabs");
+    //En cas d'inscription validée, stockage du token en local puis ajout USER dans store
+    if (response.user.token) {
+      AsyncStorage.setItem("token", response.user.token);
+      console.log("REPONSE DU BACK ==> ", response.user);
     }
+
+    //En cas de message d'erreur, on affiche ce dernier sur le front
+    if (response.message) {
+      setErrorMessage(response.message);
+    }
+    console.log("navigation");
+    return props.navigation.navigate("MyTabs");
+    // }
   };
 
   return (
@@ -74,19 +78,9 @@ const MoreInfoScreen = (props) => {
         <View
           style={{
             marginTop: 80,
-            marginRight: 20,
             alignContent: "center",
           }}
         >
-          <View>
-            {/* <View>
-                <Button onPress={showDatepicker} title="Show date picker!" />
-              </View> */}
-            {/* <View>
-                <Button onPress={showTimepicker} title="Show time picker!" />
-              </View> */}
-          </View>
-
           {/* ──────────────────── DATE DE NAISSANCE ──────────────────── */}
           <Text style={styles.label}>Date de naissance</Text>
           <InputBirthDate />
@@ -99,7 +93,40 @@ const MoreInfoScreen = (props) => {
 
           <Text style={styles.label}>Catégories</Text>
 
-          <DropDownCategories />
+          {/* <DropDownCategories /> */}
+          <DropDownCategories
+            placeHolder={"Choisissez une catégorie"}
+            containerStyle={[
+              styles.card,
+              {
+                height: 200,
+                marginBottom: 200,
+                width: "100%",
+                paddingHorizontal: 0,
+                paddingVertical: 10,
+              },
+            ]}
+            style={{
+              width: 330,
+              paddingVertical: 5,
+              backgroundColor: "white",
+              shadowColor: "#171717",
+              shadowOffset: { width: 1, height: 5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 7,
+              borderRadius: 7,
+              elevation: 6,
+              paddingHorizontal: 30,
+            }}
+            onChange={(item) => {
+              // categoriesSelected = [];
+              // categoriesSelected.push(item);
+              // setSelectedCat();
+              // setSelectedCat(item);
+              // console.log("selectedCat", selectedCat);
+              // handleCategories();
+            }}
+          />
           <Text style={styles.error}>{error}</Text>
           {/* PHRASE D'EXPLICATION */}
           <Text
@@ -201,7 +228,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 40,
-    width: 330,
+    width: 300,
     fontSize: 13,
     // margin: 15,
     borderWidth: 2,

@@ -111,6 +111,17 @@ function DetailScreen({
             <View style={styles.divider} />
             {/* Content */}
             {data.categories.map((category, i) => {
+                  let path = `https://theoduvivier.com/swap/${
+                    category.category.sub_category
+                      ? category.category.sub_category
+                          .replace(/\s/g, "_")
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                      : category.category
+                          .replace(/\s/g, "_")
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                  }.png`;
               return (
                 <View
                   key={i}
@@ -119,7 +130,7 @@ function DetailScreen({
                   }}
                 >
                   <Image
-                    source={require("../assets/images/categories/bricolage.png")}
+                    source={{ uri: path}}
                     style={{ width: 21, height: 21, marginRight: 10 }}
                   />
                   <Text style={styles.cardTitle}>

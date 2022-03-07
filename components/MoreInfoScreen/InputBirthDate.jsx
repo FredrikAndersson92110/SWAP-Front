@@ -24,7 +24,7 @@ const InputBirthDate = (props) => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={props.style}>
       <Input
         containerStyle={styles.input}
         inputStyle={{ fontSize: 13 }}
