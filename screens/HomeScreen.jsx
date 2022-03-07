@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
-    elevation: 6,
+    elevation: 7,
   },
   suggestionsBox: {
     width: "100%",
