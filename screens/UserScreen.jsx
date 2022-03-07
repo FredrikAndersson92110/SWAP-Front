@@ -34,7 +34,7 @@ const UserScreen = (props) => {
 
   let handleSubmit = async () => {
     let response = await fetch(
-      `http://192.168.10.115:3000/users/adress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
+      `http://192.168.10.114:3000/users/updateAdress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
