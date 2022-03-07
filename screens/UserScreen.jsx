@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
@@ -19,6 +19,8 @@ const UserScreen = (props) => {
   const [adress2, setAdress2] = useState();
   const [cp1, setCp1] = useState();
   const [cp2, setCp2] = useState();
+  const [city1, setCity1] = useState();
+  const [city2, setCity2] = useState();
   const [comp1, setComp1] = useState();
   const [comp2, setComp2] = useState();
   const [comp3, setComp3] = useState();
@@ -28,11 +30,11 @@ const UserScreen = (props) => {
 
   let handleSubmit = async () => {
     let response = await fetch(
-      `http://192.168.10.114:3000/users/updateAdress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
+      `https://swapapp-backend.herokuapp.com/users/updateAdress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+        body: `address_street_1=${adress1}&address_city=${city1}&address_zipcode=${cp1}`,
         // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
       }
     );
@@ -165,6 +167,14 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder={"Ville"}
+                onChangeText={(text) => setCity1(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
                 placeholder="Code postal"
                 onChangeText={(text) => setCp1(text)}
                 editable={isEditable}
@@ -179,6 +189,14 @@ const UserScreen = (props) => {
                 inputContainerStyle={{ borderBottomWidth: 0 }}
                 placeholder="Adresse secondaire"
                 onChangeText={(text) => setAdress2(text)}
+                editable={isEditable}
+              />
+              <Input
+                containerStyle={styles.input2}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder={"Ville"}
+                onChangeText={(text) => setCity2(text)}
                 editable={isEditable}
               />
               <Input

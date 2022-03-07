@@ -12,6 +12,7 @@ import { Button, CheckBox, Input, Overlay, Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import RNPickerSelect from "react-native-picker-select";
 import InputButton from "../components/InputButton";
+import { connect } from "react-redux";
 
 function ListRequestScreen(props) {
   const [check4, setCheck4] = useState(false);
