@@ -49,6 +49,7 @@ const store = createStore(
     willingReducer,
     userDetailsReducer,
     categoriesReducer,
+    locationReducer,
   })
 );
 

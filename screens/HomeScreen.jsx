@@ -1,16 +1,45 @@
 import { Feather } from "@expo/vector-icons";
 import React from "react";
+import React, { useEffect } from "react";
 import {
   Image,
   ImageBackground,
   ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
+import { Input } from "react-native-elements";
+
+import { Feather, Entypo } from "@expo/vector-icons";
+
+import Suggestions from "../components/HomeScreen/Suggestions";
+
 import { connect } from "react-redux";
 import Suggestions from "../components/HomeScreen/Suggestions";
 import InputButton from "../components/InputButton";
 import { StatusBar } from "expo-status-bar";
 
-const HomeScreen = (props) => {
+import { useIsFocused } from "@react-navigation/native";
+
+import * as Location from "expo-location";
+
+const HomeScreen = ({ onSetLocation, user, navigation }) => {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status == "granted") {
+          let location = await Location.watchPositionAsync(
+            { distanceInterval: 10 },
+            (location) => {
+              onSetLocation(location);
+            }
+          );
+        }
+      })();
+    }
+  }, [isFocused]);
+
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -50,10 +79,10 @@ const HomeScreen = (props) => {
               <Text
                 style={styles.userName}
                 onPress={() => {
-                  props.navigation.navigate("UserScreen");
+                  navigation.navigate("UserScreen");
                 }}
               >
-                {props.user.firstName}
+                {user.firstName}
               </Text>
             </View>
           </View>
@@ -70,7 +99,7 @@ const HomeScreen = (props) => {
                 { fontSize: 25, fontFamily: "Poppins_600SemiBold" })
               }
             >
-              {props.user.user_credit ? props.user.user_credit : "1"}h
+              {user.user_credit ? user.user_credit : "1"}h
             </Text>
             <Text
               style={
@@ -115,7 +144,7 @@ const HomeScreen = (props) => {
             <Text style={styles.boxTitle}>Mes missions à proximité</Text>
             <TouchableWithoutFeedback
               onPress={() => {
-                props.navigation.navigate("TinderScreen", {
+                navigation.navigate("TinderScreen", {
                   screen: "TinderScreen",
                 });
               }}
@@ -127,7 +156,7 @@ const HomeScreen = (props) => {
             </TouchableWithoutFeedback>
             <Image
               source={{
-                uri: props.user.user_img,
+                uri: user.user_img,
               }}
               style={{
                 borderRadius: 50,
@@ -152,6 +181,20 @@ const HomeScreen = (props) => {
     </ImageBackground>
   );
 };
+
+function mapStateToProps(state) {
+  return { user: state.userReducer };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onSetLocation: function (location) {
+      dispatch({ type: "user::location", location: location });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   ImageBackground: {
@@ -256,9 +299,3 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
 });
-
-function mapStateToProps(state) {
-  return { user: state.userReducer };
-}
-
-export default connect(mapStateToProps, null)(HomeScreen);

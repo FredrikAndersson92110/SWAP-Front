@@ -14,10 +14,14 @@ import { connect } from "react-redux";
 import Request from "../components/AskScreen/Request";
 import InputButton from "../components/InputButton";
 
+import getDistance from "../components/helpers";
+import * as Location from "expo-location";
+
 function AskScreen({
   onAddRequestWillingUsers,
   navigation,
   willingUserRequests,
+  userLocation,
 }) {
   const isFocused = useIsFocused();
 
@@ -53,6 +57,25 @@ function AskScreen({
     requests = requests.concat(tempUsers);
   });
   let requestList = requests.map((req, i) => {
+    let geoDistance = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status == "granted") {
+        let geocode = await Location.geocodeAsync(
+          req.userAddresses[0].address_city
+        );
+        console.log("GEOCODE", geocode);
+        let distance = Math.round(
+          getDistance(
+            userLocation.coords.latitude,
+            userLocation.coords.longitude,
+            geocode[0].latitude,
+            geocode[0].longitude
+          )
+        );
+        return distance;
+      }
+    };
+
     return (
       <Request
         key={i}
@@ -61,6 +84,7 @@ function AskScreen({
         currentRequest={req.request}
         request={req}
         location={req.userAddresses[0].address_city}
+        distance={geoDistance()}
         willingUserToken={req.token}
         name={req.firstName}
         useravatar={req.user_img}
@@ -136,7 +160,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStatetoProps(state) {
-  return { willingUserRequests: state.willingReducer };
+  return {
+    willingUserRequests: state.willingReducer,
+    userLocation: state.locationReducer,
+  };
 }
 
 export default connect(mapStatetoProps, mapDispatchToProps)(AskScreen);
