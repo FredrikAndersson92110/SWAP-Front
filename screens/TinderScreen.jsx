@@ -1,15 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Image,
-  ImageBackground,
-  TouchableWithoutFeedback,
+  ImageBackground, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import SwipeCards from "react-native-swipe-cards-deck";
 
 function Card({ data }) {

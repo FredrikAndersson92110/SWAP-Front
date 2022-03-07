@@ -1,21 +1,15 @@
-import React, { useState, useRef } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Image,
-  ImageBackground,
-  ScrollView,
-  SafeAreaView,
-  TouchableWithoutFeedback,
+  ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 // Outils pour dynamiser le compteur 
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 
 const UserScreen = (props) => {

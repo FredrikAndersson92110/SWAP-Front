@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
+  ImageBackground, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
 import { Image, Input } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 
 const SignInScreen = (props) => {

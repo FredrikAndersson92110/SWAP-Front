@@ -1,17 +1,12 @@
+import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
+  StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
-import { Text, Overlay } from "react-native-elements";
+import { Overlay, Text } from "react-native-elements";
 
-import { useNavigation } from "@react-navigation/native";
 
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
 
 const CustomButton = () => {
   const navigation = useNavigation();

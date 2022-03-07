@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Button, Input } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import Request from "../components/AskScreen/Request";
+import React, { useEffect, useState } from "react";
+import {
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { Input } from "react-native-elements";
 import { connect } from "react-redux";
+import Request from "../components/AskScreen/Request";
+import InputButton from "../components/InputButton";
 
 function AskScreen({
   onAddRequestWillingUsers,
@@ -80,33 +81,28 @@ function AskScreen({
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <View styles={{ marginTop: 50 }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.navigate("ComposeRequestScreen", {
-                screen: "ComposeRequestScreen",
-              });
-            }}
-          >
-            <Text style={styles.newRequest}>Créer une nouvelle demande</Text>
-          </TouchableWithoutFeedback>
+        <View styles={{ marginTop: 50, width: "10%" }}>
+          <Text style={styles.newRequest}>Créer une nouvelle demande</Text>
 
-          <Input
-            onPressIn={() => {
-              navigation.navigate("ComposeRequestScreen", {
-                screen: "ComposeRequestScreen",
-              });
+          <InputButton
+            style={{
+              width: 350,
+              paddingLeft: 13,
+              textAlign: "left",
+              backgroundColor: "white",
+              borderRadius: 50,
+              height: 40,
+              color: "lightgrey",
+              shadowColor: "#171717",
+              shadowOffset: { width: 1, height: 5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 7,
+              elevation: 6,
+              borderBottomWidth: 0,
+              marginBottom: 20,
+              marginTop: 7,
             }}
-            placeholder="Trouver un service"
-            inputContainerStyle={styles.input}
-            containerStyle={{
-              paddingHorizontal: 0,
-              marginTop: 0,
-              width: "95%",
-            }}
-            leftIcon={
-              <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
-            }
+            placeHolder={"Trouver un service"}
           />
         </View>
         <ScrollView
@@ -115,7 +111,6 @@ function AskScreen({
             marginTop: 0,
             width: "100%",
           }}
-
           showsVerticalScrollIndicator={false}
         >
           {/* PAGE TITLE */}
@@ -128,7 +123,6 @@ function AskScreen({
           {/* end */}
         </ScrollView>
       </View>
-      <View style={{ marginBottom: 70 }}></View>
     </ImageBackground>
   );
 }
@@ -202,7 +196,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Poppins_700Bold",
     marginLeft: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   cardTitle: {
     fontSize: 16,
@@ -238,7 +232,7 @@ const styles = StyleSheet.create({
   },
   newRequest: {
     fontSize: 16,
-    marginLeft: 20,
+    marginLeft: 15,
     fontFamily: "Poppins_600SemiBold",
   },
 });

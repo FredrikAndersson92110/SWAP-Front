@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Avatar } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { connect } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Avatar } from "react-native-elements";
+import { connect } from "react-redux";
 
 
 function Request({
@@ -189,5 +189,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 20,
     fontFamily: "Poppins_600SemiBold",
+  },
+  buttonTitle: {
+    color: "#000000",
+    fontSize: 16,
+    fontFamily: "Poppins_500Medium",
+    letterSpacing: 0.6,
   },
 });

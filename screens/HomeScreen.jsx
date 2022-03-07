@@ -1,17 +1,14 @@
-import React, { useState, useRef } from "react";
+import { Feather } from "@expo/vector-icons";
+import React from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Image,
   ImageBackground,
-  ScrollView,
-  TouchableWithoutFeedback,
+  ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
-import { Input} from "react-native-elements";
-import { Feather, Entypo } from "@expo/vector-icons";
-import Suggestions from "../components/HomeScreen/Suggestions";
 import { connect } from "react-redux";
+import Suggestions from "../components/HomeScreen/Suggestions";
+import InputButton from "../components/InputButton";
+import { StatusBar } from "expo-status-bar";
 
 const HomeScreen = (props) => {
   return (
@@ -20,7 +17,7 @@ const HomeScreen = (props) => {
       source={require("../assets/images/background-1.png")}
       resizeMode="cover"
     >
-      <View style={(styles.container, { marginTop: 50 })}>
+      <View style={(styles.container, { marginTop: 30 })}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={
@@ -88,25 +85,29 @@ const HomeScreen = (props) => {
               Crédit temps
             </Text>
           </View>
-          {/* //
-          // EN COURS
-          // */}
+
           {/* Ma recherche */}
           <View style={styles.searchBox}>
             <Text style={styles.boxTitle}>Ma recherche</Text>
-            <Input
-              placeholder="Trouver un service"
-              inputContainerStyle={styles.input}
-              containerStyle={{ paddingHorizontal: 0, marginTop: 0 }}
-              leftIcon={
-                <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
-              }
-              placeholderTextColor={{ color: "blue" }}
-              onPressIn={() => {
-                props.navigation.navigate("ComposeRequestScreen", {
-                  screen: "ComposeRequestScreen",
-                });
+            <InputButton
+              style={{
+                width: "100%",
+                height: 42,
+                backgroundColor: "white",
+                paddingLeft: 13,
+                textAlign: "left",
+                backgroundColor: "white",
+                borderRadius: 50,
+                height: 40,
+                color: "lightgrey",
+                shadowColor: "#171717",
+                shadowOffset: { width: 1, height: 5 },
+                shadowOpacity: 0.2,
+                shadowRadius: 7,
+                elevation: 6,
+                borderBottomWidth: 0,
               }}
+              placeHolder={"Trouver un service"}
             />
           </View>
           {/* MAP */}
@@ -147,6 +148,7 @@ const HomeScreen = (props) => {
           <Suggestions />
         </ScrollView>
       </View>
+      <StatusBar style="auto" />
     </ImageBackground>
   );
 };
@@ -246,26 +248,6 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 20,
     resizeMode: "contain",
-  },
-  suggestionsImage: {
-    width: "100%",
-    height: 220,
-    borderRadius: 20,
-    resizeMode: "contain",
-  },
-  input: {
-    paddingLeft: 13,
-    textAlign: "left",
-    backgroundColor: "white",
-    borderRadius: 50,
-    height: 40,
-    color: "lightgrey",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
-    borderBottomWidth: 0,
   },
   timeCounter: {
     width: "40%",

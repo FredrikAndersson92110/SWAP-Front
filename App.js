@@ -1,52 +1,45 @@
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  CardStyleInterpolators, createStackNavigator
+} from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet } from "react-native";
-
-import { NavigationContainer } from "@react-navigation/native";
-
-import { Ionicons, Feather } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from "@react-navigation/stack";
-
+//Redux
+import { Provider } from "react-redux";
+import { combineReducers, createStore } from "redux";
+import CustomButton from "./components/CustomButton";
+//components
+import LoadFonts from "./components/LoadFonts";
+import categoriesReducer from "./reducers/categories.reducer";
+//Reducers
+import requestsReducer from "./reducers/requests.reducer";
+import userReducer from "./reducers/user.reducer";
+import userDetailsReducer from "./reducers/userDetails.reducer";
+// import transactionReducer from "./reducers/transaction.reducer";
+import willingReducer from "./reducers/willing.reducer";
 //Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
 import CustomScreen from "./screens/CustomScreen";
 import DemoScreen from "./screens/DemoScreen";
 import DetailScreen from "./screens/DetailScreen";
+import ErrorScreen from "./screens/ErrorScreen";
 import HelpScreen from "./screens/HelpScreen";
 import HomeScreen from "./screens/HomeScreen";
 import InteractionsScreen from "./screens/InteractionsScreen";
 import ListRequestScreen from "./screens/ListRequestScreen";
-import SplashScreen from "./screens/SplashScreen";
-
 import MoreInfoScreen from "./screens/MoreInfoScreen";
-import SignUpScreen from "./screens/SignUpScreen";
 import SignInScreen from "./screens/SignInScreen";
-
+import SignUpScreen from "./screens/SignUpScreen";
+import SplashScreen from "./screens/SplashScreen";
 import TinderScreen from "./screens/TinderScreen";
 import TransactionScreen from "./screens/TransactionScreen";
 import UserRequestScreen from "./screens/UserRequestScreen";
 import UserScreen from "./screens/UserScreen";
-import ErrorScreen from "./screens/ErrorScreen";
 
-//components
-import LoadFonts from "./components/LoadFonts";
-import CustomButton from "./components/CustomButton";
 
-//Redux
-import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
-//Reducers
-import requestsReducer from "./reducers/requests.reducer";
-import userReducer from "./reducers/user.reducer";
-// import transactionReducer from "./reducers/transaction.reducer";
-import willingReducer from "./reducers/willing.reducer";
-import userDetailsReducer from "./reducers/userDetails.reducer";
-import categoriesReducer from "./reducers/categories.reducer";
 // import statusReducer from "./reducers/status.reducer";
 
 const store = createStore(
@@ -125,7 +118,11 @@ function MyTabs() {
         component={UserRequestScreen}
       />
       <Tab.Screen
-        options={{ tabBarButton: () => null, tabBarVisible: true }}
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: true,
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
         name="ComposeRequestScreen"
         component={ComposeRequestScreen}
       />

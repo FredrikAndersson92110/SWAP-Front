@@ -1,14 +1,10 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
+  ImageBackground, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
 import { Image, Input } from "react-native-elements";
 import { connect } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
 
 const SignUpScreen = (props) => {
   const navigation = useNavigation();
