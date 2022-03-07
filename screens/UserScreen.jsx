@@ -12,7 +12,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 
 
-const UserScreen = (props) => {
+const UserScreen = (props, request) => {
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -33,7 +33,7 @@ const UserScreen = (props) => {
 
   let handleSubmit = async () => {
     let response = await fetch(
-      `https://swapapp-backend.herokuapp.com/users/updateAdress/n_S-gctq_9b4q4OnX5Lnw1MZsxVv6pwl`,
+      `https://swapapp-backend.herokuapp.com/users/updateAdress/${props.user.token}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -228,7 +228,7 @@ const UserScreen = (props) => {
                 containerStyle={styles.input2}
                 inputStyle={{ fontSize: 13 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={props.categories}
+                placeholder={request.category}
                 onChangeText={(text) => setComp1(text)}
                 editable={isEditable}
               />
@@ -415,7 +415,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return { user: state.userReducer, categoryMatches: state.categoriesReducer, categories: state.categories };
+ 
+  return { user: state.userReducer, request:  state.newRequest };
+ 
 }
 
 export default connect(mapStateToProps, null)(UserScreen);
