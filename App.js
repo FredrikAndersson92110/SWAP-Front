@@ -20,6 +20,7 @@ import userDetailsReducer from "./reducers/userDetails.reducer";
 import locationReducer from "./reducers/location.reducer";
 // import transactionReducer from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
+import composeRequestReducer from "./reducers/composeRequest.reducer";
 //Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
@@ -52,6 +53,7 @@ const store = createStore(
     userDetailsReducer,
     categoriesReducer,
     locationReducer,
+    composeRequestReducer,
   })
 );
 
