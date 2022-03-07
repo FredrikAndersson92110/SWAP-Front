@@ -199,9 +199,9 @@ const ComposeRequestScreen = (props) => {
             style={styles.button}
             onPress={() => {
               handleSubmit();
-              // props.navigation.navigate("ListRequestScreen", {
-              //   screen: "ListRequestScreen",
-              // });
+              props.navigation.navigate("ListRequestScreen", {
+                screen: "ListRequestScreen",
+              });
             }}
           >
             <Text style={styles.text}>Suivant</Text>
