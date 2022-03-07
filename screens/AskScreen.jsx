@@ -1,24 +1,27 @@
+import { Entypo } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   ImageBackground,
   ScrollView,
+  StyleSheet,
+  Text,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
-import { Entypo } from "@expo/vector-icons";
-
-import { useIsFocused } from "@react-navigation/native";
-
-import Request from "../components/AskScreen/Request";
+import { Input } from "react-native-elements";
 import { connect } from "react-redux";
+import Request from "../components/AskScreen/Request";
+import InputButton from "../components/InputButton";
+
+import getDistance from "../components/helpers";
+import * as Location from "expo-location";
 
 function AskScreen({
   onAddRequestWillingUsers,
   navigation,
   willingUserRequests,
+  userLocation,
 }) {
   const isFocused = useIsFocused();
 
@@ -54,6 +57,25 @@ function AskScreen({
     requests = requests.concat(tempUsers);
   });
   let requestList = requests.map((req, i) => {
+    let geoDistance = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status == "granted") {
+        let geocode = await Location.geocodeAsync(
+          req.userAddresses[0].address_city
+        );
+        console.log("GEOCODE", geocode);
+        let distance = Math.round(
+          getDistance(
+            userLocation.coords.latitude,
+            userLocation.coords.longitude,
+            geocode[0].latitude,
+            geocode[0].longitude
+          )
+        );
+        return distance;
+      }
+    };
+
     return (
       <Request
         key={i}
@@ -62,6 +84,7 @@ function AskScreen({
         currentRequest={req.request}
         request={req}
         location={req.userAddresses[0].address_city}
+        distance={geoDistance()}
         willingUserToken={req.token}
         name={req.firstName}
         useravatar={req.user_img}
@@ -70,6 +93,7 @@ function AskScreen({
             ? req.category.sub_category
             : req.category.category
         }
+        categoryImage={require("../assets/images/categories/bricolage.png")}
       />
     );
   });
@@ -81,42 +105,36 @@ function AskScreen({
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <View styles={{ marginTop: 50 }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.navigate("ComposeRequestScreen", {
-                screen: "ComposeRequestScreen",
-              });
-            }}
-          >
-            <Text style={styles.newRequest}>Créer une nouvelle demande</Text>
-          </TouchableWithoutFeedback>
+        <View styles={{ marginTop: 50, width: "10%" }}>
+          <Text style={styles.newRequest}>Créer une nouvelle demande</Text>
 
-          <Input
-            onPressIn={() => {
-              navigation.navigate("ComposeRequestScreen", {
-                screen: "ComposeRequestScreen",
-              });
+          <InputButton
+            style={{
+              width: 350,
+              paddingLeft: 13,
+              textAlign: "left",
+              backgroundColor: "white",
+              borderRadius: 50,
+              height: 40,
+              color: "lightgrey",
+              shadowColor: "#171717",
+              shadowOffset: { width: 1, height: 5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 7,
+              elevation: 6,
+              borderBottomWidth: 0,
+              marginBottom: 20,
+              marginTop: 7,
             }}
-            placeholder="Trouver un service"
-            inputContainerStyle={styles.input}
-            containerStyle={{
-              paddingHorizontal: 0,
-              marginTop: 0,
-              width: "95%",
-            }}
-            leftIcon={
-              <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
-            }
-            disabled
+            placeHolder={"Trouver un service"}
           />
         </View>
         <ScrollView
           style={{
             flex: 1,
             marginTop: 0,
+            width: "100%",
           }}
-          contentContainerStyle={{ width: "100%" }}
           showsVerticalScrollIndicator={false}
         >
           {/* PAGE TITLE */}
@@ -129,7 +147,6 @@ function AskScreen({
           {/* end */}
         </ScrollView>
       </View>
-      <View style={{ marginBottom: 70 }}></View>
     </ImageBackground>
   );
 }
@@ -143,7 +160,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStatetoProps(state) {
-  return { willingUserRequests: state.willingReducer };
+  return {
+    willingUserRequests: state.willingReducer,
+    userLocation: state.locationReducer,
+  };
 }
 
 export default connect(mapStatetoProps, mapDispatchToProps)(AskScreen);
@@ -202,7 +222,8 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 24,
     fontFamily: "Poppins_700Bold",
-    marginLeft: 0,
+    marginLeft: 20,
+    marginBottom: 20,
   },
   cardTitle: {
     fontSize: 16,
@@ -238,7 +259,7 @@ const styles = StyleSheet.create({
   },
   newRequest: {
     fontSize: 16,
-    marginLeft: 20,
+    marginLeft: 15,
     fontFamily: "Poppins_600SemiBold",
   },
 });

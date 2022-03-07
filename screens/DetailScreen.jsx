@@ -10,11 +10,25 @@ import { MaterialIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 
-function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
+function DetailScreen({
+  userDetails,
+  navigation,
+  user,
+  onRemoveCategoryMatch,
+}) {
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `http://192.168.10.108:3000/accept-helper/${userDetails.requestId}/${userDetails.request.token}`,
+        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
+        {
+          method: "PUT",
+        }
+      );
+    } else {
+      console.log(userDetails.requestId, user.token);
+      onRemoveCategoryMatch(userDetails.requestId);
+      let request = await fetch(
+        `https://swapapp-backend.herokuapp.com/.168.1.25:3000/add-willing-user/${userDetails.requestId}/${user.token}`,
         {
           method: "PUT",
         }
@@ -26,16 +40,16 @@ function DetailScreen({ userDetails, navigation, onAddRequestWillingUsers }) {
   const handleRefuse = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/delete-willing-user/${userDetails.requestId}/${userDetails.request.token}`,
+        `https://swapapp-backend.herokuapp.com/.168.1.25:3000/delete-willing-user/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "DELETE",
         }
       );
       await request.json();
-      navigation.goBack();
     } else {
-      console.log("not asker");
+      onRemoveCategoryMatch(userDetails.requestId);
     }
+    navigation.goBack();
   };
 
   let data;
@@ -173,11 +187,14 @@ function mapDispatchToProps(dispatch) {
         token: token,
       });
     },
+    onRemoveCategoryMatch: function (id) {
+      dispatch({ type: "user::removeMatch", requestId: id });
+    },
   };
 }
 
 function mapStateToProps(state) {
-  return { userDetails: state.userDetailsReducer };
+  return { userDetails: state.userDetailsReducer, user: state.userReducer };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailScreen);

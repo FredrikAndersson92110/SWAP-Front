@@ -1,12 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Avatar } from "react-native-elements";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
 
-import { FontAwesome } from "@expo/vector-icons";
-
-import { useNavigation } from "@react-navigation/native";
 
 function Request({
   isAsker,
@@ -17,8 +14,10 @@ function Request({
   askerName,
   useravatar,
   location,
+  categoryImage,
 }) {
   const navigation = useNavigation();
+  // const require = "../../assets/images/categories/bricolage.png"
 
   const handleDetails = () => {
     let user = "";
@@ -26,6 +25,7 @@ function Request({
     navigation.navigate("DetailScreen");
   };
 
+  // var path = `../../assets/images/categories/${category.replace(/\s/g, "_")}.png`
   return (
     <View style={styles.card}>
       <View
@@ -41,6 +41,7 @@ function Request({
           source={{ uri: useravatar }}
           containerStyle={styles.avatar}
         />
+
         <View>
           <Text style={styles.cardTitle}>{askerName}</Text>
           <View
@@ -49,10 +50,13 @@ function Request({
               alignItems: "center",
             }}
           >
+            {/* {(category = category.replace(/\s/g, "_"))} */}
+            {console.log(categoryImage)}
             <Image
-              source={require("../../assets/images/categories/bricolage.png")}
+              // source={require("../../assets/images/categories/bricolage.png")}
+              source={categoryImage}
               style={{ width: 21, height: 21, marginRight: 10 }}
-            ></Image>
+            />
             <Text style={styles.cardTitle}>
               {category.charAt(0).toUpperCase() + category.substring(1)}
             </Text>
@@ -185,5 +189,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 20,
     fontFamily: "Poppins_600SemiBold",
+  },
+  buttonTitle: {
+    color: "#000000",
+    fontSize: 16,
+    fontFamily: "Poppins_500Medium",
+    letterSpacing: 0.6,
   },
 });

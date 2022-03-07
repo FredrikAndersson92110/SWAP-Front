@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
+  ImageBackground, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
 import { Image, Input } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 
 const SignInScreen = (props) => {
@@ -23,7 +19,7 @@ const SignInScreen = (props) => {
     let lowerCaseEmail;
 
     if (email) {
-      lowerCaseEmail = email.toLowerCase();
+      lowerCaseEmail = email.toLowerCase().trim();
     }
 
     // Véririfcation du couple Mail/MDP en backend
@@ -103,35 +99,6 @@ const SignInScreen = (props) => {
             <Text style={styles.error}>{errorMessage}</Text>
           </View>
 
-          {/* BOUTON VALIDER*/}
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                handleSubmit();
-              }}
-            >
-              <Text style={styles.text}>Connexion</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* PHRASE REDIRECTION VERS INSCRIPTION */}
-          <View>
-            <Text
-              style={{
-                color: "grey",
-                fontSize: 13,
-                marginTop: 10,
-                fontFamily: "Poppins_400Regular",
-              }}
-              onPress={() => {
-                props.navigation.navigate("SignUpScreen");
-              }}
-            >
-              Pas encore de compte? S'inscrire
-            </Text>
-          </View>
-
           {/* PHRASE CONNEXION VIA RESEAUX */}
           <View>
             <Text
@@ -173,6 +140,35 @@ const SignInScreen = (props) => {
               style={{ width: 40, height: 40 }}
             />
           </View>
+          {/* BOUTON VALIDER*/}
+          <View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                handleSubmit();
+              }}
+            >
+              <Text style={styles.text}>Connexion</Text>
+            </TouchableOpacity>
+
+            {/* PHRASE REDIRECTION VERS INSCRIPTION */}
+
+            <Text
+              style={{
+                color: "grey",
+                fontSize: 13,
+                marginTop: 10,
+                alignSelf: "center",
+                fontFamily: "Poppins_400Regular",
+              }}
+              onPress={() => {
+                props.navigation.navigate("SignUpScreen");
+              }}
+            >
+              Pas encore de compte? S'inscrire
+            </Text>
+          </View>
+
           {/* Fin des composants */}
         </View>
       </View>

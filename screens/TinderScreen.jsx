@@ -1,16 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Image,
-  ImageBackground,
-  ScrollView,
-  TouchableWithoutFeedback,
+  ImageBackground, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
-import { Feather, Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import SwipeCards from "react-native-swipe-cards-deck";
 
 function Card({ data }) {
@@ -151,10 +144,11 @@ export default function TinderScreen(props) {
                 }}
                 hasMaybeAction={true}
                 stack={true}
-                stackDepth={3}
+                stackDepth={5}
+                showYup={false}
               />
             ) : (
-              <StatusCard text="Nous recherchons les services correspondant à vos critères..." />
+              <StatusCard text="Nous recherchons des missions correspondant à vos critères..." />
             )}
           </View>
           {/* CARD

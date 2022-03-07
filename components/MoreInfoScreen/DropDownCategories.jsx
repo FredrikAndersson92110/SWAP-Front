@@ -60,7 +60,7 @@ const DropDownCategories = (props) => {
   return (
     <View style={styles.container}>
       <MultiSelect
-        style={styles.dropdown}
+        style={props.style}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
@@ -70,16 +70,13 @@ const DropDownCategories = (props) => {
         data={data}
         labelField="label"
         valueField="value"
-        placeholder="Choisissez votre genre"
+        placeholder={props.placeHolder}
         searchPlaceholder="Recherche..."
         value={selected}
-        onChange={(item) => {
-          categoriesSelected.push(item)
-          setSelected(item);
-          handleCategories();
-        }}
+
+        onChange={props.onChange}
         selectedStyle={styles.selectedStyle}
-        containerStyle={styles.dropContainer}
+        containerStyle={props.containerStyle}
       />
     </View>
   );
@@ -89,10 +86,11 @@ const DropDownCategories = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: 300,
+    width: "100%",
+    paddingHorizontal: 15,
+
     // borderWidth: 2,
     // borderColor: "blue",
   },
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     borderWidth: 2,
     paddingLeft: 15,
-    borderRadius: 7,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
@@ -116,9 +114,10 @@ const styles = StyleSheet.create({
   },
   dropContainer: {
     height: 20,
-    width: "72%",
+    width: "70%",
     fontSize: 13,
-    borderRadius: 7,
+    padding: 15,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
@@ -147,6 +146,10 @@ const styles = StyleSheet.create({
   selectedStyle: {
     borderRadius: 12,
     backgroundColor: "white",
+  },
+  placeholderStyle: {
+    color: "grey",
+    fontSize: 14,
   },
 });
 

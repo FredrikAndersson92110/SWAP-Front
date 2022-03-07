@@ -1,26 +1,48 @@
-import React, { useState, useRef } from "react";
+import { Feather } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+import * as Location from "expo-location";
+import { StatusBar } from "expo-status-bar";
+import  React, {useEffect} from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Image,
   ImageBackground,
-  ScrollView,
-  TouchableWithoutFeedback,
+  ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
 } from "react-native";
-import { Input} from "react-native-elements";
-import { Feather, Entypo } from "@expo/vector-icons";
-import Suggestions from "../components/HomeScreen/Suggestions";
 import { connect } from "react-redux";
+import Suggestions from "../components/HomeScreen/Suggestions";
+import InputButton from "../components/InputButton";
 
-const HomeScreen = (props) => {
+
+
+
+
+
+const HomeScreen = ({ onSetLocation, user, navigation }) => {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status == "granted") {
+          let location = await Location.watchPositionAsync(
+            { distanceInterval: 10 },
+            (location) => {
+              onSetLocation(location);
+            }
+          );
+        }
+      })();
+    }
+  }, [isFocused]);
+
   return (
     <ImageBackground
       style={styles.ImageBackground}
       source={require("../assets/images/background-1.png")}
       resizeMode="cover"
     >
-      <View style={(styles.container, { marginTop: 50 })}>
+      <View style={(styles.container, { marginTop: 30 })}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={
@@ -53,10 +75,10 @@ const HomeScreen = (props) => {
               <Text
                 style={styles.userName}
                 onPress={() => {
-                  props.navigation.navigate("UserScreen");
+                  navigation.navigate("UserScreen");
                 }}
               >
-                {props.user.firstName}
+                {user.firstName}
               </Text>
             </View>
           </View>
@@ -73,7 +95,7 @@ const HomeScreen = (props) => {
                 { fontSize: 25, fontFamily: "Poppins_600SemiBold" })
               }
             >
-              {props.user.user_credit ? props.user.user_credit : "1"}h
+              {user.user_credit ? user.user_credit : "1"}h
             </Text>
             <Text
               style={
@@ -88,26 +110,29 @@ const HomeScreen = (props) => {
               Crédit temps
             </Text>
           </View>
-          {/* //
-          // EN COURS
-          // */}
+
           {/* Ma recherche */}
           <View style={styles.searchBox}>
             <Text style={styles.boxTitle}>Ma recherche</Text>
-            <Input
-              placeholder="Trouver un service"
-              inputContainerStyle={styles.input}
-              containerStyle={{ paddingHorizontal: 0, marginTop: 0 }}
-              leftIcon={
-                <Entypo name="magnifying-glass" size={24} color="#F7CE46" />
-              }
-              placeholderTextColor={{ color: "blue" }}
-              disabled
-              onPressIn={() => {
-                props.navigation.navigate("ComposeRequestScreen", {
-                  screen: "ComposeRequestScreen",
-                });
+            <InputButton
+              style={{
+                width: "100%",
+                height: 42,
+                backgroundColor: "white",
+                paddingLeft: 13,
+                textAlign: "left",
+                backgroundColor: "white",
+                borderRadius: 50,
+                height: 40,
+                color: "lightgrey",
+                shadowColor: "#171717",
+                shadowOffset: { width: 1, height: 5 },
+                shadowOpacity: 0.2,
+                shadowRadius: 7,
+                elevation: 6,
+                borderBottomWidth: 0,
               }}
+              placeHolder={"Trouver un service"}
             />
           </View>
           {/* MAP */}
@@ -115,7 +140,7 @@ const HomeScreen = (props) => {
             <Text style={styles.boxTitle}>Mes missions à proximité</Text>
             <TouchableWithoutFeedback
               onPress={() => {
-                props.navigation.navigate("TinderScreen", {
+                navigation.navigate("TinderScreen", {
                   screen: "TinderScreen",
                 });
               }}
@@ -127,7 +152,7 @@ const HomeScreen = (props) => {
             </TouchableWithoutFeedback>
             <Image
               source={{
-                uri: props.user.user_img,
+                uri: user.user_img,
               }}
               style={{
                 borderRadius: 50,
@@ -148,9 +173,24 @@ const HomeScreen = (props) => {
           <Suggestions />
         </ScrollView>
       </View>
+      <StatusBar style="auto" />
     </ImageBackground>
   );
 };
+
+function mapStateToProps(state) {
+  return { user: state.userReducer };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onSetLocation: function (location) {
+      dispatch({ type: "user::location", location: location });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   ImageBackground: {
@@ -248,26 +288,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: "contain",
   },
-  suggestionsImage: {
-    width: "100%",
-    height: 220,
-    borderRadius: 20,
-    resizeMode: "contain",
-  },
-  input: {
-    paddingLeft: 13,
-    textAlign: "left",
-    backgroundColor: "white",
-    borderRadius: 50,
-    height: 40,
-    color: "lightgrey",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
-    borderBottomWidth: 0,
-  },
   timeCounter: {
     width: "40%",
     height: 120,
@@ -275,9 +295,3 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
 });
-
-function mapStateToProps(state) {
-  return { user: state.userReducer };
-}
-
-export default connect(mapStateToProps, null)(HomeScreen);
