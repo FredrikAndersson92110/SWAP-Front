@@ -15,9 +15,9 @@ export default function ComposeRequestScreen(props) {
   const [selectedCat, setSelectedCat] = useState(null);
   let categoriesSelected = [];
   const data = [
-    { label: "Femme", value: "female" },
-    { label: "Homme", value: "male" },
-    { label: "Non Binaire", value: "non binary" },
+    { label: "Ma poistion actuelle", value: "geolocation" },
+    { label: "Adresse 1 (à dyna)", value: "adresse-1" },
+    { label: "Adresse 2 (à dyna)", value: "adresse-2" },
   ];
 
   return (
@@ -50,10 +50,11 @@ export default function ComposeRequestScreen(props) {
           <Text>{errorMessage}</Text>
 
           <DropDownCategories
-            placeHolder={selected.label}
+            placeHolder={"Choisissez une catégorie"}
             containerStyle={[
               styles.card,
-              { height: 100, marginBottom: 200, width: "77%" },
+              { height: 100, marginBottom: 200, width: "77%",     paddingHorizontal: 20,
+    paddingVertical: 10, },
             ]}
             style={{
               width: "100%",
@@ -223,7 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: "white",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
