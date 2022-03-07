@@ -20,14 +20,13 @@ function Request({
   location,
   requestId,
   request,
-  userLocation,
   distance,
 }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
   const handleDetails = () => {
-    onGetDetails(isAsker, currentRequest, requestId, request);
+    onGetDetails(isAsker, currentRequest, requestId, request, distance);
     navigation.navigate("DetailScreen");
   };
 
@@ -89,11 +88,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onGetDetails: function (isAsker, request, requestId, user) {
+    onGetDetails: function (isAsker, request, requestId, user, distance) {
       dispatch({
         type: "user::details",
         isAsker: isAsker,
         request: request,
+        location: distance,
         requestId: requestId,
         user: user,
       });

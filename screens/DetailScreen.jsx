@@ -16,6 +16,7 @@ function DetailScreen({
   user,
   onRemoveCategoryMatch,
 }) {
+  console.log("ID", userDetails.requestId, "TOKEN", user.token);
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
@@ -59,7 +60,6 @@ function DetailScreen({
     data = userDetails.request.asker;
   }
 
-  console.log("DATA", data);
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -144,7 +144,7 @@ function DetailScreen({
                 style={{ marginLeft: 7 }}
               />
               <Text style={styles.bodyText}>
-                5Km ({data.userAddresses[0].address_city})
+                {userDetails.location} Km ({data.userAddresses[0].address_city})
               </Text>
             </View>
 
@@ -194,7 +194,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { userDetails: state.userDetailsReducer, user: state.userReducer };
+  return {
+    userDetails: state.userDetailsReducer,
+    user: state.userReducer,
+    userLocation: state.locationReducer,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailScreen);
