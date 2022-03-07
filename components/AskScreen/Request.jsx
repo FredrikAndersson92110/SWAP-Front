@@ -31,34 +31,11 @@ function Request({
     navigation.navigate("DetailScreen");
   };
 
-  let geoDistance = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status == "granted") {
-      let geocode = await Location.geocodeAsync(location);
-      let distance = Math.round(
-        getDistance(
-          userLocation.coords.latitude,
-          userLocation.coords.longitude,
-          geocode[0].latitude,
-          geocode[0].longitude
-        )
-      );
-      return distance;
-    }
-  };
-  // let distance;
-  // useEffect(async () => {
-  //   if (isFocused) {
-  //     distance = await geoDistance();
-  //     console.log(distance);
-  //   }
-  // }, [isFocused]);
-
   return (
-    <View style={{ borderColor: "red", borderWidth: 2, width: "100%" }}>
+    <View style={{ width: "100%" }}>
       <Text
         style={{
-          paddingLeft: 10,
+          paddingLeft: 20,
           marginBottom: 10,
           fontFamily: "Poppins_600SemiBold",
         }}
@@ -68,7 +45,7 @@ function Request({
 
       {/* CARD */}
       <View style={styles.card}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", width: "100%", padding: 7 }}>
           <Avatar
             rounded
             size="medium"

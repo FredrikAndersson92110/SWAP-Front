@@ -1,19 +1,14 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Input,
+  ImageBackground, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
-
+import { connect } from "react-redux";
 //Composants
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 import DropDownGender from "../components/MoreInfoScreen/DropDownGender";
 import InputBirthDate from "../components/MoreInfoScreen/InputBirthDate";
-import { connect } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const MoreInfoScreen = (props) => {
   //

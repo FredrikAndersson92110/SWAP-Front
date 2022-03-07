@@ -1,14 +1,10 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
+  ImageBackground, StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
 import { Image, Input } from "react-native-elements";
 import { connect } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
 
 const SignUpScreen = (props) => {
   const navigation = useNavigation();
@@ -26,30 +22,53 @@ const SignUpScreen = (props) => {
   let handleSubmit = async () => {
     //Formatage email en min
     let lowerCaseEmail;
-    lowerCaseEmail = email.toLowerCase();
+    lowerCaseEmail = email.toLowerCase().trim();
+
+    let emailRegex =
+      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
     //Vérification de l'email (existant ou non?)
-    if (email) {
-      let checkEmail = await fetch(
-        `https://swapapp-backend.herokuapp.com/users/check-email/?email=${lowerCaseEmail}`
-      );
-      if (checkEmail) {
-        setErrorMessage("Email déjà utilisé");
-      }
-    }
+    // if (email) {
+    //   let checkEmail = await fetch(
+    //     `https://swapapp-backend.herokuapp.com/users/check-email/?email=${lowerCaseEmail}`
+    //   );
+    //   if (checkEmail) {
+    //     setErrorMessage("Email déjà utilisé");
+    //   }
+    // } else {
+    //   setErrorMessage("Format de l'email non valide");
+    // }
 
+    // 1 - Vérification que tous les champs sont remplis
     if (firstName && lastName && email && password) {
+      // 2 - Vérification que l'email est au bon format
+      if (lowerCaseEmail.match(emailRegex)) {
+        console.log("==format email ok==");
+        // 3 - Vérification que email n'existe pas sur la DB
+        if (lowerCaseEmail.match(emailRegex)) {
+          let checkEmail = await fetch(
+            `https://swapapp-backend.herokuapp.com/users/check-email/?email=${lowerCaseEmail}`
+          );
+          checkEmail = await checkEmail.json();
+          console.log("checkEmail ==>", checkEmail);
 
-      console.log("email avant REDUCER :", lowerCaseEmail);
-      //Ajout USER dans le store
-      props.saveUser({
-        firstName: firstName,
-        lastName: lastName,
-        email: lowerCaseEmail,
-        password: password,
-      });
-      //On redirige vers MOREINFOS
-      return navigation.navigate("MoreInfoScreen");
+          if (checkEmail.result == false) {
+            //Ajout USER dans le store
+            props.saveUser({
+              firstName: firstName,
+              lastName: lastName,
+              email: lowerCaseEmail,
+              password: password,
+            });
+            //On redirige vers MOREINFOS
+            return navigation.navigate("MoreInfoScreen");
+          } else {
+            setErrorMessage("Email déjà utilisé");
+          }
+        }
+      } else {
+        setErrorMessage("Format de l'email non valide");
+      }
     } else {
       setErrorMessage("Veuillez remplir tous les champs");
     }
@@ -165,7 +184,7 @@ const SignUpScreen = (props) => {
           </View>
 
           {/* BOUTONS INSCRIPTION */}
-          <View style={{ justifyContent: "flex-end", marginBottom: 70 }}>
+          <View style={{ justifyContent: "flex-end" }}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
@@ -196,7 +215,6 @@ const SignUpScreen = (props) => {
   );
 };
 
-
 //
 // ─────────────────────────────────────────────────── ──────────
 //   :::::: S T Y L E S : :  :   :    :     :        :          :
@@ -207,7 +225,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     width: "100%",
   },
   view1: {
@@ -262,6 +279,12 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     bottom: -10,
     color: "red",
+  },
+  text: {
+    color: "#000000",
+    fontSize: 18,
+    fontFamily: "Poppins_600SemiBold",
+    letterSpacing: 0.6,
   },
 });
 

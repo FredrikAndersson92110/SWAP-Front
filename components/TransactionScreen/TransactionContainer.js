@@ -10,37 +10,30 @@ import {
   ScrollView,
   Picker,
 } from "react-native";
-import {
-  Overlay,
-  Input,
-  ListItem,
-} from "react-native-elements";
-import { AntDesign, Feather} from "@expo/vector-icons";
+import { Overlay, Input, ListItem } from "react-native-elements";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
 
-import {useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 // import socketIOClient from "socket.io-client";
 
-
 /*---------------------------------- FUNCTION ----------------------------------*/
 export default function TransationContainer() {
+  const navigation = useNavigation();
 
-const navigation = useNavigation();
+  const handleSubmit = async () => {
+    return navigation.navigate("InteractionsScreen");
+  };
 
-const handleSubmit = async () => {
- return navigation.navigate("InteractionsScreen")
-}
-
-  const [status, setStatus] = useState(2);
+  const [status, setStatus] = useState(1);
   const [active, setActive] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
   const [listMessage, setListMessage] = useState([]);
   const [confirm, setConfirm] = useState(false);
-
 
   // dynamise les pastilles
   let vert = "#399F09";
@@ -75,11 +68,11 @@ const handleSubmit = async () => {
   // dynamise les composants
   var components;
   if (status === 0) {
-    components = <Confirmation />
+    components = <Confirmation />;
   } else if (status === 1) {
-    components = <Declaration />
+    components = <Declaration />;
   } else if (status === 2) {
-    components = <DoubleDeclaration />
+    components = <DoubleDeclaration />;
   }
 
   let source = require("../../assets/avatar.png");
@@ -314,7 +307,7 @@ const handleSubmit = async () => {
                       <ListItem style={{ borderRadius: 8 }}>
                         <Text style={styles.chatBubbles}>Coucou!</Text>
                       </ListItem>
-                      <ListItem >
+                      <ListItem>
                         <Text style={styles.chatBubbles}>
                           Merci pour d'avoir accepté ma demande :. Tu serais
                           disponible quand?

@@ -1,14 +1,10 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import Conversation from "../components/InteractionScreeen/Conversation";
 import { useIsFocused } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  ImageBackground, ScrollView, StyleSheet, Text, View
+} from "react-native";
 import { connect } from "react-redux";
+import Conversation from "../components/InteractionScreeen/Conversation";
 
 function InteractionsScreen({ requests, onAddRequests, navigation }) {
   const isFocused = useIsFocused();

@@ -1,18 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   ImageBackground,
-  ScrollView,
-  TouchableOpacity,
+  ScrollView, StyleSheet, Text, View
 } from "react-native";
-
+import { connect } from "react-redux";
 import Request from "../components/HelpScreen/Request";
 
-import { connect } from "react-redux";
 
-import { useIsFocused } from "@react-navigation/native";
+
 
 function HelpScreen({ onMatchCategories, categoryMatches, navigation }) {
   const [message, setMessage] = useState("");

@@ -1,15 +1,10 @@
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import {
-  View,
-  StyleSheet,
   Image,
-  ImageBackground,
-  TouchableOpacity,
-  ScrollView,
+  ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View
 } from "react-native";
-import { Button, Avatar, Text } from "react-native-elements";
-import { MaterialIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
+import { Avatar, Text } from "react-native-elements";
 
-import { useFonts } from "expo-font";
 
 export default function DetailScreen(props) {
   let source = require("../assets/img_avatar2.png");
