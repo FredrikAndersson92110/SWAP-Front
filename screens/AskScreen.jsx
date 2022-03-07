@@ -27,8 +27,8 @@ function AskScreen({
   const isFocused = useIsFocused();
 
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
+  const [requestList, setRequestList] = useState([]);
+  useEffect(async () => {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
@@ -42,8 +42,51 @@ function AskScreen({
         }
       }
       getRequests();
+
+      let tempList = [];
+      for (let req of requests) {
+        let distance = await geoDistance(req);
+        tempList.push(
+          <Request
+            key={req.token}
+            isAsker={true}
+            requestId={req.requestId}
+            currentRequest={req.request}
+            request={req}
+            location={req.userAddresses[0].address_city}
+            distance={distance}
+            willingUserToken={req.token}
+            name={req.firstName}
+            useravatar={req.user_img}
+            category={
+              req.category.sub_category
+                ? req.category.sub_category
+                : req.category.category
+            }
+          />
+        );
+      }
+      setRequestList(tempList);
     }
   }, [isFocused]);
+
+  let geoDistance = async (req) => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status == "granted") {
+      let geocode = await Location.geocodeAsync(
+        req.userAddresses[0].address_city
+      );
+      let distance = Math.round(
+        getDistance(
+          userLocation.coords.latitude,
+          userLocation.coords.longitude,
+          geocode[0].latitude,
+          geocode[0].longitude
+        )
+      );
+      return distance;
+    }
+  };
 
   let requests = [];
   willingUserRequests.forEach((req) => {
@@ -57,46 +100,27 @@ function AskScreen({
     });
     requests = requests.concat(tempUsers);
   });
-  let requestList = requests.map((req, i) => {
-    let geoDistance = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status == "granted") {
-        let geocode = await Location.geocodeAsync(
-          req.userAddresses[0].address_city
-        );
-        console.log("GEOCODE", geocode);
-        let distance = Math.round(
-          getDistance(
-            userLocation.coords.latitude,
-            userLocation.coords.longitude,
-            geocode[0].latitude,
-            geocode[0].longitude
-          )
-        );
-        return distance;
-      }
-    };
 
-    return (
-      <Request
-        key={i}
-        isAsker={true}
-        requestId={req.requestId}
-        currentRequest={req.request}
-        request={req}
-        location={req.userAddresses[0].address_city}
-        distance={geoDistance()}
-        willingUserToken={req.token}
-        name={req.firstName}
-        useravatar={req.user_img}
-        category={
-          req.category.sub_category
-            ? req.category.sub_category
-            : req.category.category
-        }
-      />
-    );
-  });
+  // let requestList = requests.map((req, i) => {
+  //   return (
+  //     <Request
+  //       key={i}
+  //       isAsker={true}
+  //       requestId={req.requestId}
+  //       currentRequest={req.request}
+  //       request={req}
+  //       location={req.userAddresses[0].address_city}
+  //       willingUserToken={req.token}
+  //       name={req.firstName}
+  //       useravatar={req.user_img}
+  //       category={
+  //         req.category.sub_category
+  //           ? req.category.sub_category
+  //           : req.category.category
+  //       }
+  //     />
+  //   );
+  // });
 
   return (
     <ImageBackground

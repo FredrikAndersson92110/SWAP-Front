@@ -4,7 +4,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
+import getDistance from "../helpers";
+import * as Location from "expo-location";
+import { useEffect } from "react";
 
 function Request({
   isAsker,
@@ -16,13 +20,39 @@ function Request({
   location,
   requestId,
   request,
+  userLocation,
   distance,
 }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
   const handleDetails = () => {
     onGetDetails(isAsker, currentRequest, requestId, request);
     navigation.navigate("DetailScreen");
   };
+
+  let geoDistance = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status == "granted") {
+      let geocode = await Location.geocodeAsync(location);
+      let distance = Math.round(
+        getDistance(
+          userLocation.coords.latitude,
+          userLocation.coords.longitude,
+          geocode[0].latitude,
+          geocode[0].longitude
+        )
+      );
+      return distance;
+    }
+  };
+  // let distance;
+  // useEffect(async () => {
+  //   if (isFocused) {
+  //     distance = await geoDistance();
+  //     console.log(distance);
+  //   }
+  // }, [isFocused]);
 
   return (
     <View style={{ borderColor: "red", borderWidth: 2, width: "100%" }}>
@@ -62,7 +92,9 @@ function Request({
                 color="#F7CE46"
                 style={{ marginRight: 10 }}
               />
-              <Text style={styles.bodyText}>{location} ( km)</Text>
+              <Text style={styles.bodyText}>
+                {location} ({distance} km)
+              </Text>
             </View>
           </View>
         </View>
@@ -72,6 +104,10 @@ function Request({
       </View>
     </View>
   );
+}
+
+function mapStateToProps(state) {
+  return { userLocation: state.locationReducer };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -88,7 +124,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(Request);
+export default connect(mapStateToProps, mapDispatchToProps)(Request);
 
 const styles = StyleSheet.create({
   container: {
