@@ -19,7 +19,7 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    return navigation.navigate("UserScreen");
+    // return navigation.navigate("UserScreen");
   };
 
   let source = require("../../assets/avatar.png");
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
@@ -193,16 +193,16 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: "#FFFFFF",
-    fontSize: 18,
-    // lineHeight: 21,
-    letterSpacing: 0.6,
-    fontFamily: "Poppins_700Bold",
+    fontSize: 20,
+    lineHeight: 24,
+    marginTop: 3,
+    fontFamily: "Poppins_600SemiBold",
   },
   text2: {
     color: "#000000",
-    fontSize: 18,
-    // lineHeight: 21,
-    letterSpacing: 0.6,
-    fontFamily: "Poppins_700Bold",
+    fontSize: 20,
+    lineHeight: 24,
+    marginTop: 3,
+    fontFamily: "Poppins_600SemiBold",
   },
 });

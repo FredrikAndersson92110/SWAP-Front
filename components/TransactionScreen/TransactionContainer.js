@@ -2,21 +2,26 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import React, {
-  useCallback, useEffect, useMemo,
-  useRef, useState
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import {
-  ImageBackground, Platform,
+  ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity, TouchableWithoutFeedback, View
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
-
 
 const TransactionContainer = (props) => {
   let bottom = Platform.OS === "ios" ? 70 : 50;
@@ -26,7 +31,7 @@ const TransactionContainer = (props) => {
   // ─── CONST CHAT ─────────────────────────────────────────────────────────────────
   //
   const bottomSheetRef = useRef(BottomSheet);
-  const snapPoints = useMemo(() => ["30%", "50%", "70%"], []);
+  const snapPoints = useMemo(() => ["40%","40%","80%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
@@ -202,61 +207,65 @@ const TransactionContainer = (props) => {
               </Text>
             </View>
 
-            {/* PASTILLES DE STATUS */}
+            {/* ------- PASTILLES DE STATUS ------- */}
             <View
               style={{
                 flexDirection: "row",
                 marginTop: 20,
                 width: 280,
-                justifyContent: "space-between",
+                justifyContent: "space-even",
               }}
             >
-              <AntDesign name="checkcircle" size={30} color={color1} />
-              <View style={styles.traits}></View>
-              <AntDesign name="checkcircle" size={30} color={color2} />
-              <View style={styles.traits}></View>
-              <AntDesign name="checkcircle" size={30} color={color3} />
-            </View>
+              {/* CHECK 1 */}
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color1} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Mise en relation
+                </Text>
+              </View>
+              <View style={[styles.traits, { left: -5 }]}></View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 8,
-                width: 330,
-                // borderWidth: 1,
-                // borderColor: "red",
-              }}
-            >
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 1,
-                }}
-              >
-                Mise en relation
-              </Text>
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 58,
-                }}
-              >
-                Confirmée
-              </Text>
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 75,
-                }}
-              >
-                Déclarée
-              </Text>
+              {/* CHECK 2 */}
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color2} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Confirmée
+                </Text>
+              </View>
+              <View style={[styles.traits, {marginRight:10}]}></View>
+
+              {/* CHECK 2 */}
+
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color3} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Déclarée
+                </Text>
+              </View>
             </View>
 
             {/* COMPOSANTS SELON CONDITIONS BEFORE RETURN */}
@@ -437,6 +446,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     width: 55,
     height: 1,
+    top: -10,
     alignSelf: "center",
   },
   pageTop: {

@@ -64,7 +64,8 @@ export default function DoubleDeclaration() {
                 color: "black",
                 fontWeight: 'bold',
                 marginLeft: 35,
-                fontSize: 15,
+            fontSize: 15,
+                marginTop: 20
               }}
             >
               Commentaire
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
