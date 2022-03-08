@@ -1,30 +1,22 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { useNavigation } from "@react-navigation/native";
 import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-  useState,
+  useCallback, useEffect, useMemo,
+  useRef, useState
 } from "react";
 import {
-  Platform,
+  ImageBackground, Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
-  ImageBackground,
-  Pressable,
-  TouchableWithoutFeedback,
+  TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
-import { Input, ListItem, Overlay } from "react-native-elements";
 import { connect } from "react-redux";
 import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
+
 
 const TransactionContainer = (props) => {
   let bottom = Platform.OS === "ios" ? 70 : 50;
@@ -166,226 +158,232 @@ const TransactionContainer = (props) => {
   //
 
   return (
-    <View style={styles.container}>
-      <View style={{ marginTop: 20 }}>
-        <View style={styles.view1}>
-          {/* PAGE TITLE */}
-          <View style={styles.pageTop}>
-            <Text
-              style={{
-                color: "black",
-                fontFamily: "Poppins_700Bold",
-                marginLeft: 18,
-                fontSize: 20,
-              }}
-            >
-              Statut de la demande
-            </Text>
+    <ImageBackground
+      style={styles.ImageBackground}
+      source={require("../../assets/images/background-2.png")}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={{ marginTop: 20 }}>
+          <View style={styles.view1}>
+            {/* PAGE TITLE */}
+            <View style={styles.pageTop}>
+              <Text
+                style={{
+                  color: "black",
+                  fontFamily: "Poppins_700Bold",
+                  marginLeft: 18,
+                  fontSize: 20,
+                }}
+              >
+                Statut de la demande
+              </Text>
 
-            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
-              <AntDesign
-                name="close"
-                size={30}
-                color="#000000"
-                style={{ marginRight: 10 }}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-
-          <View style={{ alignSelf: "flex-start" }}>
-            <Text
-              style={{
-                color: "black",
-                marginLeft: 18,
-                fontSize: 12,
-                fontFamily: "Poppins_400Regular",
-              }}
-            >
-              {transactionStatus}
-            </Text>
-          </View>
-
-          {/* PASTILLES DE STATUS */}
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 20,
-              width: 280,
-              justifyContent: "space-between",
-            }}
-          >
-            <AntDesign name="checkcircle" size={30} color={color1} />
-            <View style={styles.traits}></View>
-            <AntDesign name="checkcircle" size={30} color={color2} />
-            <View style={styles.traits}></View>
-            <AntDesign name="checkcircle" size={30} color={color3} />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 8,
-              width: 330,
-              // borderWidth: 1,
-              // borderColor: "red",
-            }}
-          >
-            <Text
-              style={{
-                color: "black",
-                fontSize: 10,
-                fontFamily: "Poppins_400Regular",
-                marginLeft: 1,
-              }}
-            >
-              Mise en relation
-            </Text>
-            <Text
-              style={{
-                color: "black",
-                fontSize: 10,
-                fontFamily: "Poppins_400Regular",
-                marginLeft: 58,
-              }}
-            >
-              Confirmée
-            </Text>
-            <Text
-              style={{
-                color: "black",
-                fontSize: 10,
-                fontFamily: "Poppins_400Regular",
-                marginLeft: 75,
-              }}
-            >
-              Déclarée
-            </Text>
-          </View>
-
-          {/* COMPOSANTS SELON CONDITIONS BEFORE RETURN */}
-          <View style={{ flex: 1, justifyContent: "center" }}>
-            {components}
-          </View>
-
-          {/* Fin des composants */}
-        </View>
-      </View>
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        keyboardBehavior="fillParent"
-        onChange={handleSheetChanges}
-        style={{
-          alignItems: "center",
-          marginTop: 60,
-          justifyContent: "center",
-        }}
-      >
-        <View style={styles.contentContainer}>
-          <View style={{ width: "100%", marginLeft: 15, marginTop: 20 }}>
-            <Text style={styles.titre}>Messages</Text>
-          </View>
-
-          <ScrollView content={styles.scrollZone}>
-            {/* CHAT ZONE MESSAGES */}
-
-            {/* Message received */}
-            <View style={{ alignItems: "flex-start" }}>
-              <View style={styles.chatBubblesReceived}>
-                <Text style={{ margin: 10, color: "white" }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                  ☺️
-                </Text>
-              </View>
+              <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+                <AntDesign
+                  name="close"
+                  size={30}
+                  color="#000000"
+                  style={{ marginRight: 10 }}
+                />
+              </TouchableWithoutFeedback>
             </View>
 
-            {/* Message sent */}
-            <View style={{ alignItems: "flex-end" }}>
-              <View style={styles.chatBubblesSent}>
-                <Text style={{ margin: 10 }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                  ☺️
-                </Text>
-              </View>
+            <View style={{ alignSelf: "flex-start" }}>
+              <Text
+                style={{
+                  color: "black",
+                  marginLeft: 18,
+                  fontSize: 12,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
+                {transactionStatus}
+              </Text>
             </View>
 
-            {/* Message received */}
-            <View style={{ alignItems: "flex-start" }}>
-              <View style={styles.chatBubblesReceived}>
-                <Text style={{ margin: 10, color: "white" }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                  ☺️
-                </Text>
-              </View>
-            </View>
-
-            {/* Message sent */}
-            <View style={{ alignItems: "flex-end" }}>
-              <View style={styles.chatBubblesSent}>
-                <Text style={{ margin: 10 }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37
-                  jours.Coucou! tu veux être mon ami? Je suis sobre depuis 37
-                  jours. ☺️
-                </Text>
-              </View>
-            </View>
-            {/* Message received */}
-            <View style={{ alignItems: "flex-start" }}>
-              <View style={styles.chatBubblesReceived}>
-                <Text style={{ margin: 10, color: "white" }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                  ☺️
-                </Text>
-              </View>
-            </View>
-
-            {/* Message sent */}
-            <View style={{ alignItems: "flex-end" }}>
-              <View style={styles.chatBubblesSent}>
-                <Text style={{ margin: 10 }}>
-                  Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                  ☺️
-                </Text>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: 370,
-            alignItems: "center",
-            marginBottom: bottom,
-          }}
-        >
-          <BottomSheetTextInput
-            style={[styles.input, { paddingBottom: 0 }]}
-            keyboardBehavior={"fullScreen"}
-            android_keyboardInputMode={"adjustResize"}
-          />
-          <TouchableOpacity
-          // onPress={()=> {socket.emit("sendMessage", {message:currentMessage, pseudo: props.pseudo})}}
-          >
+            {/* PASTILLES DE STATUS */}
             <View
               style={{
-                backgroundColor: "#F7CE46",
-                padding: 10,
-                borderRadius: 50,
-                margin: 20,
-                shadowColor: "#171717",
-                shadowOffset: { width: 1, height: 5 },
-                shadowOpacity: 0.2,
-                shadowRadius: 7,
-                elevation: 7,
+                flexDirection: "row",
+                marginTop: 20,
+                width: 280,
+                justifyContent: "space-between",
               }}
             >
-              <Feather name="send" size={18} color="#000000" />
+              <AntDesign name="checkcircle" size={30} color={color1} />
+              <View style={styles.traits}></View>
+              <AntDesign name="checkcircle" size={30} color={color2} />
+              <View style={styles.traits}></View>
+              <AntDesign name="checkcircle" size={30} color={color3} />
             </View>
-          </TouchableOpacity>
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 8,
+                width: 330,
+                // borderWidth: 1,
+                // borderColor: "red",
+              }}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 10,
+                  fontFamily: "Poppins_400Regular",
+                  marginLeft: 1,
+                }}
+              >
+                Mise en relation
+              </Text>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 10,
+                  fontFamily: "Poppins_400Regular",
+                  marginLeft: 58,
+                }}
+              >
+                Confirmée
+              </Text>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 10,
+                  fontFamily: "Poppins_400Regular",
+                  marginLeft: 75,
+                }}
+              >
+                Déclarée
+              </Text>
+            </View>
+
+            {/* COMPOSANTS SELON CONDITIONS BEFORE RETURN */}
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              {components}
+            </View>
+
+            {/* Fin des composants */}
+          </View>
         </View>
-      </BottomSheet>
-    </View>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          keyboardBehavior="fillParent"
+          onChange={handleSheetChanges}
+          style={{
+            alignItems: "center",
+            marginTop: 60,
+            justifyContent: "center",
+          }}
+        >
+          <View style={styles.contentContainer}>
+            <View style={{ width: "100%", marginLeft: 15, marginTop: 20 }}>
+              <Text style={styles.titre}>Messages</Text>
+            </View>
+
+            <ScrollView content={styles.scrollZone}>
+              {/* CHAT ZONE MESSAGES */}
+
+              {/* Message received */}
+              <View style={{ alignItems: "flex-start" }}>
+                <View style={styles.chatBubblesReceived}>
+                  <Text style={{ margin: 10, color: "white" }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
+                    ☺️
+                  </Text>
+                </View>
+              </View>
+
+              {/* Message sent */}
+              <View style={{ alignItems: "flex-end" }}>
+                <View style={styles.chatBubblesSent}>
+                  <Text style={{ margin: 10 }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
+                    ☺️
+                  </Text>
+                </View>
+              </View>
+
+              {/* Message received */}
+              <View style={{ alignItems: "flex-start" }}>
+                <View style={styles.chatBubblesReceived}>
+                  <Text style={{ margin: 10, color: "white" }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
+                    ☺️
+                  </Text>
+                </View>
+              </View>
+
+              {/* Message sent */}
+              <View style={{ alignItems: "flex-end" }}>
+                <View style={styles.chatBubblesSent}>
+                  <Text style={{ margin: 10 }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37
+                    jours.Coucou! tu veux être mon ami? Je suis sobre depuis 37
+                    jours. ☺️
+                  </Text>
+                </View>
+              </View>
+              {/* Message received */}
+              <View style={{ alignItems: "flex-start" }}>
+                <View style={styles.chatBubblesReceived}>
+                  <Text style={{ margin: 10, color: "white" }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
+                    ☺️
+                  </Text>
+                </View>
+              </View>
+
+              {/* Message sent */}
+              <View style={{ alignItems: "flex-end" }}>
+                <View style={styles.chatBubblesSent}>
+                  <Text style={{ margin: 10 }}>
+                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
+                    ☺️
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              width: 370,
+              alignItems: "center",
+              marginBottom: bottom,
+            }}
+          >
+            <BottomSheetTextInput
+              style={[styles.input, { paddingBottom: 0 }]}
+              keyboardBehavior={"fullScreen"}
+              android_keyboardInputMode={"adjustResize"}
+            />
+            <TouchableOpacity
+            // onPress={()=> {socket.emit("sendMessage", {message:currentMessage, pseudo: props.pseudo})}}
+            >
+              <View
+                style={{
+                  backgroundColor: "#F7CE46",
+                  padding: 10,
+                  borderRadius: 50,
+                  margin: 20,
+                  shadowColor: "#171717",
+                  shadowOffset: { width: 1, height: 5 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 7,
+                  elevation: 7,
+                }}
+              >
+                <Feather name="send" size={18} color="#000000" />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </BottomSheet>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -405,7 +403,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#0000",
     width: "100%",
     marginBottom: 0,
     shadowColor: "#000",
@@ -518,5 +516,11 @@ const styles = StyleSheet.create({
     // lineHeight: 21,
     letterSpacing: 0.6,
     fontFamily: "Poppins_700Bold",
+  },
+  ImageBackground: {
+    width: "100%",
+    height: "100%",
+    flex: 1,
+    justifyContent: "center",
   },
 });
