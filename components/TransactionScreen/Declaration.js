@@ -216,7 +216,7 @@ export default function Declaration(props) {
         <View style={styles.boutonDecl}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("BottomNavigator")}
+            onPress={() => props.navigation.navigate("DoubleDeclaration")}
           >
             <Text style={styles.text}>Déclarer</Text>
           </TouchableOpacity>

@@ -13,27 +13,21 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 import * as Location from "expo-location";
 import { connect } from "react-redux";
-
-
 const ComposeRequestScreen = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
-
   const [selected, setSelected] = useState("");
   let categoriesSelected = [];
-
   const data = [
     { label: "Ma position actuelle", value: "geolocation" },
-    { label: "Adresse 1 (à dyna)", value: "address1" },
-    { label: "Adresse 2 (à dyna)", value: "address2" },
+    { label: "Adresse 1 ", value: props.user.userAddresses[0].address_street_1},
+    { label: "Adresse 2 ", value: props.user.userAddresses[1].address_street_1 },
   ];
-
   // 4 valeurs INPUTS
   let addressObj;
   const [selectedAddress, setSelectedAddress] = useState("");
   const [description, setDescription] = useState("");
   const [disponibility, setDisponibility] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
-
   const handleLocation = async (location) => {
     if (location.value == "geolocation") {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -47,13 +41,28 @@ const ComposeRequestScreen = (props) => {
           address_street_1: address[0].name,
           address_zipcode: address[0].postalCode,
           address_city: address[0].city,
+          
         };
         setSelectedAddress(addressObj);
         console.log("choix localisation =>", addressObj);
       }
-    } else if (location.value == "address1") {
+    } else if (location.value == props.user.userAddresses[0].address_street_1) {
       console.log("choix 1 =>", location.value);
-    } else if (location.value == "address2") {
+      addressObj = {
+        address_street_1: props.user.userAddresses[0].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+        
+      };
+      setSelectedAddress(addressObj);
+    } else if (location.value == props.user.userAddresses[1].address_street_1) {
+      addressObj = {
+        address_street_1: props.user.userAddresses[1].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+        
+      };
+      setSelectedAddress(addressObj);
       console.log("choix 2 =>", location.value);
     }
   };
@@ -63,23 +72,20 @@ const ComposeRequestScreen = (props) => {
                     "Vous ne pouvez choisir qu'une seul categorie"
                   )
                 : null;
+if (selectedAddress == "" || description == "" || disponibility == "" || selectedCat == "") {
+  setErrorMessage("Merci de remplir tous les champs")
+} else {
+  let data = {
+    description : description,
+    disponibility: disponibility,
+    category: selectedCat[0],
+    address_street_1: selectedAddress.address_street_1,
 
-    if (selectedAddress == "" || description == "" || disponibility == "" || selectedCat == "") {
-      setErrorMessage("Merci de remplir tous les champs")
-    } else {
-      let data = {
-        description : description,
-        disponibility: disponibility,
-        category: selectedCat[0],
-        address_street_1: selectedAddress.address_street_1,
-        address_city: selectedAddress.address_city,
-        address_zipcode: selectedAddress.address_zipcode,
-      };
-      console.log("data",data);
-      props.onComposeRequest(data);
-    }
   };
-
+  console.log(data);
+  props.onComposeRequest(data);
+}
+  };
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -106,137 +112,134 @@ const ComposeRequestScreen = (props) => {
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           {/* ==== LIEU ==== */}
           <Text style={styles.textTitle}>Lieu</Text>
-
-          <View>
-            <Dropdown
-              style={[styles.card]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              dropdownPosition="auto"
-              search={false}
-              data={data}
-              labelField="label"
-              valueField="value"
-              placeholder={selected.label}
-              onChange={(item) => {
-                setSelected(item);
-                handleLocation(item);
-              }}
-              containerStyle={[styles.dropContainer,{height: 0}]}
-            />
-          </View>
-
-          {/* ==== CATEGORIES ==== */}
-          <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
-
-          <DropDownCategories
-            placeHolder={"Choisissez une catégorie"}
-            containerStyle={[
-              styles.card,
-              {
-                height: 100,
-                marginBottom: 200,
-                width: "77%",
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-              },
-            ]}
-            style={{
-              width: "100%",
-              padding: 15,
-              backgroundColor: "white",
-              shadowColor: "#171717",
-              shadowOffset: { width: 1, height: 5 },
-              shadowOpacity: 0.2,
-              shadowRadius: 7,
-              borderRadius: 15,
-              elevation: 6,
-              marginHorizontal: 15,
-              paddingHorizontal: 30,
-            }}
-            onChange={(item) => {
-              categoriesSelected = [];
-              categoriesSelected.push(item);
-              setSelectedCat();
-              setSelectedCat(item);
-              console.log("selectedCat", selectedCat);
-              // handleCategories();
-            }}
-          />
-
-          {/* ==== DESCRIPTION ==== */}
-          <Text style={styles.textTitle}>Description</Text>
-
-          <TextInput
-            textAlignVertical={"top"}
-            style={[styles.inputTextarea, { paddingTop: 25 }]}
-            placeholder="Description de votre demande en quelques mots.
-          N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
-            placeholderTextColor="grey"
-            numberOfLines={7}
-            multiline={true}
-            onChangeText={(text) => {
-
-              setDescription(text.trim());
-              console.log("text", text);
-            }}
-            
-          />
-
-          {/* ==== DISPONIBILITES ==== */}
-          <Text style={styles.textTitle}>Mes disponibilités</Text>
-
-          <TextInput
-            style={[styles.inputTextarea, { paddingTop: 25 }]}
-            textAlignVertical={"top"}
-            placeholder="Lundi soirs, jeudi et vendredi matin"
-            placeholderTextColor="grey"
-            numberOfLines={3}
-            multiline={true}
-            onChangeText={(text) => setDisponibility(text.trim())}
-          />
-          <Text style={styles.error}>{errorMessage}</Text>
-        </KeyboardAwareScrollView>
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              handleSubmit();
-              props.navigation.navigate("ListRequestScreen", {
-                screen: "ListRequestScreen",
-              });
-            }}
-          >
-            <Text style={styles.text}>Suivant</Text>
-          </TouchableOpacity>
-        </View>
+      <View>
+        <Dropdown
+          style={[styles.card]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          dropdownPosition="auto"
+          search={false}
+          data={data}
+          labelField="label"
+          valueField="value"
+          placeholder={selected.label}
+          onChange={(item) => {
+            setSelected(item);
+            handleLocation(item);
+          }}
+          containerStyle={[styles.dropContainer,{height: 0}]}
+        />
       </View>
-    </ImageBackground>
+
+      {/* ==== CATEGORIES ==== */}
+      <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
+
+      <DropDownCategories
+        placeHolder={"Choisissez une catégorie"}
+        containerStyle={[
+          styles.card,
+          {
+            height: 100,
+            marginBottom: 200,
+            width: "77%",
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+          },
+        ]}
+        style={{
+          width: "100%",
+          padding: 15,
+          backgroundColor: "white",
+          shadowColor: "#171717",
+          shadowOffset: { width: 1, height: 5 },
+          shadowOpacity: 0.2,
+          shadowRadius: 7,
+          borderRadius: 15,
+          elevation: 6,
+          marginHorizontal: 15,
+          paddingHorizontal: 30,
+        }}
+        onChange={(item) => {
+          categoriesSelected = [];
+          categoriesSelected.push(item);
+          setSelectedCat();
+          setSelectedCat(item);
+          console.log("selectedCat", selectedCat);
+          // handleCategories();
+        }}
+      />
+
+      {/* ==== DESCRIPTION ==== */}
+      <Text style={styles.textTitle}>Description</Text>
+
+      <TextInput
+        textAlignVertical={"top"}
+        style={[styles.inputTextarea, { paddingTop: 25 }]}
+        placeholder="Description de votre demande en quelques mots.
+      N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
+        placeholderTextColor="grey"
+        numberOfLines={7}
+        multiline={true}
+        onChangeText={(text) => {
+          setDescription(text.trim());
+        }}
+      />
+
+      {/* ==== DISPONIBILITES ==== */}
+      <Text style={styles.textTitle}>Mes disponibilités</Text>
+
+      <TextInput
+        style={[styles.inputTextarea, { paddingTop: 25 }]}
+        textAlignVertical={"top"}
+        placeholder="Lundi soirs, jeudi et vendredi matin"
+        placeholderTextColor="grey"
+        numberOfLines={3}
+        multiline={true}
+        onChangeText={(text) => setDisponibility(text.trim())}
+      />
+      <Text style={styles.error}>{errorMessage}</Text>
+    </KeyboardAwareScrollView>
+    <View style={{ alignItems: "center" }}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          handleSubmit();
+          props.navigation.navigate("ListRequestScreen", {
+            screen: "ListRequestScreen",
+          });
+        }}
+      >
+        <Text style={styles.text}>Suivant</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</ImageBackground>
   );
 };
 
+function mapStateToProps(state) {
+ 
+  return { user: state.userReducer, request:  state.newRequest };
+ 
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     onComposeRequest: function (newRequest) {
       dispatch({ type: "composeRequest::newRequest", newRequest });
     },
-
   };
 }
-
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ComposeRequestScreen);
-
 //
 // ─────────────────────────────────────────────────── ──────────
 //   :::::: S T Y L E S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────
 //
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

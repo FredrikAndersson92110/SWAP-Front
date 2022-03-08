@@ -14,7 +14,7 @@ import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories"
 import DropDownPicker from 'react-native-dropdown-picker';
 
 
-const UserScreen = (props, request) => {
+const UserScreen = (props) => {
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -25,8 +25,6 @@ const UserScreen = (props, request) => {
   const [city2, setCity2] = useState();
   const [comp1, setComp1] = useState();
   const [comp2, setComp2] = useState();
-  const [comp3, setComp3] = useState();
-  const [comp4, setComp4] = useState();
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
   const [selectedCat, setSelectedCat] = useState("");

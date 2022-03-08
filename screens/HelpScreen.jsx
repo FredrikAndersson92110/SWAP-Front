@@ -12,7 +12,7 @@ import Request from "../components/HelpScreen/Request";
 
 import getDistance from "../components/helpers";
 
-function HelpScreen({ onMatchCategories, categoryMatches, userLocation }) {
+function HelpScreen({ props, onMatchCategories, categoryMatches, userLocation }) {
   const [message, setMessage] = useState("");
 
   const isFocused = useIsFocused();
