@@ -7,29 +7,37 @@ import {
 import { ListItem, Avatar, Text } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 /* -----------------------------FUNCTION---------------------------------------*/
-export default function Conversation({
+
+// syntaxe REVERSE DATA FLOW (cf My Moviz)
+// props destructurés, issues du composant parent "Interactions"
+function Conversation({
   name,
   useravatar,
   category,
   lastMessage,
-  request,
   isAsker,
+  getTransactionInfos,
+  conversationInfos,
 }) {
   const navigation = useNavigation();
 
 var openTransaction = () => {
-  navigation.navigate('TransactionScreen')
-  console.log(request, isAsker)
+  getTransactionInfos( conversationInfos, isAsker)
+  // console.log('REQUEST POUR TRANSACTION:',conversationInfos, isAsker)
 }
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
-          onPress={() => openTransaction()}
+        onPress={()=> {openTransaction(), navigation.navigate("TransactionScreen")}}
+        // onPress={() => navigation.navigate("TransactionScreen")}
+        //   onPress={() => {openTransaction(),  props.navigation.navigate("TransactionScreen", {
+        //     screen: "TransactionScreen",
+        //   })}
           Component={TouchableHighlight}
           containerStyle={{
             backgroundColor: "transparent",
@@ -79,10 +87,11 @@ var openTransaction = () => {
   );
 }
 
+// Elisa : récupère les requests et le isAsker, via les props fournies dans le composant de présentation Conversation vers le dispatch
 function mapDispatchToProps(dispatch) {
   return {
-    getRequestInfos: function (request, isAsker) {
-      dispatch({ type: "getRequestInfos", request, isAsker });
+    getTransactionInfos: function ( conversationInfos, isAsker) {
+      dispatch({ type: "getTransactionInfos", transactionInfos: {conversationInfos: conversationInfos,  isAsker : isAsker} });
     },
   };
 }

@@ -19,7 +19,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
 
   const [message, setMessage] = useState("");
 
-  // chercher les matches de requêtes
+  // appel de la route qui recherche les matches de requêtes qui 
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -30,6 +30,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
 
         if (response.status) {
           onAddRequests(response.requests);
+          // console.log('RESPONSE FETCH RESQUEST:', response.requests)
         } else {
           setMessage(response.message);
         }
@@ -40,7 +41,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
 
 
   // tri des données du requestSchema à récupérer
-  //  if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les autres plutôt que ma vignette.
+  // if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les vignettes des autres plutôt que la mienne.
+  // "requests" récupéré via le mapStateToProps
   let conversations = [];
   requests.forEach((req) => {
     if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
@@ -50,6 +52,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
           category: req.category,
           requestId: req._id,
           asker: req.asker,
+          request: req,
         };
       });
       conversations = conversations.concat(tempConv);
@@ -65,51 +68,53 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
           category: req.category,
           requestId: req._id,
           asker: req.asker,
+          request: req,
         });
       }
     }
   });
 
-  //  maps générant les échanges à partir du tableau conversation créé au dessus. (contient les messages tchat notamment)
+  //  maps générant les échanges à partir du tableau "conversations" créé au dessus. (contient les messages tchat notamment)
   let requestList = conversations.map((conversation, i) => {
     if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
       return (
+        // syntaxe REVERSE DATA FLOW (cf My Moviz)
         <Conversation
-          request={conversation}
+          conversationInfos={conversation} // pour afficher conversation 
           key={i}
-          isAsker={true}
-          name={conversation.conversation_id.firstName}
-          useravatar={conversation.conversation_id.user_img}
+          isAsker={true} // // passé en props destructuré dans la function du screen "Conversation" 
+          name={conversation.conversation_id.firstName} // same
+          useravatar={conversation.conversation_id.user_img} // same
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          }
+          } // same
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
               : { message: "" }
-          }
+          } // same
         />
       );
     } else {
       return (
         <Conversation
-          request={conversation}
+          conversationInfos={conversation} // pour afficher conversation
           key={i}
-          isAsker={false}
-          name={conversation.asker.firstName}
-          useravatar={conversation.asker.user_img}
+          isAsker={false} 
+          name={conversation.asker.firstName} 
+          useravatar={conversation.asker.user_img}  
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          }
+          } 
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
-              : { message: "" }
-          }
+              : { message: "" } 
+          } 
         />
       );
     }
@@ -137,6 +142,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   );
 }
 
+// ajoute dans le store les requests correspondant au token de l'utilisateur, via l'argument "data"
+// request récupéré par "onAddRequests(response.requests)" dans le fetch
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {

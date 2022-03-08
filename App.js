@@ -44,7 +44,7 @@ import { createStore, combineReducers } from "redux";
 //Reducers
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
-// import transactionReducer from "./reducers/transaction.reducer";
+import transactionInfos from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
 // import statusReducer from "./reducers/status.reducer";
@@ -55,6 +55,7 @@ const store = createStore(
     userReducer,
     willingReducer,
     userDetailsReducer,
+    transactionInfos,
   })
 );
 

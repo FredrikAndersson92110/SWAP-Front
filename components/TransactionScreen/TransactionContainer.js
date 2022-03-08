@@ -23,23 +23,31 @@ import DoubleDeclaration from "./DoubleDeclaration";
 
 import {useNavigation} from "@react-navigation/native";
 
+import {connect} from 'react-redux'
+
 // import socketIOClient from "socket.io-client";
 
 
 /*---------------------------------- FUNCTION ----------------------------------*/
-export default function TransationContainer() {
-
+function TransactionContainer(props) {
+console.log(">>>> REQUEST:", props.transactionInfos.conversationInfos.messages[0])
 const navigation = useNavigation();
 
 const handleSubmit = async () => {
  return navigation.navigate("InteractionsScreen")
 }
 
-  const [status, setStatus] = useState(2);
+  const [status, setStatus] = useState(0);
   const [active, setActive] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
   const [listMessage, setListMessage] = useState([]);
   const [confirm, setConfirm] = useState(false);
+
+
+  useEffect(() => {
+    setStatus(props.transactionInfos.conversationInfos.request.asker_status)
+  }, []);
+  console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status)
 
 
   // dynamise les pastilles
@@ -65,17 +73,37 @@ const handleSubmit = async () => {
     color2 = vert;
     color3 = jaune;
     transactionStatus = "En attente de déclaration du swaper";
-  } else {
+  } else if (status === 3) {
     color1 = vert;
     color2 = vert;
     color3 = vert;
     transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
   }
 
-  // dynamise les composants
+  // affichage des composants selon le statut de la transaction
   var components;
   if (status === 0) {
-    components = <Confirmation />
+    if(props.transactionInfos.isAsker) {
+    components = <Confirmation 
+                    firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
+                    avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
+                    // icon={}
+                    category={props.transactionInfos.conversationInfos.request.category}
+                    description={props.transactionInfos.conversationInfos.request.description}
+                    // disponibility={}
+                    // location={}
+                    />
+                  } else {
+    components = <Confirmation 
+                    firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
+                    avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
+                    // icon={}
+                    category={props.transactionInfos.conversationInfos.request.category}
+                    description={props.transactionInfos.conversationInfos.request.description}
+                    // disponibility={}
+                    // location={}
+                    />  
+                  }
   } else if (status === 1) {
     components = <Declaration />
   } else if (status === 2) {
@@ -83,6 +111,7 @@ const handleSubmit = async () => {
   }
 
   let source = require("../../assets/avatar.png");
+
 
   // useEffect(() => {
   //   socket.on("sendMessageToAll", (messageData) => {
@@ -209,7 +238,7 @@ const handleSubmit = async () => {
             </Text>
           </View>
 
-          {/* COMPOSANTS */}
+          {/* COMPOSANTS SELON CONDITIONS BEFORE RETURN */}
           <View style={{ flex: 1, justifyContent: "center" }}>
             {components}
           </View>
@@ -362,7 +391,8 @@ const handleSubmit = async () => {
 }
 
 {
-  /* <Overlay isVisible={overlayVisible} fullScreen>
+  /* Success Overlay Atman:
+  <Overlay isVisible={overlayVisible} fullScreen>
 <ImageBackground
   style={styles.ImageBackground}
   source={require("../assets/images/background-2.png")}
@@ -426,6 +456,16 @@ const handleSubmit = async () => {
 </ImageBackground>
 </Overlay> */
 }
+
+
+function mapStateToProps(state) {
+  return { transactionInfos: state.transactionInfos };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(TransactionContainer)
 
 //
 // ─────────────────────────────────────────────────── ──────────
