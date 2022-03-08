@@ -12,15 +12,20 @@ import { combineReducers, createStore } from "redux";
 import CustomButton from "./components/CustomButton";
 //components
 import LoadFonts from "./components/LoadFonts";
-import categoriesReducer from "./reducers/categories.reducer";
 //Reducers
+import categoriesReducer from "./reducers/categories.reducer";
 import requestsReducer from "./reducers/requests.reducer";
 import userReducer from "./reducers/user.reducer";
 import userDetailsReducer from "./reducers/userDetails.reducer";
 import locationReducer from "./reducers/location.reducer";
-// import transactionReducer from "./reducers/transaction.reducer";
+import transactionInfos from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import composeRequestReducer from "./reducers/composeRequest.reducer";
+// import transactionReducer from "./reducers/transaction.reducer";
+// import requestsReducer from "./reducers/requests.reducer";
+// import userReducer from "./reducers/user.reducer";
+// import willingReducer from "./reducers/willing.reducer";
+// import userDetailsReducer from "./reducers/userDetails.reducer";
 //Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
@@ -42,8 +47,12 @@ import UserRequestScreen from "./screens/UserRequestScreen";
 import UserScreen from "./screens/UserScreen";
 
 
+// //Redux
+// import { Provider } from "react-redux";
+// import { createStore, combineReducers } from "redux";
+//Reducers
 
-// import statusReducer from "./reducers/status.reducer";
+
 
 const store = createStore(
   combineReducers({
@@ -54,6 +63,7 @@ const store = createStore(
     categoriesReducer,
     locationReducer,
     composeRequestReducer,
+    transactionInfos,
   })
 );
 

@@ -1,116 +1,133 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableWithoutFeedback, Picker, } from "react-native";
-import { Image, Avatar, } from "react-native-elements";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Picker,
+} from "react-native";
+import { Image, Avatar } from "react-native-elements";
 // import RNPickerSelect from "react-native-picker-select";
 
-import {useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
 
 
 /*---------------------------------- FUNCTION ----------------------------------*/
-export default function Confirmation(props) {
+function Confirmation({firstName, avatar, description, category, transactionInfos}) {
+  const navigation = useNavigation();
 
-const navigation = useNavigation();
+  const handleSubmit = async () => {
+    return navigation.navigate("UserScreen");
+  };
 
-const handleSubmit = async () => {
- return navigation.navigate("UserScreen")
-}
-  
-let source = require("../../assets/avatar.png");
+  let source = require("../../assets/avatar.png");
 
-  
-// let handleSubmit = async () => {
-//   let response = await fetch(
-//     `https://swapapp-backend.herokuapp.com/users/adress/:`,
-//     {
-//       method: "PUT",
-//       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//       body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
-//       // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
-//     }
-//   );
-//   response = await response.json();
-// };
+  let path = `https://theoduvivier.com/swap/${
+                    category.sub_category
+                      ? category.sub_category
+                          .replace(/\s/g, "_")
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                      : category.category
+                          .replace(/\s/g, "_")
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                  }.png`
 
-  return (
-    <View style={styles.container}>
+  // let handleSubmit = async () => {
+  //   let response = await fetch(
+  //     `https://swapapp-backend.herokuapp.com/users/adress/:`,
+  //     {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //       body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+  //       // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
+  //     }
+  //   );
+  //   response = await response.json();
+  // };
+// var test = props.transactionInfos.requestInfos[0].conversations[0].conversation_id.firstName;  
+// console.log('+++ CONVERSATIONS:', test);
 
-            {/* VIGNETTE COLLABORATEUR */}
-            <View style={styles.vignette}>
-
-            {/* Touchablewithoutfeedback pour afficher le profil du collaborateur*/}
-            <TouchableWithoutFeedback
-                        onPress={() => handleSubmit()}
-            >
-            <View style={{ flexDirection: "row", }}>
-              <Avatar rounded size="medium" source={source} />
-              <View style={{ marginLeft: 11, }}>
-                <Text style={{ marginBottom: 2, fontFamily: "Poppins_600SemiBold" }}>
-                  Fredrick
+     return (
+      <View style={styles.container}>
+        {/* VIGNETTE COLLABORATEUR */}
+        <View style={styles.vignette}>
+          {/* Touchablewithoutfeedback pour afficher le profil du collaborateur*/}
+          <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+            <View style={{ flexDirection: "row" }}>
+              <Avatar rounded size="medium" source={{uri: avatar}} />
+              <View style={{ marginLeft: 11 }}>
+                <Text
+                  style={{ marginBottom: 2, fontFamily: "Poppins_600SemiBold" }}
+                >
+                  {firstName}
                 </Text>
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: 'flex-start',
+                    justifyContent: "flex-start",
                     marginTop: 1,
                   }}
                 >
                   <Image
-                    source={require("../../assets/images/categories/bricolage.png")}
-                    style={{ width: 20, height: 20, marginRight: 8,  }}
+                    source={{uri : path}}
+                    style={{ width: 20, height: 20, marginRight: 8 }}
                   />
                   <View>
-                    <Text style={{ marginLeft: 5, maxWidth: 210, maxHeight: 110, fontSize: 13, fontFamily: "Poppins_400Regular"}}>Demande de bricolage</Text>
+                    <Text
+                      style={{
+                        marginLeft: 5,
+                        maxWidth: 210,
+                        maxHeight: 110,
+                        fontSize: 13,
+                        fontFamily: "Poppins_400Regular",
+                      }}
+                    >
+                      Demande de {category.sub_category ? category.sub_category : category.category}
+                    </Text>
                   </View>
                 </View>
               </View>
             </View>
-            
-            </TouchableWithoutFeedback>
- 
-          </View>
-          
-          {/* BOUTONS ANNULATION/VALIDATION */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              position: "absolute",
-              bottom: 260,
-            }}
-            >
-            <TouchableOpacity
-              style={styles.button1}
-              // onPress={() => props.navigation.navigate("BottomNavigator")}
-            >
-              <Text style={styles.text1}>Annuler</Text>
-            </TouchableOpacity>
+          </TouchableWithoutFeedback>
+        </View>
 
-            <TouchableOpacity
-              style={styles.button2}
-              // onPress={() => { setConfirm(true), {/* reducer pour changer status dans le store */} }
-              // }
-            >
-              <Text style={styles.text2}>Confirmer</Text>
-            </TouchableOpacity>
+        {/* BOUTONS ANNULATION/VALIDATION */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            position: "absolute",
+            bottom: 260,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.button1}
+            // onPress={() => props.navigation.navigate("BottomNavigator")}
+          >
+            <Text style={styles.text1}>Annuler</Text>
+          </TouchableOpacity>
 
-          </View>
-    </View>
-  );
+          <TouchableOpacity
+            style={styles.button2}
+            // onPress={() => { setConfirm(true), {/* reducer pour changer status dans le store */} }
+            // }
+          >
+            <Text style={styles.text2}>Confirmer</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  } 
+
+function mapStateToProps(state) {
+  return { transactionInfos: state.transactionInfos };
 }
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     userStatus: function (status) {
-//       dispatch({ type: "userStatus", status});
-//     },
-//   };
-// }
-
-// export default connect(
-//   null,
-//   mapDispatchToProps
-// )(Confirmation);
-
+export default connect(mapStateToProps, null)(Confirmation);
 
 
 //
@@ -179,19 +196,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     // lineHeight: 21,
     letterSpacing: 0.6,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: "Poppins_700Bold",
   },
   text2: {
     color: "#000000",
     fontSize: 18,
     // lineHeight: 21,
     letterSpacing: 0.6,
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: "Poppins_700Bold",
   },
- 
- 
-
-
-
-
 });
