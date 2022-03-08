@@ -1,7 +1,8 @@
-export default function (request = [], action) {
-    if (action.type === "userStatus") {
-      console.log("reducer !!!", action.status);
-      return action.status;
-    }
-    return status
+export default function (transactionInfos = {}, action) {
+  if (action.type === "getTransactionInfos") {
+    // console.log(">>>> REDUCER getTransactionInfos :", action.transactionInfos.conversationInfos, action.transactionInfos.isAsker);
+
+    return action.transactionInfos;
   }
+  return transactionInfos;
+}
