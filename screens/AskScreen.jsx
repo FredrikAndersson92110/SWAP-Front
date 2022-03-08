@@ -9,26 +9,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Input } from "react-native-elements";
+
 import { connect } from "react-redux";
 import Request from "../components/AskScreen/Request";
 import InputButton from "../components/InputButton";
 
 import getDistance from "../components/helpers";
-import * as Location from "expo-location";
 
 function AskScreen({
   onAddRequestWillingUsers,
-  navigation,
   willingUserRequests,
   userLocation,
 }) {
   const isFocused = useIsFocused();
 
   const [message, setMessage] = useState("");
-  const [requestList, setRequestList] = useState([]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
@@ -36,91 +33,69 @@ function AskScreen({
         );
         let response = await request.json();
         if (response.status) {
-          onAddRequestWillingUsers(response.requests);
+          try {
+            let promise = await Promise.all(
+              response.requests.slice(0, 1).map(async (req) => {
+                let tempUsers = await Promise.all(
+                  req.willing_users.map(async (user) => {
+                    let coords = await fetch(
+                      `https://koumoul.com/s/geocoder/api/v1/coord?city=${user.userAddresses[0].address_city}`
+                    );
+                    let resp = await coords.json();
+                    console.log("COORDS", resp);
+                    let distance = Math.round(
+                      getDistance(
+                        userLocation.coords.latitude,
+                        userLocation.coords.longitude,
+                        resp.lat,
+                        resp.lon
+                      )
+                    );
+                    return {
+                      ...user,
+                      category: req.category,
+                      requestId: req._id,
+                      request: req,
+                      distance,
+                    };
+                  })
+                );
+                return tempUsers;
+              })
+            );
+            onAddRequestWillingUsers(promise.flat(1));
+          } catch (error) {
+            console.error(error);
+          }
         } else {
           setMessage(response.message);
         }
       }
       getRequests();
-      let tempList = [];
-      for (let req of requests) {
-        let distance = await geoDistance(req);
-        tempList.push(
-          <Request
-            key={req.token}
-            isAsker={true}
-            requestId={req.requestId}
-            currentRequest={req.request}
-            request={req}
-            location={req.userAddresses[0].address_city}
-            distance={distance}
-            willingUserToken={req.token}
-            name={req.firstName}
-            useravatar={req.user_img}
-            category={
-              req.category.sub_category
-                ? req.category.sub_category
-                : req.category.category
-            }
-          />
-        );
-      }
-      setRequestList(tempList);
     }
   }, [isFocused]);
-  console.log(requestList);
 
-  let geoDistance = async (req) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status == "granted") {
-      let geocode = await Location.geocodeAsync(
-        req.userAddresses[0].address_city
-      );
-      let distance = Math.round(
-        getDistance(
-          userLocation.coords.latitude,
-          userLocation.coords.longitude,
-          geocode[0].latitude,
-          geocode[0].longitude
-        )
-      );
-      return distance;
-    }
-  };
-
-  let requests = [];
-  willingUserRequests.forEach((req) => {
-    let tempUsers = req.willing_users.map((user) => {
-      return {
-        ...user,
-        category: req.category,
-        requestId: req._id,
-        request: req,
-      };
-    });
-    requests = requests.concat(tempUsers);
+  let requestList = willingUserRequests.map((req, i) => {
+    return (
+      <Request
+        key={i}
+        isAsker={true}
+        requestId={req.requestId}
+        currentRequest={req.request}
+        request={req}
+        distance={req.distance}
+        location={req.userAddresses[0].address_city}
+        willingUserToken={req.token}
+        name={req.firstName}
+        useravatar={req.user_img}
+        category={
+          req.category.sub_category
+            ? req.category.sub_category
+            : req.category.category
+        }
+      />
+    );
   });
-
-  // let requestList = requests.map((req, i) => {
-  //   return (
-  //     <Request
-  //       key={i}
-  //       isAsker={true}
-  //       requestId={req.requestId}
-  //       currentRequest={req.request}
-  //       request={req}
-  //       location={req.userAddresses[0].address_city}
-  //       willingUserToken={req.token}
-  //       name={req.firstName}
-  //       useravatar={req.user_img}
-  //       category={
-  //         req.category.sub_category
-  //           ? req.category.sub_category
-  //           : req.category.category
-  //       }
-  //     />
-  //   );
-  // });
 
   return (
     <ImageBackground
