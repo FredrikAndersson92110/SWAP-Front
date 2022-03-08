@@ -69,7 +69,7 @@ function ListRequestScreen(props) {
               marginTop: 7,
               marginHorizontal: 15,
             }}
-            placeHolder={props.requests.category}
+            placeHolder={props.composeRequest}
           />
 
           <TouchableOpacity
@@ -310,7 +310,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.userReducer, requests: state.requestsReducer, request:  state.newRequest };
+  return { user: state.userReducer, requests: state.requestsReducer, composeRequest:  state.newRequest };
 }
 
 
