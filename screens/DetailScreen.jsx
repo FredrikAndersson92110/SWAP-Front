@@ -4,6 +4,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Avatar, Text } from "react-native-elements";
 import { MaterialIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
@@ -111,17 +112,17 @@ function DetailScreen({
             <View style={styles.divider} />
             {/* Content */}
             {data.categories.map((category, i) => {
-                  let path = `https://theoduvivier.com/swap/${
-                    category.category.sub_category
-                      ? category.category.sub_category
-                          .replace(/\s/g, "_")
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                      : category.category
-                          .replace(/\s/g, "_")
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                  }.png`;
+              let path = `https://theoduvivier.com/swap/${
+                category.category.sub_category
+                  ? category.category.sub_category
+                      .replace(/\s/g, "_")
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "")
+                  : category.category
+                      .replace(/\s/g, "_")
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "")
+              }.png`;
               return (
                 <View
                   key={i}
@@ -130,7 +131,7 @@ function DetailScreen({
                   }}
                 >
                   <Image
-                    source={{ uri: path}}
+                    source={{ uri: path }}
                     style={{ width: 21, height: 21, marginRight: 10 }}
                   />
                   <Text style={styles.cardTitle}>
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#8B8B8B",
     opacity: 0.5,
     borderBottomWidth: 0.5,
-    width: "100%",
+    width: Dimensions.get("window").width / 1,
     marginTop: 20,
     marginBottom: 20,
   },
