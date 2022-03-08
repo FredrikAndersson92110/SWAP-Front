@@ -15,7 +15,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
 
   const [message, setMessage] = useState("");
 
-  // appel de la route qui recherche les matches de requêtes qui 
+  // appel de la route qui recherche les matches de requêtes qui
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -73,9 +73,9 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
       return (
         // syntaxe REVERSE DATA FLOW (cf My Moviz)
         <Conversation
-          conversationInfos={conversation} // pour afficher conversation 
+          conversationInfos={conversation} // pour afficher conversation
           key={i}
-          isAsker={true} // // passé en props destructuré dans la function du screen "Conversation" 
+          isAsker={true} // // passé en props destructuré dans la function du screen "Conversation"
           name={conversation.conversation_id.firstName} // same
           useravatar={conversation.conversation_id.user_img} // same
           category={
@@ -95,19 +95,19 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
         <Conversation
           conversationInfos={conversation} // pour afficher conversation
           key={i}
-          isAsker={false} 
-          name={conversation.asker.firstName} 
-          useravatar={conversation.asker.user_img}  
+          isAsker={false}
+          name={conversation.asker.firstName}
+          useravatar={conversation.asker.user_img}
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          } 
+          }
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
-              : { message: "" } 
-          } 
+              : { message: "" }
+          }
         />
       );
     }

@@ -27,13 +27,6 @@ export default function LoginScreen(props) {
     }
 
     // Véririfcation du couple Mail/MDP en backend
-<<<<<<< HEAD
-    let response = await fetch(`https://swapapp-backend.herokuapp.com/users/sign-in`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `email=${lowerCaseEmail}&password=${password}`,
-    });
-=======
     let response = await fetch(
       `https://swapapp-backend.herokuapp.com/users/sign-in`,
       {
@@ -42,7 +35,6 @@ export default function LoginScreen(props) {
         body: `email=${lowerCaseEmail}&password=${password}`,
       }
     );
->>>>>>> 364f9e74c56d287bb9eaa1b99ccf0abfc2172597
     response = await response.json();
 
     // Si le couple Mail/MDP est valide
@@ -67,120 +59,120 @@ export default function LoginScreen(props) {
       style={styles.container}
     >
       <View style={{ marginTop: 50 }}>
-      <KeyboardAwareScrollView>
-        <View style={styles.view1}>
-          {/* PAGE TITLE */}
-          <View style={{ alignSelf: "flex-start" }}>
-            <Text
+        <KeyboardAwareScrollView>
+          <View style={styles.view1}>
+            {/* PAGE TITLE */}
+            <View style={{ alignSelf: "flex-start" }}>
+              <Text
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginLeft: 18,
+                  fontSize: 22,
+                  fontFamily: "Poppins_700Bold",
+                  marginTop: 70,
+                }}
+              >
+                Connexion
+              </Text>
+            </View>
+
+            {/* INPUTS */}
+            <View style={{ marginTop: 80 }}>
+              <Text style={styles.label}>Email</Text>
+              <Input
+                // mode= 'outlined'
+                containerStyle={styles.input}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                placeholder="Mail"
+                onChangeText={(text) => {
+                  text.toLowerCase();
+                  setEmail(text);
+                }}
+              />
+              <Text style={styles.label}>Mot de passe</Text>
+
+              <Input
+                containerStyle={styles.input}
+                inputStyle={{ fontSize: 13 }}
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                secureTextEntry={true}
+                placeholder={"Enter Password"}
+                onChangeText={(text) => setPassword(text)}
+              />
+              <Text style={styles.error}>{errorMessage}</Text>
+            </View>
+
+            {/* BOUTON VALIDER*/}
+            <View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {
+                  handleSubmit();
+                }}
+              >
+                <Text style={styles.text}>Connexion</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* PHRASE REDIRECTION VERS INSCRIPTION */}
+            <View>
+              <Text
+                style={{
+                  color: "grey",
+                  fontSize: 13,
+                  marginTop: 10,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
+                Pas encore de compte? S'inscrire
+              </Text>
+            </View>
+
+            {/* PHRASE CONNEXION VIA RESEAUX */}
+            <View>
+              <Text
+                style={{
+                  color: "black",
+                  alignSelf: "center",
+                  fontSize: 14,
+                  fontFamily: "Poppins_400Regular",
+                  marginTop: 120,
+                  marginBottom: 15,
+                }}
+              >
+                {" "}
+                OU connectez-vous avec{" "}
+              </Text>
+            </View>
+
+            {/* MINI LOGO RESEAU */}
+            <View
               style={{
-                color: "black",
-                fontWeight: "bold",
-                marginLeft: 18,
-                fontSize: 22,
-                fontFamily: "Poppins_700Bold",
-                marginTop: 70,
+                flexDirection: "row",
+                marginBottom: 30,
+                width: 200,
+                justifyContent: "space-between",
+                // borderWidth: 1,
+                // borderColor: "red",
               }}
             >
-              Connexion
-            </Text>
+              <Image
+                source={require("../../assets/images/GroupIcons/Group40.png")}
+                style={{ width: 40, height: 40 }}
+              />
+              <Image
+                source={require("../../assets/images/GroupIcons/Group41.png")}
+                style={{ width: 40, height: 40 }}
+              />
+              <Image
+                source={require("../../assets/images/GroupIcons/Group42.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            </View>
+            {/* Fin des composants */}
           </View>
-
-          {/* INPUTS */}
-          <View style={{ marginTop: 80 }}>
-            <Text style={styles.label}>Email</Text>
-            <Input
-              // mode= 'outlined'
-              containerStyle={styles.input}
-              inputStyle={{ fontSize: 13 }}
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              placeholder="Mail"
-              onChangeText={(text) => {
-                text.toLowerCase();
-                setEmail(text);
-              }}
-            />
-            <Text style={styles.label}>Mot de passe</Text>
-
-            <Input
-              containerStyle={styles.input}
-              inputStyle={{ fontSize: 13 }}
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              secureTextEntry={true}
-              placeholder={"Enter Password"}
-              onChangeText={(text) => setPassword(text)}
-            />
-            <Text style={styles.error}>{errorMessage}</Text>
-          </View>
-
-          {/* BOUTON VALIDER*/}
-          <View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                handleSubmit();
-              }}
-            >
-              <Text style={styles.text}>Connexion</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* PHRASE REDIRECTION VERS INSCRIPTION */}
-          <View>
-            <Text
-              style={{
-                color: "grey",
-                fontSize: 13,
-                marginTop: 10,
-                fontFamily: "Poppins_400Regular",
-              }}
-            >
-              Pas encore de compte? S'inscrire
-            </Text>
-          </View>
-
-          {/* PHRASE CONNEXION VIA RESEAUX */}
-          <View>
-            <Text
-              style={{
-                color: "black",
-                alignSelf: "center",
-                fontSize: 14,
-                fontFamily: "Poppins_400Regular",
-                marginTop: 120,
-                marginBottom: 15,
-              }}
-            >
-              {" "}
-              OU connectez-vous avec{" "}
-            </Text>
-          </View>
-
-          {/* MINI LOGO RESEAU */}
-          <View
-            style={{
-              flexDirection: "row",
-              marginBottom: 30,
-              width: 200,
-              justifyContent: "space-between",
-              // borderWidth: 1,
-              // borderColor: "red",
-            }}
-          >
-            <Image
-              source={require("../../assets/images/GroupIcons/Group40.png")}
-              style={{ width: 40, height: 40 }}
-            />
-            <Image
-              source={require("../../assets/images/GroupIcons/Group41.png")}
-              style={{ width: 40, height: 40 }}
-            />
-            <Image
-              source={require("../../assets/images/GroupIcons/Group42.png")}
-              style={{ width: 40, height: 40 }}
-            />
-          </View>
-          {/* Fin des composants */}
-        </View>
         </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
