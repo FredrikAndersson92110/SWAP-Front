@@ -112,9 +112,10 @@ function DetailScreen({
             <View style={styles.divider} />
             {/* Content */}
             {data.categories.map((category, i) => {
+              console.log("category", category);
               let path = `https://theoduvivier.com/swap/${
-                category.category.sub_category
-                  ? category.category.sub_category
+                category.sub_category
+                  ? category.sub_category
                       .replace(/\s/g, "_")
                       .normalize("NFD")
                       .replace(/[\u0300-\u036f]/g, "")
