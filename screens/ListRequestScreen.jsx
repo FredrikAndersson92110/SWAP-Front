@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -20,10 +21,14 @@ function ListRequestScreen(props) {
   const [check2, setCheck2] = useState(false);
   const [check1, setCheck1] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const isFocused = useIsFocused();
 
   const toggleOverlay = () => {
     setOverlayVisible(!overlayVisible);
   };
+  console.log(props.composeRequest);
 
   return (
     <ImageBackground
@@ -69,7 +74,7 @@ function ListRequestScreen(props) {
               marginTop: 7,
               marginHorizontal: 15,
             }}
-            placeHolder={props.composeRequest}
+            placeHolder={props.composeRequest.category}
           />
 
           <TouchableOpacity
@@ -176,10 +181,18 @@ function ListRequestScreen(props) {
                   Propose des cours de chinois
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={require("../assets/avatar.png")}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -203,10 +216,19 @@ function ListRequestScreen(props) {
                   Propose des cours de chinois
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={require("../assets/avatar.png")}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -230,10 +252,18 @@ function ListRequestScreen(props) {
                   Propose des cours de chinois
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={require("../assets/avatar.png")}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -300,7 +330,6 @@ function ListRequestScreen(props) {
   );
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {
@@ -310,10 +339,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.userReducer, requests: state.requestsReducer, composeRequest:  state.newRequest };
+  return {
+    user: state.userReducer,
+    requests: state.requestsReducer,
+    composeRequest: state.composeRequestReducer,
+    categoryMatches: state.categoriesReducer,
+    userLocation: state.locationReducer,
+  };
 }
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 

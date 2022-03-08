@@ -14,6 +14,7 @@ import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories"
 import * as Location from "expo-location";
 import { connect } from "react-redux";
 
+
 const ComposeRequestScreen = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -74,7 +75,7 @@ const ComposeRequestScreen = (props) => {
         address_city: selectedAddress.address_city,
         address_zipcode: selectedAddress.address_zipcode,
       };
-      console.log(data);
+      console.log("data",data);
       props.onComposeRequest(data);
     }
   };
@@ -176,8 +177,11 @@ const ComposeRequestScreen = (props) => {
             numberOfLines={7}
             multiline={true}
             onChangeText={(text) => {
+
               setDescription(text.trim());
+              console.log("text", text);
             }}
+            
           />
 
           {/* ==== DISPONIBILITES ==== */}
