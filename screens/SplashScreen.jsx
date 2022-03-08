@@ -5,7 +5,7 @@ import { StyleSheet, View, Image } from "react-native";
 import { connect } from "react-redux";
 
 const SplashScreen = (props) => {
-  // AsyncStorage.clear();
+  AsyncStorage.clear();
   let token;
 
   useEffect(async () => {
