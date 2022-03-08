@@ -13,6 +13,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import RNPickerSelect from "react-native-picker-select";
 import InputButton from "../components/InputButton";
 import { connect } from "react-redux";
+import BottomSheet from "@gorhom/bottom-sheet";
+
 
 function ListRequestScreen(props) {
   const [check4, setCheck4] = useState(false);
@@ -24,6 +26,8 @@ function ListRequestScreen(props) {
   const toggleOverlay = () => {
     setOverlayVisible(!overlayVisible);
   };
+
+
 
   return (
     <ImageBackground
@@ -294,6 +298,7 @@ function ListRequestScreen(props) {
               </View>
             </ImageBackground>
           </Overlay>
+
         </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
@@ -472,5 +477,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+  },
+  container2: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: "grey",
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
   },
 });
