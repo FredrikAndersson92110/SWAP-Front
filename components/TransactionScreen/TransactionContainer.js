@@ -25,110 +25,110 @@ import {connect} from 'react-redux'
 
 /*---------------------------------- FUNCTION ----------------------------------*/
 function TransactionContainer(props) {
-// console.log(">>>> REQUEST:", props.transactionInfos.conversationInfos.messages[0])
-const navigation = useNavigation();
+  // console.log(">>>> REQUEST:", props.transactionInfos.conversationInfos)
+  const navigation = useNavigation();
 
-const handleSubmit = async () => {
- return navigation.navigate("InteractionsScreen")
-}
-
-  const [status, setStatus] = useState(0);
-  const [active, setActive] = useState(false);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [listMessage, setListMessage] = useState([]);
-  const [confirm, setConfirm] = useState(false);
-
-
-  useEffect(() => {
-    setStatus(props.transactionInfos.conversationInfos.request.asker_status)
-  }, []);
-  console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status)
-
-
-  // dynamise les pastilles
-  let vert = "#399F09";
-  let jaune = "#F7CE46";
-  let gris = "#DDDDDD";
-  var transactionStatus;
-  var color1;
-  var color2;
-  var color3;
-  if (status === 0) {
-    color1 = vert;
-    color2 = jaune;
-    color3 = gris;
-    transactionStatus = "En attente de confirmation";
-  } else if (status === 1) {
-    color1 = vert;
-    color2 = vert;
-    color3 = gris;
-    transactionStatus = "En attente de déclaration";
-  } else if (status === 2) {
-    color1 = vert;
-    color2 = vert;
-    color3 = jaune;
-    transactionStatus = "En attente de déclaration du swaper";
-  } else if (status === 3) {
-    color1 = vert;
-    color2 = vert;
-    color3 = vert;
-    transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
+  const handleSubmit = async () => {
+  return navigation.navigate("InteractionsScreen")
   }
 
-  // affichage des composants selon le statut de la transaction
-  var components;
-  if (status === 0) {
-    if(props.transactionInfos.isAsker) {
-    components = <Confirmation 
-                    firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
-                    avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
-                    // icon={}
-                    category={props.transactionInfos.conversationInfos.request.category}
-                    description={props.transactionInfos.conversationInfos.request.description}
-                    // disponibility={}
-                    // location={}
-                    />
-                  } else {
-    components = <Confirmation 
-                    firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
-                    avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
-                    // icon={}
-                    category={props.transactionInfos.conversationInfos.request.category}
-                    description={props.transactionInfos.conversationInfos.request.description}
-                    // disponibility={}
-                    // location={}
-                    />  
-                  }
-  } else if (status === 1) {
-    components = <Declaration />;
-  } else if (status === 2) {
-    components = <DoubleDeclaration />;
-  }
-
-  let source = require("../../assets/avatar.png");
+    const [status, setStatus] = useState(0);
+    const [active, setActive] = useState(false);
+    const [currentMessage, setCurrentMessage] = useState("");
+    const [listMessage, setListMessage] = useState([]);
+    const [confirm, setConfirm] = useState(false);
 
 
-  // useEffect(() => {
-  //   socket.on("sendMessageToAll", (messageData) => {
-  //     setListMessage([...listMessage, messageData]);
-  //   });
-  // }, [listMessage]);
+    // useEffect(() => {
+    //   setStatus(props.transactionInfos.conversationInfos.request.asker_status)
+    // }, []);
+    // console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status);
 
-  // var chatMessages = listMessage.map((messageData, i) => {
-  //   var msg = messageData.message.replace(/:\)/g, '\u263A');
-  //   msg = msg.replace(/:\(/g, '\u2639');
-  //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
-  //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
 
-  //       return(
-  //         <ListItem key={i}>
-  //           <ListItem.Content>
-  //             <ListItem.Title>{msg}</ListItem.Title>
-  //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
-  //           </ListItem.Content>
-  //         </ListItem>
-  //       )
-  //     });
+    // dynamise les pastilles
+    let vert = "#399F09";
+    let jaune = "#F7CE46";
+    let gris = "#DDDDDD";
+    var transactionStatus;
+    var color1;
+    var color2;
+    var color3;
+    if (status === 0) {
+      color1 = vert;
+      color2 = jaune;
+      color3 = gris;
+      transactionStatus = "En attente de confirmation";
+    } else if (status === 1) {
+      color1 = vert;
+      color2 = vert;
+      color3 = gris;
+      transactionStatus = "En attente de déclaration";
+    } else if (status === 2) {
+      color1 = vert;
+      color2 = vert;
+      color3 = jaune;
+      transactionStatus = "En attente de déclaration du swaper";
+    } else if (status === 3) {
+      color1 = vert;
+      color2 = vert;
+      color3 = vert;
+      transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
+    }
+
+    // affichage des composants selon le statut de la transaction
+    var components;
+    if (status === 0) {
+      if(props.transactionInfos.isAsker) {
+      components = <Confirmation
+                      firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
+                      // icon={}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />
+                    } else {
+      components = <Confirmation 
+                      firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
+                      // icon={}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />  
+                    }
+    } else if (status === 1) {
+      components = <Declaration />;
+    } else if (status === 2) {
+      components = <DoubleDeclaration />;
+    }
+
+    let source = require("../../assets/avatar.png");
+
+
+    // useEffect(() => {
+    //   socket.on("sendMessageToAll", (messageData) => {
+    //     setListMessage([...listMessage, messageData]);
+    //   });
+    // }, [listMessage]);
+
+    // var chatMessages = listMessage.map((messageData, i) => {
+    //   var msg = messageData.message.replace(/:\)/g, '\u263A');
+    //   msg = msg.replace(/:\(/g, '\u2639');
+    //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
+    //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
+
+    //       return(
+    //         <ListItem key={i}>
+    //           <ListItem.Content>
+    //             <ListItem.Title>{msg}</ListItem.Title>
+    //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
+    //           </ListItem.Content>
+    //         </ListItem>
+    //       )
+    //     });
 
   return (
     <ImageBackground

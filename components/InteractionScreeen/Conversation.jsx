@@ -19,25 +19,22 @@ function Conversation({
   category,
   lastMessage,
   isAsker,
-  getTransactionInfos,
   conversationInfos,
+  getTransactionInfos,
 }) {
   const navigation = useNavigation();
 
-var openTransaction = () => {
-  getTransactionInfos( conversationInfos, isAsker)
-  // console.log('REQUEST POUR TRANSACTION:',conversationInfos, isAsker)
-}
+  var openTransaction = () => {
+    getTransactionInfos( conversationInfos, isAsker)
+    console.log('AU CLICK SUR UNE CONVERSATION:', conversationInfos, isAsker)
+  }
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
+        Component={TouchableOpacity}
         onPress={()=> {openTransaction(), navigation.navigate("TransactionScreen")}}
-        // onPress={() => navigation.navigate("TransactionScreen")}
-        //   onPress={() => {openTransaction(),  props.navigation.navigate("TransactionScreen", {
-        //     screen: "TransactionScreen",
-        //   })}
           containerStyle={{
             backgroundColor: "transparent",
           }}
