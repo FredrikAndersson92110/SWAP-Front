@@ -4,7 +4,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
 
-
 function Request({
   isAsker,
   currentRequest,
@@ -15,13 +14,14 @@ function Request({
   useravatar,
   location,
   categoryImage,
+  distance,
 }) {
   const navigation = useNavigation();
   // const require = "../../assets/images/categories/bricolage.png"
 
   const handleDetails = () => {
     let user = "";
-    onGetDetails(isAsker, currentRequest, requestId, user);
+    onGetDetails(isAsker, currentRequest, requestId, user, distance);
     navigation.navigate("DetailScreen");
   };
 
@@ -51,7 +51,6 @@ function Request({
             }}
           >
             {/* {(category = category.replace(/\s/g, "_"))} */}
-            {console.log(categoryImage)}
             <Image
               // source={require("../../assets/images/categories/bricolage.png")}
               source={categoryImage}
@@ -74,7 +73,9 @@ function Request({
               color="#F7CE46"
               style={{ marginRight: 10 }}
             />
-            <Text style={styles.bodyText}>{location} (6 km)</Text>
+            <Text style={styles.bodyText}>
+              {location} ({distance} km)
+            </Text>
           </View>
         </View>
       </View>
@@ -88,11 +89,12 @@ function Request({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onGetDetails: function (isAsker, request, requestId, user) {
+    onGetDetails: function (isAsker, request, requestId, user, distance) {
       dispatch({
         type: "user::details",
         isAsker: isAsker,
         request: request,
+        location: distance,
         requestId: requestId,
         user: user,
       });

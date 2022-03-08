@@ -2,22 +2,21 @@ import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
-  ScrollView, StyleSheet, Text, View
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Request from "../components/HelpScreen/Request";
 
+import getDistance from "../components/helpers";
 
-function HelpScreen({
-  onMatchCategories,
-  categoryMatches,
-  navigation,
-  categoryImage,
-}) {
+function HelpScreen({ onMatchCategories, categoryMatches, userLocation }) {
   const [message, setMessage] = useState("");
 
   const isFocused = useIsFocused();
-  
+
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -27,17 +26,41 @@ function HelpScreen({
         // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
         let response = await request.json();
         if (response.status) {
-          onMatchCategories(response.matchingRequests);
+          try {
+            let promise = await Promise.all(
+              response.matchingRequests.map(async (req) => {
+                let coords = await fetch(
+                  `https://koumoul.com/s/geocoder/api/v1/coord?city=${req.asker.userAddresses[0].address_city}`
+                );
+                let resp = await coords.json();
+
+                let distance = Math.round(
+                  getDistance(
+                    userLocation.coords.latitude,
+                    userLocation.coords.longitude,
+                    resp.lat,
+                    resp.lon
+                  )
+                );
+                return {
+                  ...req,
+                  distance,
+                };
+              })
+            );
+            onMatchCategories(promise);
+          } catch (error) {
+            console.error(error);
+          }
         } else {
           setMessage(response.message);
         }
       }
-        getRequests();
-      }
-    }, [isFocused]);
-    
-  let requestList = categoryMatches.map((request, i) => {
+      getRequests();
+    }
+  }, [isFocused]);
 
+  let requestList = categoryMatches.map((request, i) => {
     let path = `https://theoduvivier.com/swap/${
       request.category.category.sub_category
         ? request.category.category.sub_category
@@ -56,6 +79,7 @@ function HelpScreen({
       <Request
         key={i}
         isAsker={false}
+        distance={request.distance}
         useravatar={request.asker.user_img}
         currentRequest={request}
         requestId={request._id}
@@ -122,7 +146,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { categoryMatches: state.categoriesReducer };
+  return {
+    categoryMatches: state.categoriesReducer,
+    userLocation: state.locationReducer,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HelpScreen);

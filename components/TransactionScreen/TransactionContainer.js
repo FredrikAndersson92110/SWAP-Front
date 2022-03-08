@@ -30,9 +30,9 @@ const TransactionContainer = (props) => {
   let bottom = Platform.OS === "ios" ? 70 : 50;
   const navigation = useNavigation();
 
-//
-// ─── CONST CHAT ─────────────────────────────────────────────────────────────────
-//
+  //
+  // ─── CONST CHAT ─────────────────────────────────────────────────────────────────
+  //
   const bottomSheetRef = useRef(BottomSheet);
   const snapPoints = useMemo(() => ["30%", "50%", "70%"], []);
   const handleSheetChanges = useCallback((index) => {
@@ -159,14 +159,12 @@ const TransactionContainer = (props) => {
   //       )
   //     });
 
-
-
   //
   // ────────────────────────────────────────────────────── I ──────────
   //   :::::: R E N D E R S : :  :   :    :     :        :          :
   // ────────────────────────────────────────────────────────────────
   //
-  
+
   return (
     <View style={styles.container}>
       <View style={{ marginTop: 20 }}>
@@ -522,5 +520,3 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
   },
 });
-
-

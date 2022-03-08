@@ -10,7 +10,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
       Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c; // Distance in miles
-  return d;
+  return d * 1.609344;
 }
 
 function deg2rad(deg) {
