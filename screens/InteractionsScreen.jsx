@@ -1,12 +1,16 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
-  ImageBackground, ScrollView, StyleSheet, Text, View
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Conversation from "../components/InteractionScreeen/Conversation";
 
-function InteractionsScreen({ requests, onAddRequests, navigation }) {
+function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
   const isFocused = useIsFocused();
 
   const [message, setMessage] = useState("");
@@ -16,7 +20,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+          `https://swapapp-backend.herokuapp.com/get-matches/${user.token}`
         );
         let response = await request.json();
 
@@ -36,7 +40,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   // "requests" récupéré via le mapStateToProps
   let conversations = [];
   requests.forEach((req) => {
-    if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    if (req.asker.token === user.token) {
       let tempConv = req.conversations.map((conversation) => {
         return {
           ...conversation,
@@ -49,9 +53,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       conversations = conversations.concat(tempConv);
     } else {
       let foundConversation = req.conversations.find(
-        (conversation) =>
-          conversation.conversation_id.token ===
-          "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+        (conversation) => conversation.conversation_id.token === user.token
       );
       if (foundConversation) {
         conversations.push({
@@ -67,7 +69,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
 
   //  maps générant les échanges à partir du tableau "conversations" créé au dessus. (contient les messages tchat notamment)
   let requestList = conversations.map((conversation, i) => {
-    if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    if (conversation.asker.token === user.token) {
       return (
         // syntaxe REVERSE DATA FLOW (cf My Moviz)
         <Conversation
@@ -186,7 +188,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { requests: state.requestsReducer };
+  return { requests: state.requestsReducer, user: state.userReducer };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InteractionsScreen);

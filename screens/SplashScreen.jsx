@@ -11,9 +11,8 @@ const SplashScreen = (props) => {
   useEffect(async () => {
     // SI un token est présent en local storage ==> rredirection vers la page HOME + recupération des données USER que l'on stock dans le store
     AsyncStorage.getItem("token", async function (error, data) {
-      console.log("token sent to back ==>",data);
+      console.log("token sent to back ==>", data);
       if (data) {
-
         let response = await fetch(
           `https://swapapp-backend.herokuapp.com/users/get-user/${data}`
         );
@@ -29,17 +28,15 @@ const SplashScreen = (props) => {
     });
   }, []);
 
-
-    return (
-      <View style={styles.overlay}>
-        <Image
-          style={styles.image}
-          resizeMode={"contain"}
-          source={require("../assets/splash.png")}
-        ></Image>
-      </View>
-    );
-  
+  return (
+    <View style={styles.overlay}>
+      <Image
+        style={styles.image}
+        resizeMode={"contain"}
+        source={require("../assets/splash.png")}
+      ></Image>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
