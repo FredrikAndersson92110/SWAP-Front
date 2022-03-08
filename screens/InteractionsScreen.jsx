@@ -1,28 +1,31 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
-  ImageBackground, ScrollView, StyleSheet, Text, View
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Conversation from "../components/InteractionScreeen/Conversation";
 
-function InteractionsScreen({ requests, onAddRequests, navigation }) {
+function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
   const isFocused = useIsFocused();
 
   const [message, setMessage] = useState("");
 
-  // appel de la route qui recherche les matches de requêtes qui 
+  // chercher les matches sur ResquestSchema
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+          `https://swapapp-backend.herokuapp.com/get-matches/${user.token}`
         );
         let response = await request.json();
 
         if (response.status) {
           onAddRequests(response.requests);
-          // console.log('RESPONSE FETCH RESQUEST:', response.requests)
         } else {
           setMessage(response.message);
         }
@@ -32,11 +35,10 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   }, [isFocused]);
 
   // tri des données du requestSchema à récupérer
-  // if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les vignettes des autres plutôt que la mienne.
-  // "requests" récupéré via le mapStateToProps
   let conversations = [];
   requests.forEach((req) => {
-    if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    // si le token du asker est le mien, alors:
+    if (req.asker.token === user.token) {
       let tempConv = req.conversations.map((conversation) => {
         return {
           ...conversation,
@@ -48,11 +50,11 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       });
       conversations = conversations.concat(tempConv);
     } else {
+      // si mon token est stocké dans la propriété "conversation_id", je suis helper, et une conversation existe déjà:
       let foundConversation = req.conversations.find(
-        (conversation) =>
-          conversation.conversation_id.token ===
-          "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+        (conversation) => conversation.conversation_id.token === user.token
       );
+      // si une conversation existe déjà, pusher dans les conversations existantes la category, le requestId et ttes les infos du asker
       if (foundConversation) {
         conversations.push({
           ...foundConversation,
@@ -65,47 +67,47 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     }
   });
 
-  //  maps générant les échanges à partir du tableau "conversations" créé au dessus. (contient les messages tchat notamment)
+  //  maps générant les échanges à partir pour CHAQUE conversation, à partir du tableau créé au dessus.
+  //  si je suis asker, pour afficher les autres plutôt que ma vignette.
   let requestList = conversations.map((conversation, i) => {
-    if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    if (conversation.asker.token === user.token) {
       return (
-        // syntaxe REVERSE DATA FLOW (cf My Moviz)
         <Conversation
-          conversationInfos={conversation} // pour afficher conversation 
           key={i}
-          isAsker={true} // // passé en props destructuré dans la function du screen "Conversation" 
-          name={conversation.conversation_id.firstName} // same
-          useravatar={conversation.conversation_id.user_img} // same
+          conversationInfos={conversation}
+          isAsker={true}
+          name={conversation.conversation_id.firstName}
+          useravatar={conversation.conversation_id.user_img}
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          } // same
+          }
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
               : { message: "" }
-          } // same
+          }
         />
       );
     } else {
       return (
         <Conversation
-          conversationInfos={conversation} // pour afficher conversation
           key={i}
-          isAsker={false} 
-          name={conversation.asker.firstName} 
-          useravatar={conversation.asker.user_img}  
+          conversationInfos={conversation}
+          isAsker={false}
+          name={conversation.asker.firstName}
+          useravatar={conversation.asker.user_img}
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          } 
+          }
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
-              : { message: "" } 
-          } 
+              : { message: "" }
+          }
         />
       );
     }
@@ -175,8 +177,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   );
 }
 
-// ajoute dans le store les requests correspondant au token de l'utilisateur, via l'argument "data"
-// request récupéré par "onAddRequests(response.requests)" dans le fetch
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {
@@ -186,7 +186,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { requests: state.requestsReducer };
+  return { requests: state.requestsReducer, user: state.userReducer };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InteractionsScreen);

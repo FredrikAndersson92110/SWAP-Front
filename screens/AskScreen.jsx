@@ -20,6 +20,7 @@ function AskScreen({
   onAddRequestWillingUsers,
   willingUserRequests,
   userLocation,
+  user,
 }) {
   const isFocused = useIsFocused();
 
@@ -29,7 +30,7 @@ function AskScreen({
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-willing-users/CyfMgR7UvrILzTVS5keCCY2gPaqy9njx"
+          `https://swapapp-backend.herokuapp.com/get-willing-users/${user.token}`
         );
         let response = await request.json();
         if (response.status) {
@@ -76,25 +77,29 @@ function AskScreen({
   }, [isFocused]);
 
   let requestList = willingUserRequests.map((req, i) => {
-    return (
-      <Request
-        key={i}
-        isAsker={true}
-        requestId={req.requestId}
-        currentRequest={req.request}
-        request={req}
-        distance={req.distance}
-        location={req.userAddresses[0].address_city}
-        willingUserToken={req.token}
-        name={req.firstName}
-        useravatar={req.user_img}
-        category={
-          req.category.sub_category
-            ? req.category.sub_category
-            : req.category.category
-        }
-      />
-    );
+    if (req.distance < 200) {
+      return (
+        <Request
+          key={i}
+          isAsker={true}
+          requestId={req.requestId}
+          currentRequest={req.request}
+          request={req}
+          distance={req.distance}
+          location={req.userAddresses[0].address_city}
+          willingUserToken={req.token}
+          name={req.firstName}
+          useravatar={req.user_img}
+          category={
+            req.category.sub_category
+              ? req.category.sub_category
+              : req.category.category
+          }
+        />
+      );
+    } else {
+      return null;
+    }
   });
 
   return (
@@ -162,6 +167,7 @@ function mapStatetoProps(state) {
   return {
     willingUserRequests: state.willingReducer,
     userLocation: state.locationReducer,
+    user: state.userReducer,
   };
 }
 

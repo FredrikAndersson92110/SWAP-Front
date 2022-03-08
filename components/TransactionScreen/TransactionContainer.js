@@ -2,15 +2,21 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import React, {
-  useCallback, useEffect, useMemo,
-  useRef, useState
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import {
-  ImageBackground, Platform,
+  ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity, TouchableWithoutFeedback, View
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Confirmation from "./Confirmation";
@@ -18,6 +24,7 @@ import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
 
 
+/*---------------------------------- FUNCTION ----------------------------------*/
 const TransactionContainer = (props) => {
   let bottom = Platform.OS === "ios" ? 70 : 50;
   const navigation = useNavigation();
@@ -26,130 +33,113 @@ const TransactionContainer = (props) => {
   // ─── CONST CHAT ─────────────────────────────────────────────────────────────────
   //
   const bottomSheetRef = useRef(BottomSheet);
-  const snapPoints = useMemo(() => ["30%", "50%", "70%"], []);
+  const snapPoints = useMemo(() => ["40%","40%","80%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
 
-  // console.log(">>>> REQUEST:", props.transactionInfos.conversationInfos.messages[0])
-
+  
   const handleSubmit = async () => {
-    return navigation.navigate("InteractionsScreen");
-  };
-
-  const [status, setStatus] = useState(0);
-  const [active, setActive] = useState(false);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [listMessage, setListMessage] = useState([]);
-  const [confirm, setConfirm] = useState(false);
-
-  useEffect(() => {
-    setStatus(props.transactionInfos.conversationInfos.request.asker_status);
-  }, []);
-  console.log(
-    "USEEFFECT :",
-    props.transactionInfos.conversationInfos.request.asker_status
-  );
-
-  // dynamise les pastilles
-  let vert = "#399F09";
-  let jaune = "#F7CE46";
-  let gris = "#DDDDDD";
-  var transactionStatus;
-  var color1;
-  var color2;
-  var color3;
-  if (status === 0) {
-    color1 = vert;
-    color2 = jaune;
-    color3 = gris;
-    transactionStatus = "En attente de confirmation";
-  } else if (status === 1) {
-    color1 = vert;
-    color2 = vert;
-    color3 = gris;
-    transactionStatus = "En attente de déclaration";
-  } else if (status === 2) {
-    color1 = vert;
-    color2 = vert;
-    color3 = jaune;
-    transactionStatus = "En attente de déclaration du swaper";
-  } else if (status === 3) {
-    color1 = vert;
-    color2 = vert;
-    color3 = vert;
-    transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
+  return navigation.navigate("InteractionsScreen")
   }
 
-  // affichage des composants selon le statut de la transaction
-  var components;
-  if (status === 0) {
-    if (props.transactionInfos.isAsker) {
-      components = (
-        <Confirmation
-          firstName={
-            props.transactionInfos.conversationInfos.conversation_id.firstName
-          }
-          avatar={
-            props.transactionInfos.conversationInfos.conversation_id.user_img
-          }
-          // icon={}
-          category={props.transactionInfos.conversationInfos.request.category}
-          description={
-            props.transactionInfos.conversationInfos.request.description
-          }
-          // disponibility={}
-          // location={}
-        />
-      );
-    } else {
-      components = (
-        <Confirmation
-          firstName={
-            props.transactionInfos.conversationInfos.request.asker.firstName
-          }
-          avatar={
-            props.transactionInfos.conversationInfos.request.asker.user_img
-          }
-          // icon={}
-          category={props.transactionInfos.conversationInfos.request.category}
-          description={
-            props.transactionInfos.conversationInfos.request.description
-          }
-          // disponibility={}
-          // location={}
-        />
-      );
+    const [status, setStatus] = useState(0);
+    const [active, setActive] = useState(false);
+    const [currentMessage, setCurrentMessage] = useState("");
+    const [listMessage, setListMessage] = useState([]);
+    const [confirm, setConfirm] = useState(false);
+
+
+    // useEffect(() => {
+    //   setStatus(props.transactionInfos.conversationInfos.request.asker_status)
+    // }, []);
+    // console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status);
+
+
+    // dynamise les pastilles
+    let vert = "#399F09";
+    let jaune = "#F7CE46";
+    let gris = "#DDDDDD";
+    var transactionStatus;
+    var color1;
+    var color2;
+    var color3;
+    if (status === 0) {
+      color1 = vert;
+      color2 = jaune;
+      color3 = gris;
+      transactionStatus = "En attente de confirmation";
+    } else if (status === 1) {
+      color1 = vert;
+      color2 = vert;
+      color3 = gris;
+      transactionStatus = "En attente de déclaration";
+    } else if (status === 2) {
+      color1 = vert;
+      color2 = vert;
+      color3 = jaune;
+      transactionStatus = "En attente de déclaration du swaper";
+    } else if (status === 3) {
+      color1 = vert;
+      color2 = vert;
+      color3 = vert;
+      transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
     }
-  } else if (status === 1) {
-    components = <Declaration />;
-  } else if (status === 2) {
-    components = <DoubleDeclaration />;
-  }
 
-  let source = require("../../assets/avatar.png");
+    // affichage des composants selon le statut de la transaction
+    var components;
+    if (status === 0) {
+      if(props.transactionInfos.isAsker) {
+      components = <Confirmation
+                      firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
+                      // icon={}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />
+                    } else {
+      components = <Confirmation 
+                      firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
+                      // icon={}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />  
+                    }
+    } else if (status === 1) {
+      components = <Declaration />;
+    } else if (status === 2) {
+      components = <DoubleDeclaration />;
+    }
 
-  // useEffect(() => {
-  //   socket.on("sendMessageToAll", (messageData) => {
-  //     setListMessage([...listMessage, messageData]);
-  //   });
-  // }, [listMessage]);
+    let source = require("../../assets/avatar.png");
 
-  // var chatMessages = listMessage.map((messageData, i) => {
-  //   var msg = messageData.message.replace(/:\)/g, '\u263A');
-  //   msg = msg.replace(/:\(/g, '\u2639');
-  //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
-  //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
 
-  //       return(
-  //         <ListItem key={i}>
-  //           <ListItem.Content>
-  //             <ListItem.Title>{msg}</ListItem.Title>
-  //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
-  //           </ListItem.Content>
-  //         </ListItem>
-  //       )
-  //     });
+    // useEffect(() => {
+    //   socket.on("sendMessageToAll", (messageData) => {
+    //     setListMessage([...listMessage, messageData]);
+    //   });
+    // }, [listMessage]);
+
+    // var chatMessages = listMessage.map((messageData, i) => {
+    //   var msg = messageData.message.replace(/:\)/g, '\u263A');
+    //   msg = msg.replace(/:\(/g, '\u2639');
+    //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
+    //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
+
+    //       return(
+    //         <ListItem key={i}>
+    //           <ListItem.Content>
+    //             <ListItem.Title>{msg}</ListItem.Title>
+    //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
+    //           </ListItem.Content>
+    //         </ListItem>
+    //       )
+    //     });
 
   //
   // ────────────────────────────────────────────────────── I ──────────
@@ -202,61 +192,65 @@ const TransactionContainer = (props) => {
               </Text>
             </View>
 
-            {/* PASTILLES DE STATUS */}
+            {/* ------- PASTILLES DE STATUS ------- */}
             <View
               style={{
                 flexDirection: "row",
                 marginTop: 20,
                 width: 280,
-                justifyContent: "space-between",
+                justifyContent: "space-even",
               }}
             >
-              <AntDesign name="checkcircle" size={30} color={color1} />
-              <View style={styles.traits}></View>
-              <AntDesign name="checkcircle" size={30} color={color2} />
-              <View style={styles.traits}></View>
-              <AntDesign name="checkcircle" size={30} color={color3} />
-            </View>
+              {/* CHECK 1 */}
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color1} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Mise en relation
+                </Text>
+              </View>
+              <View style={[styles.traits, { left: -5 }]}></View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 8,
-                width: 330,
-                // borderWidth: 1,
-                // borderColor: "red",
-              }}
-            >
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 1,
-                }}
-              >
-                Mise en relation
-              </Text>
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 58,
-                }}
-              >
-                Confirmée
-              </Text>
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 10,
-                  fontFamily: "Poppins_400Regular",
-                  marginLeft: 75,
-                }}
-              >
-                Déclarée
-              </Text>
+              {/* CHECK 2 */}
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color2} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Confirmée
+                </Text>
+              </View>
+              <View style={[styles.traits, {marginRight:10}]}></View>
+
+              {/* CHECK 2 */}
+
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AntDesign name="checkcircle" size={30} color={color3} />
+                <Text
+                  style={{
+                    color: "black",
+                    fontSize: 10,
+                    fontFamily: "Poppins_400Regular",
+                    marginLeft: 1,
+                    marginTop: 10,
+                  }}
+                >
+                  Déclarée
+                </Text>
+              </View>
             </View>
 
             {/* COMPOSANTS SELON CONDITIONS BEFORE RETURN */}
@@ -437,6 +431,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     width: 55,
     height: 1,
+    top: -10,
     alignSelf: "center",
   },
   pageTop: {

@@ -21,7 +21,7 @@ import locationReducer from "./reducers/location.reducer";
 import transactionInfos from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import composeRequestReducer from "./reducers/composeRequest.reducer";
-
+//Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
 import CustomScreen from "./screens/CustomScreen";
@@ -40,10 +40,6 @@ import TinderScreen from "./screens/TinderScreen";
 import TransactionScreen from "./screens/TransactionScreen";
 import UserRequestScreen from "./screens/UserRequestScreen";
 import UserScreen from "./screens/UserScreen";
-
-
-
-
 
 const store = createStore(
   combineReducers({

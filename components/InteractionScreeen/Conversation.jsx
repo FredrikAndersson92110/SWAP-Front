@@ -2,6 +2,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
@@ -19,25 +20,22 @@ function Conversation({
   category,
   lastMessage,
   isAsker,
-  getTransactionInfos,
   conversationInfos,
+  getTransactionInfos,
 }) {
   const navigation = useNavigation();
 
-var openTransaction = () => {
-  getTransactionInfos( conversationInfos, isAsker)
-  // console.log('REQUEST POUR TRANSACTION:',conversationInfos, isAsker)
-}
+  var openTransaction = () => {
+    getTransactionInfos( conversationInfos, isAsker)
+    console.log('AU CLICK SUR UNE CONVERSATION:', conversationInfos, isAsker)
+  }
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
+        Component={TouchableOpacity}
         onPress={()=> {openTransaction(), navigation.navigate("TransactionScreen")}}
-        // onPress={() => navigation.navigate("TransactionScreen")}
-        //   onPress={() => {openTransaction(),  props.navigation.navigate("TransactionScreen", {
-        //     screen: "TransactionScreen",
-        //   })}
           containerStyle={{
             backgroundColor: "transparent",
           }}
@@ -68,7 +66,9 @@ var openTransaction = () => {
                   flexDirection: "row",
                 }}
               >
-                <Text style={{ color: "#8B8B8B" }}>{isAsker ? "Demande:" : "Mission:"} </Text>
+                <Text style={{ color: "#8B8B8B" }}>
+                  {isAsker ? "Demande:" : "Mission:"}{" "}
+                </Text>
                 <Text style={{ fontFamily: "Poppins_700Bold" }}>
                   {category}
                 </Text>
@@ -97,14 +97,19 @@ var openTransaction = () => {
 // Elisa : récupère les requests et le isAsker, via les props fournies dans le composant de présentation Conversation vers le dispatch
 function mapDispatchToProps(dispatch) {
   return {
-    getTransactionInfos: function ( conversationInfos, isAsker) {
-      dispatch({ type: "getTransactionInfos", transactionInfos: {conversationInfos: conversationInfos,  isAsker : isAsker} });
+    getTransactionInfos: function (conversationInfos, isAsker) {
+      dispatch({
+        type: "getTransactionInfos",
+        transactionInfos: {
+          conversationInfos: conversationInfos,
+          isAsker: isAsker,
+        },
+      });
     },
   };
 }
 
 export default connect(null, mapDispatchToProps)(Conversation);
-
 
 //
 // ─────────────────────────────────────────────────── ──────────

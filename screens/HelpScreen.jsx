@@ -12,7 +12,12 @@ import Request from "../components/HelpScreen/Request";
 
 import getDistance from "../components/helpers";
 
-function HelpScreen({ props, onMatchCategories, categoryMatches, userLocation }) {
+function HelpScreen({
+  onMatchCategories,
+  categoryMatches,
+  userLocation,
+  user,
+}) {
   const [message, setMessage] = useState("");
 
   const isFocused = useIsFocused();
@@ -21,7 +26,7 @@ function HelpScreen({ props, onMatchCategories, categoryMatches, userLocation })
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/match-categories/WK5zB1AX-ajwRoAnDpeeowN4D96COfQ4"
+          `https://swapapp-backend.herokuapp.com/match-categories/${user.token}`
         );
         // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
         let response = await request.json();
@@ -75,28 +80,32 @@ function HelpScreen({ props, onMatchCategories, categoryMatches, userLocation })
     console.log("PATH", path);
     //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663953/montage_de_meubles.png
     //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663954/montage_de_meubles.png
-    return (
-      <Request
-        key={i}
-        isAsker={false}
-        distance={request.distance}
-        useravatar={request.asker.user_img}
-        currentRequest={request}
-        requestId={request._id}
-        askerName={request.asker.firstName}
-        location={
-          request.asker.userAddresses[0]
-            ? request.asker.userAddresses[0].address_city
-            : ""
-        }
-        category={
-          request.category.category.sub_category
-            ? request.category.category.sub_category
-            : request.category.category
-        }
-        categoryImage={{ uri: path }}
-      />
-    );
+    if (request.distance < 200) {
+      return (
+        <Request
+          key={i}
+          isAsker={false}
+          distance={request.distance}
+          useravatar={request.asker.user_img}
+          currentRequest={request}
+          requestId={request._id}
+          askerName={request.asker.firstName}
+          location={
+            request.asker.userAddresses[0]
+              ? request.asker.userAddresses[0].address_city
+              : ""
+          }
+          category={
+            request.category.category.sub_category
+              ? request.category.category.sub_category
+              : request.category.category
+          }
+          categoryImage={{ uri: path }}
+        />
+      );
+    } else {
+      return null;
+    }
   });
 
   return (
@@ -149,6 +158,7 @@ function mapStateToProps(state) {
   return {
     categoryMatches: state.categoriesReducer,
     userLocation: state.locationReducer,
+    user: state.userReducer,
   };
 }
 

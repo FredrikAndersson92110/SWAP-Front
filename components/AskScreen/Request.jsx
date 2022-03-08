@@ -69,7 +69,10 @@ function Request({
                 style={{ marginRight: 10 }}
               />
               <Text style={styles.bodyText}>
-                {location} ({distance} km)
+                {location.length > 10
+                  ? location.substring(0, 10) + "..."
+                  : location}{" "}
+                ({distance} km)
               </Text>
             </View>
           </View>
