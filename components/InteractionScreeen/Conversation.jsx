@@ -2,6 +2,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
@@ -19,27 +20,22 @@ function Conversation({
   category,
   lastMessage,
   isAsker,
-  getTransactionInfos,
   conversationInfos,
+  getTransactionInfos,
 }) {
   const navigation = useNavigation();
 
   var openTransaction = () => {
-    getTransactionInfos(conversationInfos, isAsker);
-    // console.log('REQUEST POUR TRANSACTION:',conversationInfos, isAsker)
-  };
+    getTransactionInfos( conversationInfos, isAsker)
+    console.log('AU CLICK SUR UNE CONVERSATION:', conversationInfos, isAsker)
+  }
 
   return (
     <>
       <TouchableWithoutFeedback>
         <ListItem
-          onPress={() => {
-            openTransaction(), navigation.navigate("TransactionScreen");
-          }}
-          // onPress={() => navigation.navigate("TransactionScreen")}
-          //   onPress={() => {openTransaction(),  props.navigation.navigate("TransactionScreen", {
-          //     screen: "TransactionScreen",
-          //   })}
+        Component={TouchableOpacity}
+        onPress={()=> {openTransaction(), navigation.navigate("TransactionScreen")}}
           containerStyle={{
             backgroundColor: "transparent",
           }}
