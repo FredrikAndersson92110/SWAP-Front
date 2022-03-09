@@ -22,7 +22,7 @@ function DetailScreen({
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `http://192.168.10.154:3000/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
+        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "PUT",
         }
@@ -51,7 +51,7 @@ function DetailScreen({
   const handleRefuse = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `http://192.168.10.154:3000/delete-willing-user/${userDetails.requestId}/${userDetails.user.token}`,
+        `https://swapapp-backend.herokuapp.com/delete-willing-user/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "DELETE",
         }

@@ -26,7 +26,7 @@ function HelpScreen({
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `http://192.168.10.154:3000/match-categories/${user.token}`
+          `https://swapapp-backend.herokuapp.com/match-categories/${user.token}`
         );
         // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
         let response = await request.json();
