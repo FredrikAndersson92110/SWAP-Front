@@ -153,7 +153,7 @@ function TinderScreen({
   // PART 2 DU USEEFFECT : DATA POUR LES CARDS
   console.log(" ------ MATCH ------", categoryMatches);
   let cardsArray = categoryMatches.map((request, i) => {
-    console.log("request.category.sub_category", request.category.sub_category);
+    console.log("----request-----", request);
     return {
       key: i,
       title: request.category.sub_category

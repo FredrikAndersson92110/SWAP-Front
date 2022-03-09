@@ -17,14 +17,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
-import DropDownPicker from 'react-native-dropdown-picker';
-
-<<<<<<< HEAD
-const UserScreen = (props, request) => {
-=======
 
 const UserScreen = (props) => {
->>>>>>> e07d5ec209d4cbae7773ee3f06c77a9b2b33e212
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -38,7 +32,6 @@ const UserScreen = (props) => {
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
- 
 
   let handleSubmit = async () => {
     let response = await fetch(
@@ -233,77 +226,72 @@ const UserScreen = (props) => {
                 </TouchableWithoutFeedback>
               </Text>
 
-              
-            
               <DropDownCategories
-            placeHolder={"Choisissez une catégorie"}
-            containerStyle={[
-              styles.card,
-              {
-                height: 100,
-                marginBottom: 200,
-                width: "77%",
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-              },
-            ]}
-            style={{
-              width: "100%",
-              padding: 15,
-              
-              shadowColor: "#171717",
-              shadowOffset: { width: 1, height: 5 },
-              shadowOpacity: 0.2,
-              shadowRadius: 7,
-              borderRadius: 15,
-              elevation: 6,
-              marginHorizontal: 15,
-              paddingHorizontal: 30,
-            }}
-            onChange={(item) => {
-              
-              setSelectedCat();
-              setSelectedCat(item);
-              
-              console.log("selectedCat", selectedCat);
-              // handleCategories();
-            }}
-          />
+                placeHolder={"Choisissez une catégorie"}
+                containerStyle={[
+                  styles.card,
+                  {
+                    height: 100,
+                    marginBottom: 200,
+                    width: "77%",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  },
+                ]}
+                style={{
+                  width: "100%",
+                  padding: 15,
+
+                  shadowColor: "#171717",
+                  shadowOffset: { width: 1, height: 5 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 7,
+                  borderRadius: 15,
+                  elevation: 6,
+                  marginHorizontal: 15,
+                  paddingHorizontal: 30,
+                }}
+                onChange={(item) => {
+                  setSelectedCat();
+                  setSelectedCat(item);
+
+                  console.log("selectedCat", selectedCat);
+                  // handleCategories();
+                }}
+              />
               <DropDownCategories
-            placeHolder={"Choisissez une catégorie"}
-            containerStyle={[
-              styles.card,
-              {
-                height: 100,
-                marginBottom: 200,
-                width: "77%",
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-              },
-            ]}
-            style={{
-              width: "100%",
-              padding: 15,
-              
-              shadowColor: "#171717",
-              shadowOffset: { width: 1, height: 5 },
-              shadowOpacity: 0.2,
-              shadowRadius: 7,
-              borderRadius: 15,
-              elevation: 6,
-              marginHorizontal: 15,
-              paddingHorizontal: 30,
-            }}
-            onChange={(item) => {
-              
-              setSelectedCat();
-              setSelectedCat(item);
-              
-              console.log("selectedCat", selectedCat);
-              // handleCategories();
-            }}
-          />
-          
+                placeHolder={"Choisissez une catégorie"}
+                containerStyle={[
+                  styles.card,
+                  {
+                    height: 100,
+                    marginBottom: 200,
+                    width: "77%",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  },
+                ]}
+                style={{
+                  width: "100%",
+                  padding: 15,
+
+                  shadowColor: "#171717",
+                  shadowOffset: { width: 1, height: 5 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 7,
+                  borderRadius: 15,
+                  elevation: 6,
+                  marginHorizontal: 15,
+                  paddingHorizontal: 30,
+                }}
+                onChange={(item) => {
+                  setSelectedCat();
+                  setSelectedCat(item);
+
+                  console.log("selectedCat", selectedCat);
+                  // handleCategories();
+                }}
+              />
             </View>
           </View>
         </ScrollView>
@@ -417,7 +405,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
-    height: 20
   },
   fonts: {
     marginBottom: 8,

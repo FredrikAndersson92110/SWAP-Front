@@ -35,7 +35,6 @@ function HelpScreen({
             let promise = await Promise.all(
               response.matchingRequests.map(async (req) => {
                 let coords = await fetch(
-                  // `https://koumoul.com/s/geocoder/api/v1/coord?city=${req.asker.userAddresses[0].address_city}`
                   `http://api.openweathermap.org/geo/1.0/direct?q=${req.asker.userAddresses[0].address_city},fr&appid=f2b23e6c8f32f28cdd181b47f5b3ba63`
                 );
 
