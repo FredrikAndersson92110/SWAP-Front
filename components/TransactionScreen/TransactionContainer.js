@@ -181,7 +181,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     // affichage des composants selon le statut de la transaction
     var components;
     if (status === 0) {
-      if(props.transactionInfos.isAsker) {
+      if(transactionInfos.isAsker) {
       //  si je suis asker
       components = <Confirmation
                       isAsker={transactionInfos.isAsker}
@@ -209,7 +209,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
                       />  
                     }
     } else if (status === 1) {
-      if(props.transactionInfos.isAsker) {
+      if(transactionInfos.isAsker) {
       components = <Declaration 
                       isAsker={transactionInfos.isAsker}
                       token={transactionInfos.conversationInfos.conversation_id.token}
@@ -231,7 +231,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
                       />
                     }
     } else if (status === 2) {
-      if(props.transactionInfos.isAsker) {
+      if(transactionInfos.isAsker) {
       components = <DoubleDeclaration 
                       isAsker={transactionInfos.isAsker}
                       token={transactionInfos.conversationInfos.conversation_id.token}
