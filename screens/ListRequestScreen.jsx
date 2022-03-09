@@ -30,12 +30,6 @@ function ListRequestScreen(props) {
   const toggleOverlay = () => {
     setOverlayVisible(!overlayVisible);
   };
- 
-
-  
-
-
-
 
   return (
     <ImageBackground
@@ -103,11 +97,6 @@ function ListRequestScreen(props) {
               marginHorizontal: 15,
             }}
             activeOpacity={1}
-            onPress={() => {
-              navigation.navigate("ComposeRequestScreen", {
-                screen: "ComposeRequestScreen",
-              });
-            }}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text

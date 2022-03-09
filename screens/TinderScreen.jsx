@@ -118,7 +118,6 @@ function TinderScreen({
             let promise = await Promise.all(
               response.matchingRequests.map(async (req) => {
                 let coords = await fetch(
-                  // `https://koumoul.com/s/geocoder/api/v1/coord?city=${req.asker.userAddresses[0].address_city}`
                   `http://api.openweathermap.org/geo/1.0/direct?q=${req.asker.userAddresses[0].address_city},fr&appid=f2b23e6c8f32f28cdd181b47f5b3ba63`
                 );
 
@@ -153,20 +152,22 @@ function TinderScreen({
   // PART 2 DU USEEFFECT : DATA POUR LES CARDS
   console.log(" ------ MATCH ------", categoryMatches);
   let cardsArray = categoryMatches.map((request, i) => {
-    console.log("----request-----", request);
+    console.log("----request-----", request.category);
     return {
       key: i,
       title: request.category.sub_category
-        ? request.category.sub_category
-        : request.category,
+        ? request.category.sub_category.charAt(0).toUpperCase() +
+          request.category.sub_category.substring(1)
+        : request.category.category.charAt(0).toUpperCase() +
+          request.category.category.substring(1),
       backgroundColor: "#FFF",
-      image: `http://theoduvivier.com/swap/${
+      image: `https://theoduvivier.com/swap/${
         request.category.sub_category
           ? request.category.sub_category
               .replace(/\s/g, "_")
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "")
-          : request.category
+          : request.category.category
               .replace(/\s/g, "_")
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "")
