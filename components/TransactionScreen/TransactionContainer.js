@@ -138,6 +138,36 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     transactionInfos.conversationInfos.request.asker_status
   );
 
+  // dynamise les pastilles
+  let vert = "#399F09";
+  let jaune = "#F7CE46";
+  let gris = "#DDDDDD";
+  var transactionStatus;
+  var color1;
+  var color2;
+  var color3;
+  if (status === 0) {
+    color1 = vert;
+    color2 = jaune;
+    color3 = gris;
+    transactionStatus = "En attente de confirmation";
+  } else if (status === 1) {
+    color1 = vert;
+    color2 = vert;
+    color3 = gris;
+    transactionStatus = "En attente de déclaration";
+  } else if (status === 2) {
+    color1 = vert;
+    color2 = vert;
+    color3 = jaune;
+    transactionStatus = "En attente de déclaration du swaper";
+  } else if (status === 3) {
+    color1 = vert;
+    color2 = vert;
+    color3 = vert;
+    transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
+  }
+
   let source = require("../../assets/avatar.png");
 
   // affichage des composants selon le statut de la transaction
@@ -175,8 +205,6 @@ const TransactionContainer = ({ transactionInfos, user }) => {
   } else if (status === 2) {
     components = <DoubleDeclaration />;
   }
-
-  let source = require("../../assets/avatar.png");
 
   //
   // ────────────────────────────────────────────────────── I ──────────
