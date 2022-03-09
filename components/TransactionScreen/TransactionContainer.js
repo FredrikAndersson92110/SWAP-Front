@@ -27,7 +27,6 @@ import socketIOClient from "socket.io-client";
 var socket = socketIOClient("https://swapapp-backend.herokuapp.com");
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 
-import { useIsFocused } from "@react-navigation/native";
 import { log } from "react-native-reanimated";
 
 
