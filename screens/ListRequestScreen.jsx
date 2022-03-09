@@ -266,9 +266,13 @@ function ListRequestScreen(props) {
 
                 <Text style={styles.textTitle2}>Demande envoyée ! </Text>
 
-                <View style={styles.container2}>
+                {/* <View style={styles.container2}>
                   <AntDesign name="checkcircle" size={100} color="#F7CE46" />
-                </View>
+                </View> */}
+                <Image
+                     style={styles.timeCounter}
+                    source={require("../assets/images/HomeScreen/timeCounter.png")}
+                    />
 
                 <Text style={styles.bodyText}>
                   Les Swapers sélectionnés recevront une notification concernant
@@ -300,7 +304,6 @@ function ListRequestScreen(props) {
   );
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {
@@ -310,10 +313,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.userReducer, requests: state.requestsReducer, request:  state.newRequest };
+  return {
+    user: state.userReducer,
+    requests: state.requestsReducer,
+    request: state.newRequest,
+  };
 }
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 

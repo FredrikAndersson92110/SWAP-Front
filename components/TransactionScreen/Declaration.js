@@ -10,16 +10,29 @@ import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import RNPickerSelect from "react-native-picker-select";
 
+import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
+
 /*---------------------------------- FUNCTION ----------------------------------*/
-export default function Declaration(props) {
+export default function Declaration({navigation, isAsker, token, category, avatar, firstName }) {
   const [date, setDate] = useState(new Date("01/01/2012"));
-  const [mode, setMode] = useState("date"); // changer
+  const [mode, setMode] = useState("date"); 
   const [show, setShow] = useState(false);
   const [time, setTime] = useState(0);
 
-  const [selectedValue, setSelectedValue] = useState("java");
+  // const navigation = useNavigation();
 
-  let source = require("../../assets/avatar.png");
+ let path = `https://theoduvivier.com/swap/${
+    category.sub_category
+      ? category.sub_category
+          .replace(/\s/g, "_")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+      : category.category
+          .replace(/\s/g, "_")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+  }.png`
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -36,9 +49,6 @@ export default function Declaration(props) {
     showMode("date"); // changer
   };
 
-  //   const showTimepicker = () => {
-  //     showMode('time');
-  //   };
 
   const incrementTime = () => {
     setTime(time + 0, 5);
@@ -65,7 +75,7 @@ export default function Declaration(props) {
             // }}
             >
               <View style={{ flexDirection: "row" }}>
-                <Avatar rounded size="medium" source={source} />
+                <Avatar rounded size="medium" source={{uri: avatar}} />
                 <View style={{ marginLeft: 11 }}>
                   <Text
                     style={{
@@ -73,7 +83,7 @@ export default function Declaration(props) {
                       fontFamily: "Poppins_600SemiBold",
                     }}
                   >
-                    Fredrick
+                    {firstName}
                   </Text>
                   <View
                     style={{
@@ -83,7 +93,7 @@ export default function Declaration(props) {
                     }}
                   >
                     <Image
-                      source={require("../../assets/images/categories/bricolage.png")}
+                      source={{uri : path}}
                       style={{ width: 20, height: 20, marginRight: 8 }}
                     />
                     <View>
@@ -96,21 +106,7 @@ export default function Declaration(props) {
                           fontFamily: "Poppins_400Regular",
                         }}
                       >
-                        Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricoge
-                        Demawdrhdjgc
-                        Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricoge
-                        Demawdrhdjgc
-                       
+                        Demande de  {category.sub_category ? category.sub_category : category.category}
                       </Text>
                     </View>
                   </View>
@@ -154,36 +150,7 @@ export default function Declaration(props) {
             </View>
             <View style={{ flexDirection: "row" }}>
               <View style={styles.input2}>
-                {/* <Picker
-                  selectedValue={selectedValue}
-                  // placeholder={{
-                  //   label: "Sélectionnez votre position",
-                  //   value: null,
-                  // }}
-                  style={{
-                    height: 50,
-                    width: 200,
-                    backgroundColor: "#000000",
-                    color: "red",
-                    fontFamily: "Poppins_400Regular",
-                  }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }
-                >
-                  <Picker.Item
-                    style={{ color: "#E7E7E7" }}
-                    label="30 mins"
-                    value="0.5"
-                  />
-                  <Picker.Item label="1h" value="1" />
-                  <Picker.Item label="1h30" value="1.5" />
-                  <Picker.Item label="2h" value="2" />
-                  <Picker.Item label="2h30" value="2.5" />
-                  <Picker.Item label="3h" value="3" />
-                  <Picker.Item label="3h30" value="3.5" />
-                  <Picker.Item label="4h" value="4" />
-                </Picker> */}
+             
               </View>
 
               {/* <Input
@@ -216,7 +183,7 @@ export default function Declaration(props) {
         <View style={styles.boutonDecl}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("BottomNavigator")}
+            onPress={() => navigation.navigate("BottomNavigator")}
           >
             <Text style={styles.text}>Déclarer</Text>
           </TouchableOpacity>
@@ -226,28 +193,6 @@ export default function Declaration(props) {
   );
 }
 
-// {/* TEST DROP DOWN */}
-// {/* <View style={styles.card}>
-//       <RNPickerSelect
-//         style={styles.inputTest}
-//         placeholder={{
-//           label: "Sélectionnez votre position",
-//           value: null,
-//         }}
-//         onValueChange={(value) => console.log(value)}
-//         items={[
-//           {
-//             label: "Position actuelle",
-//             value: "Position actuelle",
-//             inputLabel: "ici!",
-//           },
-//           {
-//             label: "Adresse principale",
-//             value: "Adresse principale",
-//           },
-//         ]}
-//       />
-//     </View> */}
 
 
 //

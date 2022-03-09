@@ -19,7 +19,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          "https://swapapp-backend.herokuapp.com/get-matches/TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+          "https://swapapp-backend.herokuapp.com/get-matches/lmHXSZ-XNZnn5fQuXgHcVVbv1Qhn5cFC"
         );
         let response = await request.json();
 
@@ -37,14 +37,14 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   let conversations = [];
   requests.forEach((req) => {
     // si le token du asker est le mien, alors:
-    if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    if (req.asker.token === "lmHXSZ-XNZnn5fQuXgHcVVbv1Qhn5cFC") {
       let tempConv = req.conversations.map((conversation) => {
         return {
           ...conversation,
           category: req.category,
           requestId: req._id,
           asker: req.asker,
-          request: req,
+          request: req,  // la conversation
         };
       });
       conversations = conversations.concat(tempConv);
@@ -53,7 +53,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
       let foundConversation = req.conversations.find(
         (conversation) =>
           conversation.conversation_id.token ===
-          "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY"
+          "lmHXSZ-XNZnn5fQuXgHcVVbv1Qhn5cFC"
       );
       // si une conversation existe déjà, pusher dans les conversations existantes la category, le requestId et ttes les infos du asker
       if (foundConversation) {
@@ -62,7 +62,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
           category: req.category,
           requestId: req._id,
           asker: req.asker,
-          request: req,
+          request: req, 
+          // que doit être affiché?
         });
       }
     }
@@ -71,7 +72,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation }) {
   //  maps générant les échanges à partir pour CHAQUE conversation, à partir du tableau créé au dessus.
   //  si je suis asker, pour afficher les autres plutôt que ma vignette.
   let requestList = conversations.map((conversation, i) => {
-    if (conversation.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") {
+    if (conversation.asker.token === "lmHXSZ-XNZnn5fQuXgHcVVbv1Qhn5cFC") {
       return (
         <Conversation
           key={i}

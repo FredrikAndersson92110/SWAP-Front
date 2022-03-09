@@ -17,7 +17,7 @@ import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 import {connect} from 'react-redux'
 
@@ -26,23 +26,30 @@ import {connect} from 'react-redux'
 /*---------------------------------- FUNCTION ----------------------------------*/
 function TransactionContainer(props) {
   // console.log(">>>> REQUEST:", props.transactionInfos.conversationInfos)
+
+  // renvoie un booléan de visibilité ou non (cf useEffect)
   const navigation = useNavigation();
+
+  const isFocused = useIsFocused();
 
   const handleSubmit = async () => {
   return navigation.navigate("InteractionsScreen")
   }
 
-    const [status, setStatus] = useState(0);
+    const [status, setStatus] = useState(-1);
     const [active, setActive] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [listMessage, setListMessage] = useState([]);
     const [confirm, setConfirm] = useState(false);
 
 
-    // useEffect(() => {
-    //   setStatus(props.transactionInfos.conversationInfos.request.asker_status)
-    // }, []);
-    // console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status);
+    useEffect(() => {
+      if (isFocused) { 
+      setStatus(props.transactionInfos.conversationInfos.request.asker_status)
+    }
+    }, [isFocused]);
+
+    console.log("USEEFFECT :", props.transactionInfos.conversationInfos.request.asker_status);
 
 
     // dynamise les pastilles
@@ -79,20 +86,26 @@ function TransactionContainer(props) {
     var components;
     if (status === 0) {
       if(props.transactionInfos.isAsker) {
+      //  si je suis asker
       components = <Confirmation
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
                       firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
                       avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
-                      // icon={}
                       category={props.transactionInfos.conversationInfos.request.category}
                       description={props.transactionInfos.conversationInfos.request.description}
                       // disponibility={}
                       // location={}
                       />
                     } else {
-      components = <Confirmation 
+      //  si je suis helper
+      components = <Confirmation
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.request.asker.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
                       firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
                       avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
-                      // icon={}
                       category={props.transactionInfos.conversationInfos.request.category}
                       description={props.transactionInfos.conversationInfos.request.description}
                       // disponibility={}
@@ -100,9 +113,49 @@ function TransactionContainer(props) {
                       />  
                     }
     } else if (status === 1) {
-      components = <Declaration />;
+      if(props.transactionInfos.isAsker) {
+      components = <Declaration 
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
+                      firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      />
+                    } else {
+      components = <Declaration 
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.request.asker.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
+                      firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      />
+                    }
     } else if (status === 2) {
-      components = <DoubleDeclaration />;
+      if(props.transactionInfos.isAsker) {
+      components = <DoubleDeclaration 
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
+                      firstName={props.transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={props.transactionInfos.conversationInfos.conversation_id.user_img}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      />
+                    } else {
+        components = <DoubleDeclaration 
+                      isAsker={props.transactionInfos.isAsker}
+                      token={props.transactionInfos.conversationInfos.request.asker.token}
+                      requestId={props.transactionInfos.conversationInfos.requestId}
+                      firstName={props.transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={props.transactionInfos.conversationInfos.request.asker.user_img}
+                      category={props.transactionInfos.conversationInfos.request.category}
+                      description={props.transactionInfos.conversationInfos.request.description}
+                      />
+      }
     }
 
     let source = require("../../assets/avatar.png");
@@ -381,73 +434,6 @@ function TransactionContainer(props) {
       </View>
     </ImageBackground>
   );
-}
-
-{
-  /* Success Overlay Atman:
-  <Overlay isVisible={overlayVisible} fullScreen>
-<ImageBackground
-  style={styles.ImageBackground}
-  source={require("../assets/images/background-2.png")}
-  resizeMode="cover"
->
-  <View style={styles.container}>
-    <KeyboardAwareScrollView>
-      <View
-        style={{
-          alignItems: "flex-end",
-          marginBottom: 20,
-          paddingTop: 50,
-        }}
-      ></View>
-
-      <Text style={styles.textTitle2}>Demande envoyée ! </Text>
-
-        
-      <View style={styles.container}>
-            <Image
-              style={styles.timeCounter}
-              source={require("../assets/images/HomeScreen/timeCounter.png")}
-            />
-            <Text
-              style={
-                (styles.boxTitle,
-                { fontSize: 25, fontFamily: "Poppins_600SemiBold" })
-              }
-            >
-              {props.user.user_credit}h
-            </Text>
-            <Text
-              style={
-                (styles.boxTitle,
-                {
-                  fontWeight: "700",
-                  fontSize: 16,
-                  fontFamily: "Poppins_500Medium",
-                })
-              }
-            >
-              Crédit temps
-            </Text>
-          </View>
-      <Text style={styles.bodyText}>
-       Féliciation!! Fred à confirmé votre SWAP. Vous avez gagné 2h de crédit  temps :D !   </Text>
- 
-      <Button
-        title="Retour à l'accueil"
-        titleStyle={styles.buttonTitle}
-        buttonStyle={styles.button}
-        containerStyle={styles.buttonContainer}
-        onPress={() => {
-          props.navigation.navigate("MyTabs");
-          toggleOverlay()
-        }}
-
-      />
-    </KeyboardAwareScrollView>
-  </View>
-</ImageBackground>
-</Overlay> */
 }
 
 
