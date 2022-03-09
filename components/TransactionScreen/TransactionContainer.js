@@ -2,23 +2,111 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import React, {
-  useCallback, useEffect, useMemo,
-  useRef, useState
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import {
-  ImageBackground, Platform,
+  ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity, TouchableWithoutFeedback, View
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { connect } from "react-redux";
 import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
 
+//Socket
+import socketIOClient from "socket.io-client";
+var socket = socketIOClient("http://192.168.10.154:3000");
 
-const TransactionContainer = (props) => {
+import { useIsFocused } from "@react-navigation/native";
+import { log } from "react-native-reanimated";
+
+const TransactionContainer = ({ transactionInfos, user }) => {
+  const isFocused = useIsFocused();
+
+  // WEB SOCKET CHAT
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [listMessage, setListMessage] = useState([]);
+
+  useEffect(() => {
+    if (isFocused) {
+      let room = transactionInfos.conversationInfos.requestId;
+      console.log("ROOM", room);
+      socket.emit("selectRoom", {
+        userName: user.firstName,
+        room,
+      });
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    socket.on("sendMessageToRoom", (data) => {
+      let newList = [...listMessage, data];
+      setListMessage(newList);
+    });
+  }, [listMessage]);
+
+  const handlePost = async (value) => {
+    socket.emit("SendMessage", { userName: user.firstName, message: value });
+    setCurrentMessage("");
+
+    let request = await fetch("http://192.168.10.154:3000/add-message", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        requestId: transactionInfos.conversationInfos.requestId,
+        conversationToken:
+          transactionInfos.conversationInfos.conversation_id.token,
+        content: value,
+      }),
+    });
+    let response = await request.json();
+    console.log(response);
+  };
+
+  let messageList = transactionInfos.conversationInfos.messages.map(
+    (message, i) => {
+      return (
+        <View
+          key={i}
+          style={{
+            alignItems:
+              message.author.token === user.token ? "flex-end" : "flex-start",
+          }}
+        >
+          <View
+            style={
+              message.author.token === user.token
+                ? styles.chatBubblesSent
+                : styles.chatBubblesReceived
+            }
+          >
+            <Text
+              style={
+                message.author.token === user.token
+                  ? styles.chatTextSent
+                  : styles.chatTextReceived
+              }
+            >
+              {message.message}
+            </Text>
+          </View>
+        </View>
+      );
+    }
+  );
+  // end
+
   let bottom = Platform.OS === "ios" ? 70 : 50;
   const navigation = useNavigation();
 
@@ -39,16 +127,14 @@ const TransactionContainer = (props) => {
 
   const [status, setStatus] = useState(0);
   const [active, setActive] = useState(false);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [listMessage, setListMessage] = useState([]);
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
-    setStatus(props.transactionInfos.conversationInfos.request.asker_status);
+    setStatus(transactionInfos.conversationInfos.request.asker_status);
   }, []);
   console.log(
     "USEEFFECT :",
-    props.transactionInfos.conversationInfos.request.asker_status
+    transactionInfos.conversationInfos.request.asker_status
   );
 
   // dynamise les pastilles
@@ -84,20 +170,16 @@ const TransactionContainer = (props) => {
   // affichage des composants selon le statut de la transaction
   var components;
   if (status === 0) {
-    if (props.transactionInfos.isAsker) {
+    if (transactionInfos.isAsker) {
       components = (
         <Confirmation
           firstName={
-            props.transactionInfos.conversationInfos.conversation_id.firstName
+            transactionInfos.conversationInfos.conversation_id.firstName
           }
-          avatar={
-            props.transactionInfos.conversationInfos.conversation_id.user_img
-          }
+          avatar={transactionInfos.conversationInfos.conversation_id.user_img}
           // icon={}
-          category={props.transactionInfos.conversationInfos.request.category}
-          description={
-            props.transactionInfos.conversationInfos.request.description
-          }
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
           // disponibility={}
           // location={}
         />
@@ -105,17 +187,11 @@ const TransactionContainer = (props) => {
     } else {
       components = (
         <Confirmation
-          firstName={
-            props.transactionInfos.conversationInfos.request.asker.firstName
-          }
-          avatar={
-            props.transactionInfos.conversationInfos.request.asker.user_img
-          }
+          firstName={transactionInfos.conversationInfos.request.asker.firstName}
+          avatar={transactionInfos.conversationInfos.request.asker.user_img}
           // icon={}
-          category={props.transactionInfos.conversationInfos.request.category}
-          description={
-            props.transactionInfos.conversationInfos.request.description
-          }
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
           // disponibility={}
           // location={}
         />
@@ -128,28 +204,6 @@ const TransactionContainer = (props) => {
   }
 
   let source = require("../../assets/avatar.png");
-
-  // useEffect(() => {
-  //   socket.on("sendMessageToAll", (messageData) => {
-  //     setListMessage([...listMessage, messageData]);
-  //   });
-  // }, [listMessage]);
-
-  // var chatMessages = listMessage.map((messageData, i) => {
-  //   var msg = messageData.message.replace(/:\)/g, '\u263A');
-  //   msg = msg.replace(/:\(/g, '\u2639');
-  //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
-  //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
-
-  //       return(
-  //         <ListItem key={i}>
-  //           <ListItem.Content>
-  //             <ListItem.Title>{msg}</ListItem.Title>
-  //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
-  //           </ListItem.Content>
-  //         </ListItem>
-  //       )
-  //     });
 
   //
   // ────────────────────────────────────────────────────── I ──────────
@@ -286,66 +340,38 @@ const TransactionContainer = (props) => {
 
             <ScrollView content={styles.scrollZone}>
               {/* CHAT ZONE MESSAGES */}
-
-              {/* Message received */}
-              <View style={{ alignItems: "flex-start" }}>
-                <View style={styles.chatBubblesReceived}>
-                  <Text style={{ margin: 10, color: "white" }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                    ☺️
-                  </Text>
-                </View>
-              </View>
-
-              {/* Message sent */}
-              <View style={{ alignItems: "flex-end" }}>
-                <View style={styles.chatBubblesSent}>
-                  <Text style={{ margin: 10 }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                    ☺️
-                  </Text>
-                </View>
-              </View>
-
-              {/* Message received */}
-              <View style={{ alignItems: "flex-start" }}>
-                <View style={styles.chatBubblesReceived}>
-                  <Text style={{ margin: 10, color: "white" }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                    ☺️
-                  </Text>
-                </View>
-              </View>
-
-              {/* Message sent */}
-              <View style={{ alignItems: "flex-end" }}>
-                <View style={styles.chatBubblesSent}>
-                  <Text style={{ margin: 10 }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37
-                    jours.Coucou! tu veux être mon ami? Je suis sobre depuis 37
-                    jours. ☺️
-                  </Text>
-                </View>
-              </View>
-              {/* Message received */}
-              <View style={{ alignItems: "flex-start" }}>
-                <View style={styles.chatBubblesReceived}>
-                  <Text style={{ margin: 10, color: "white" }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                    ☺️
-                  </Text>
-                </View>
-              </View>
-
-              {/* Message sent */}
-              <View style={{ alignItems: "flex-end" }}>
-                <View style={styles.chatBubblesSent}>
-                  <Text style={{ margin: 10 }}>
-                    Coucou! tu veux être mon ami? Je suis sobre depuis 37 jours.
-                    ☺️
-                  </Text>
-                </View>
-              </View>
+              {messageList}
+              {listMessage !== 0
+                ? listMessage.map((data, i) => (
+                    <View
+                      key={i}
+                      style={{
+                        alignItems:
+                          data.userName === user.firstName
+                            ? "flex-end"
+                            : "flex-start",
+                      }}
+                    >
+                      <View
+                        style={
+                          data.userName === user.firstName
+                            ? styles.chatBubblesSent
+                            : styles.chatBubblesReceived
+                        }
+                      >
+                        <Text
+                          style={
+                            data.userName === user.firstName
+                              ? styles.chatTextSent
+                              : styles.chatTextReceived
+                          }
+                        >
+                          {data.message}
+                        </Text>
+                      </View>
+                    </View>
+                  ))
+                : null}
             </ScrollView>
           </View>
           <View
@@ -357,13 +383,13 @@ const TransactionContainer = (props) => {
             }}
           >
             <BottomSheetTextInput
+              value={currentMessage}
+              onChangeText={(value) => setCurrentMessage(value)}
               style={[styles.input, { paddingBottom: 0 }]}
               keyboardBehavior={"fullScreen"}
               android_keyboardInputMode={"adjustResize"}
             />
-            <TouchableOpacity
-            // onPress={()=> {socket.emit("sendMessage", {message:currentMessage, pseudo: props.pseudo})}}
-            >
+            <TouchableOpacity onPress={() => handlePost(currentMessage)}>
               <View
                 style={{
                   backgroundColor: "#F7CE46",
@@ -388,7 +414,7 @@ const TransactionContainer = (props) => {
 };
 
 function mapStateToProps(state) {
-  return { transactionInfos: state.transactionInfos };
+  return { transactionInfos: state.transactionInfos, user: state.userReducer };
 }
 
 export default connect(mapStateToProps, null)(TransactionContainer);
@@ -460,6 +486,10 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     backgroundColor: "rgba(151, 151, 151, 0.15)",
   },
+  chatTextSent: {
+    margin: 10,
+    color: "black",
+  },
   chatBubblesSent: {
     maxWidth: 250,
     borderRadius: 15,
@@ -473,6 +503,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     marginLeft: 100,
     marginRight: 15,
+    marginBottom: 5,
   },
   send: {
     backgroundColor: "#F7CE46",
@@ -485,6 +516,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 2,
+  },
+  chatTextReceived: {
+    margin: 10,
+    color: "white",
   },
   chatBubblesReceived: {
     maxWidth: 250,
@@ -500,6 +535,7 @@ const styles = StyleSheet.create({
     margin: 15,
     marginLeft: 15,
     marginRight: 100,
+    marginBottom: 5,
   },
   scrollZone: {
     flex: 1,

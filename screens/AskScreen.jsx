@@ -145,7 +145,9 @@ function AskScreen({
           <View>
             <Text style={styles.pageTitle}>Mes demandes</Text>
           </View>
-          {message !== "" ? <Text>{message}</Text> : null}
+          {message !== "" ? (
+            <Text style={styles.bodyText}>{message}</Text>
+          ) : null}
           {/* Request */}
           {requestList}
           {/* end */}
@@ -239,6 +241,7 @@ const styles = StyleSheet.create({
     color: "#717171",
     fontSize: 14,
     fontFamily: "Poppins_500Medium",
+    marginHorizontal: 15,
   },
   avatar: {
     borderRadius: 50,

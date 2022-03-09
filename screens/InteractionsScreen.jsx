@@ -20,10 +20,11 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `https://swapapp-backend.herokuapp.com/get-matches/${user.token}`
+          `http://192.168.10.154:3000/get-matches/${user.token}`
         );
         let response = await request.json();
 
+        console.log(response.status);
         if (response.status) {
           onAddRequests(response.requests);
           // console.log('RESPONSE FETCH RESQUEST:', response.requests)
@@ -35,9 +36,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     }
   }, [isFocused]);
 
-  // tri des données du requestSchema à récupérer
-  // if (req.asker.token === "TrHIXHXCdXrtIrJmIVFusPQSOFgRyQrY") pour afficher les vignettes des autres plutôt que la mienne.
-  // "requests" récupéré via le mapStateToProps
   let conversations = [];
   requests.forEach((req) => {
     if (req.asker.token === user.token) {
@@ -67,11 +65,9 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     }
   });
 
-  //  maps générant les échanges à partir du tableau "conversations" créé au dessus. (contient les messages tchat notamment)
   let requestList = conversations.map((conversation, i) => {
     if (conversation.asker.token === user.token) {
       return (
-        // syntaxe REVERSE DATA FLOW (cf My Moviz)
         <Conversation
           conversationInfos={conversation} // pour afficher conversation
           key={i}
@@ -82,12 +78,12 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
             conversation.category.sub_category
               ? conversation.category.sub_category
               : conversation.category.category
-          } // same
+          }
           lastMessage={
             conversation.messages[conversation.messages.length - 1]
               ? conversation.messages[conversation.messages.length - 1]
               : { message: "" }
-          } // same
+          }
         />
       );
     } else {
@@ -165,6 +161,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
             Mes missions
           </Text>
         </View>
+        <Text style={styles.bodyText}>{message !== "" ? message : null}</Text>
         <View style={styles.box}>{requestList}</View>
       </ScrollView>
       {/* <Button
@@ -209,6 +206,14 @@ const styles = StyleSheet.create({
   },
   boxText: {
     fontSize: 16,
+  },
+  bodyText: {
+    color: "#717171",
+    fontSize: 14,
+    fontWeight: "400",
+    fontFamily: "Poppins_400Regular",
+    marginHorizontal: 15,
+    marginTop: 30,
   },
   box: {
     elevation: 6,
