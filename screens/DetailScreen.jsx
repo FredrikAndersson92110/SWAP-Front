@@ -16,25 +16,34 @@ function DetailScreen({
   navigation,
   user,
   onRemoveCategoryMatch,
+  getTransactionInfos,
 }) {
   console.log("ID", userDetails.requestId, "TOKEN", user.token);
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
+        `http://192.168.10.154:3000/accept-helper/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "PUT",
         }
       );
+      let response = await request.json();
+      if (response.status) {
+        getTransactionInfos(response.request, userDetails.isAsker);
+      }
     } else {
       console.log(userDetails.requestId, user.token);
       onRemoveCategoryMatch(userDetails.requestId);
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/.168.1.25:3000/add-willing-user/${userDetails.requestId}/${user.token}`,
+        `http:/192.168.10.154:3000/add-willing-user/${userDetails.requestId}/${user.token}`,
         {
           method: "PUT",
         }
       );
+      let response = await request.json();
+      if (response.status) {
+        getTransactionInfos(response.request, userDetails.isAsker);
+      }
     }
     navigation.navigate("TransactionScreen");
   };
@@ -42,7 +51,7 @@ function DetailScreen({
   const handleRefuse = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
-        `https://swapapp-backend.herokuapp.com/.168.1.25:3000/delete-willing-user/${userDetails.requestId}/${userDetails.user.token}`,
+        `http://192.168.10.154:3000/delete-willing-user/${userDetails.requestId}/${userDetails.user.token}`,
         {
           method: "DELETE",
         }
@@ -202,6 +211,15 @@ function mapDispatchToProps(dispatch) {
     },
     onRemoveCategoryMatch: function (id) {
       dispatch({ type: "user::removeMatch", requestId: id });
+    },
+    getTransactionInfos: function (conversationInfos, isAsker) {
+      dispatch({
+        type: "getTransactionInfos",
+        transactionInfos: {
+          conversationInfos: conversationInfos,
+          isAsker: isAsker,
+        },
+      });
     },
   };
 }

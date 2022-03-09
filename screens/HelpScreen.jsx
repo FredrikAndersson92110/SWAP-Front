@@ -26,7 +26,7 @@ function HelpScreen({
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `https://swapapp-backend.herokuapp.com/match-categories/${user.token}`
+          `http://192.168.10.154:3000/match-categories/${user.token}`
         );
         // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
         let response = await request.json();
@@ -60,6 +60,7 @@ function HelpScreen({
             console.error(error);
           }
         } else {
+          console.log(response.message);
           setMessage(response.message);
         }
       }
@@ -141,6 +142,9 @@ function HelpScreen({
           showsVerticalScrollIndicator={false}
         >
           {/* CARD */}
+          {message !== "" ? (
+            <Text style={styles.bodyText}>{message}</Text>
+          ) : null}
           {requestList}
         </ScrollView>
       </View>
@@ -230,5 +234,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "400",
     fontFamily: "Poppins_400Regular",
+    marginHorizontal: 15,
   },
 });

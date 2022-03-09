@@ -6,10 +6,6 @@ import { connect } from "react-redux";
 
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import getDistance from "../helpers";
-import * as Location from "expo-location";
-import { useEffect } from "react";
-
 function Request({
   isAsker,
   name,

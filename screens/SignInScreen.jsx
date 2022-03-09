@@ -2,7 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  ImageBackground, StyleSheet, Text, TouchableOpacity, View
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Image, Input } from "react-native-elements";
 import { connect } from "react-redux";

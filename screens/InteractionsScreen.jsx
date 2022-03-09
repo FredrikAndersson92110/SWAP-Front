@@ -20,10 +20,11 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `https://swapapp-backend.herokuapp.com/get-matches/${user.token}`
+          `http://192.168.10.154:3000/get-matches/${user.token}`
         );
         let response = await request.json();
 
+        console.log(response.status);
         if (response.status) {
           onAddRequests(response.requests);
         } else {
@@ -34,7 +35,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     }
   }, [isFocused]);
 
-  // tri des données du requestSchema à récupérer
   let conversations = [];
   requests.forEach((req) => {
     // si le token du asker est le mien, alors:
@@ -67,8 +67,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     }
   });
 
-  //  maps générant les échanges à partir pour CHAQUE conversation, à partir du tableau créé au dessus.
-  //  si je suis asker, pour afficher les autres plutôt que ma vignette.
   let requestList = conversations.map((conversation, i) => {
     if (conversation.asker.token === user.token) {
       return (
@@ -165,6 +163,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
             Mes missions
           </Text>
         </View>
+        <Text style={styles.bodyText}>{message !== "" ? message : null}</Text>
         <View style={styles.box}>{requestList}</View>
       </ScrollView>
       {/* <Button
@@ -207,6 +206,14 @@ const styles = StyleSheet.create({
   },
   boxText: {
     fontSize: 16,
+  },
+  bodyText: {
+    color: "#717171",
+    fontSize: 14,
+    fontWeight: "400",
+    fontFamily: "Poppins_400Regular",
+    marginHorizontal: 15,
+    marginTop: 30,
   },
   box: {
     elevation: 6,
