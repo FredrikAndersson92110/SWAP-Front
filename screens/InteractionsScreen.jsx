@@ -45,7 +45,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
           category: req.category,
           requestId: req._id,
           asker: req.asker,
-          request: req,
+          request: req,  // la conversation
         };
       });
       conversations = conversations.concat(tempConv);
@@ -61,7 +61,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
           category: req.category,
           requestId: req._id,
           asker: req.asker,
-          request: req,
+          request: req, 
+          // que doit être affiché?
         });
       }
     }

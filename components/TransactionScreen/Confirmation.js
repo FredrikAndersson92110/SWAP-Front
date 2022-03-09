@@ -15,13 +15,10 @@ import { connect } from "react-redux";
 
 
 /*---------------------------------- FUNCTION ----------------------------------*/
-function Confirmation({firstName, avatar, description, category, transactionInfos}) {
+function Confirmation({firstName, avatar, description, category, token, isAsker, requestId, updateTransaction, transactionInfos}) {
   const navigation = useNavigation();
 
-  const handleSubmit = async () => {
-    // return navigation.navigate("UserScreen");
-  };
-
+ 
   let source = require("../../assets/avatar.png");
 
   let path = `https://theoduvivier.com/swap/${
@@ -36,41 +33,29 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
                           .replace(/[\u0300-\u036f]/g, "")
                   }.png`
 
-
-  useEffect(() => {
+          //  ds postman >>  http://localhost:3000/users/update-status/621f909ca32dff786faa7a17/yDpr8ca7LpbeHj4UdGsD-YDUxlntEsA4
+          // quand GIT:  https://swapapp-backend.herokuapp.com
     let changeStatus = async () => {
-      let response = await fetch( "https://swapapp-backend.herokuapp.com/update-status/requestID",  {
-          method: "PUT",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+      let rawResponse = await fetch( `http://192.168.10.151:3000/users/update-status/${requestId}/${token}`,  {
+          method: "PUT",    // ok changement de status dans BDD
         }
       )
-    response = await response.json();
-    // console.log('REPONSE FETCH STATUS:', response);
+    let response = await rawResponse.json();
+   
+      // console.log('STATUS DE LA REPONSE ROUTE:', response.status)  ---> réponse : true
+    if (response.status) {
+      console.log('NOUVEAU STATUS:', response.updatedRequest) // ---> réponse avec .conversation_id = undefined
+      updateTransaction(response.updatedRequest, isAsker)
+    }
   }
-}, []);     
-
-
-
-  // let handleSubmit = async () => {
-  //   let response = await fetch(
-  //     `https://swapapp-backend.herokuapp.com/users/adress/:`,
-  //     {
-  //       method: "PUT",
-  //       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  //       body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
-  //       // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
-  //     }
-  //   );
-  //   response = await response.json();
-  // };
+    
 
      return (
       <View style={styles.container}>
         {/* VIGNETTE COLLABORATEUR */}
         <View style={styles.vignette}>
           {/* Touchablewithoutfeedback pour afficher le profil du collaborateur*/}
-          <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+          <TouchableWithoutFeedback>
             <View style={{ flexDirection: "row" }}>
               <Avatar rounded size="medium" source={{uri: avatar}} />
               <View style={{ marginLeft: 11 }}>
@@ -125,23 +110,33 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
             <Text style={styles.text1}>Annuler</Text>
           </TouchableOpacity>
 
+          {isAsker ?
           <TouchableOpacity
             style={styles.button2}
-            onPress={() => { changeStatus()}
-            }
+            onPress={() => changeStatus()}
           >
             <Text style={styles.text2}>Confirmer</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> : null
+           }
+
         </View>
       </View>
     );
   } 
 
+function mapDispatchToProps(dispatch) {
+  return{
+    updateTransaction: function (data, isAsker) {
+      dispatch ({ type : "getTransactionInfos", transactionInfos: {conversationInfos : data, isAsker: isAsker} })
+    }
+  }
+}
+
 function mapStateToProps(state) {
   return { transactionInfos: state.transactionInfos };
 }
 
-export default connect(mapStateToProps, null)(Confirmation);
+export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);
 
 
 //

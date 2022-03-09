@@ -10,13 +10,30 @@ import { Input, Text, Avatar, Image } from "react-native-elements";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 // import RNPickerSelect from "react-native-picker-select";
 
+import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
+
 /*---------------------------------- FUNCTION ----------------------------------*/
-export default function Declaration(props) {
-  const [date, setDate] = useState();
-  const [time, setTime] = useState("0");
+
+  
+export default function Declaration({navigation, isAsker, token, category, avatar, firstName }) {
+  const [date, setDate] = useState(new Date("01/01/2012"));
+  const [time, setTime] = useState(0);
   const [error, setError] = useState("");
 
-  let source = require("../../assets/avatar.png");
+  // const navigation = useNavigation();
+
+ let path = `https://theoduvivier.com/swap/${
+    category.sub_category
+      ? category.sub_category
+          .replace(/\s/g, "_")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+      : category.category
+          .replace(/\s/g, "_")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+  }.png`
 
   // const onChange = (event, selectedDate) => {
   //   const currentDate = selectedDate || date;
@@ -33,9 +50,6 @@ export default function Declaration(props) {
   //   showMode("date"); // changer
   // };
 
-  //   const showTimepicker = () => {
-  //     showMode('time');
-  //   };
 
   const handleDate = (inputDate) => {
     if (
@@ -84,7 +98,7 @@ export default function Declaration(props) {
             // }}
             >
               <View style={{ flexDirection: "row" }}>
-                <Avatar rounded size="medium" source={source} />
+                <Avatar rounded size="medium" source={{uri: avatar}} />
                 <View style={{ marginLeft: 11 }}>
                   <Text
                     style={{
@@ -92,7 +106,7 @@ export default function Declaration(props) {
                       fontFamily: "Poppins_600SemiBold",
                     }}
                   >
-                    Fredrick
+                    {firstName}
                   </Text>
                   <View
                     style={{
@@ -102,7 +116,7 @@ export default function Declaration(props) {
                     }}
                   >
                     <Image
-                      source={require("../../assets/images/categories/bricolage.png")}
+                      source={{uri : path}}
                       style={{ width: 20, height: 20, marginRight: 8 }}
                     />
                     <View>
@@ -115,11 +129,7 @@ export default function Declaration(props) {
                           fontFamily: "Poppins_400Regular",
                         }}
                       >
-                        Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de
-                        bricolage
+                        Demande de  {category.sub_category ? category.sub_category : category.category}
                       </Text>
                     </View>
                   </View>
@@ -191,7 +201,7 @@ export default function Declaration(props) {
         <View style={styles.boutonDecl}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("DoubleDeclaration")}
+            // onPress={() => navigation.navigate("BottomNavigator")}
           >
             <Text style={styles.text}>Déclarer</Text>
           </TouchableOpacity>
@@ -201,28 +211,6 @@ export default function Declaration(props) {
   );
 }
 
-// {/* TEST DROP DOWN */}
-// {/* <View style={styles.card}>
-//       <RNPickerSelect
-//         style={styles.inputTest}
-//         placeholder={{
-//           label: "Sélectionnez votre position",
-//           value: null,
-//         }}
-//         onValueChange={(value) => console.log(value)}
-//         items={[
-//           {
-//             label: "Position actuelle",
-//             value: "Position actuelle",
-//             inputLabel: "ici!",
-//           },
-//           {
-//             label: "Adresse principale",
-//             value: "Adresse principale",
-//           },
-//         ]}
-//       />
-//     </View> */}
 
 //
 // ─────────────────────────────────────────────────── ──────────

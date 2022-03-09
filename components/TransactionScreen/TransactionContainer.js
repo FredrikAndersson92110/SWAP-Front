@@ -1,6 +1,5 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
-import { useNavigation } from "@react-navigation/native";
 import React, {
   useCallback,
   useEffect,
@@ -26,14 +25,19 @@ import DoubleDeclaration from "./DoubleDeclaration";
 //Socket
 import socketIOClient from "socket.io-client";
 var socket = socketIOClient("https://swapapp-backend.herokuapp.com");
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 import { useIsFocused } from "@react-navigation/native";
 import { log } from "react-native-reanimated";
 
+
+
 const TransactionContainer = ({ transactionInfos, user }) => {
   const isFocused = useIsFocused();
 
-  // WEB SOCKET CHAT
+  const navigation = useNavigation();
+
+    // WEB SOCKET CHAT
   const [currentMessage, setCurrentMessage] = useState("");
   const [listMessage, setListMessage] = useState([]);
 
@@ -111,7 +115,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
   // end
 
   let bottom = Platform.OS === "ios" ? 70 : 50;
-  const navigation = useNavigation();
+ 
 
   //
   // ─── CONST CHAT ─────────────────────────────────────────────────────────────────
@@ -138,79 +142,143 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     transactionInfos.conversationInfos.request.asker_status
   );
 
-  // dynamise les pastilles
-  let vert = "#399F09";
-  let jaune = "#F7CE46";
-  let gris = "#DDDDDD";
-  var transactionStatus;
-  var color1;
-  var color2;
-  var color3;
-  if (status === 0) {
-    color1 = vert;
-    color2 = jaune;
-    color3 = gris;
-    transactionStatus = "En attente de confirmation";
-  } else if (status === 1) {
-    color1 = vert;
-    color2 = vert;
-    color3 = gris;
-    transactionStatus = "En attente de déclaration";
-  } else if (status === 2) {
-    color1 = vert;
-    color2 = vert;
-    color3 = jaune;
-    transactionStatus = "En attente de déclaration du swaper";
-  } else if (status === 3) {
-    color1 = vert;
-    color2 = vert;
-    color3 = vert;
-    transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
-  }
-
-  let source = require("../../assets/avatar.png");
-
-  // affichage des composants selon le statut de la transaction
-  var components;
-  if (status === 0) {
-    if (transactionInfos.isAsker) {
-      components = (
-        <Confirmation
-          firstName={
-            transactionInfos.conversationInfos.conversation_id.firstName
-          }
-          avatar={transactionInfos.conversationInfos.conversation_id.user_img}
-          // icon={}
-          category={transactionInfos.conversationInfos.request.category}
-          description={transactionInfos.conversationInfos.request.description}
-          // disponibility={}
-          // location={}
-        />
-      );
-    } else {
-      components = (
-        <Confirmation
-          firstName={transactionInfos.conversationInfos.request.asker.firstName}
-          avatar={transactionInfos.conversationInfos.request.asker.user_img}
-          // icon={}
-          category={transactionInfos.conversationInfos.request.category}
-          description={transactionInfos.conversationInfos.request.description}
-          // disponibility={}
-          // location={}
-        />
-      );
+     // dynamise les pastilles
+    let vert = "#399F09";
+    let jaune = "#F7CE46";
+    let gris = "#DDDDDD";
+    var transactionStatus;
+    var color1;
+    var color2;
+    var color3;
+    if (status === 0) {
+      color1 = vert;
+      color2 = jaune;
+      color3 = gris;
+      transactionStatus = "En attente de confirmation";
+    } else if (status === 1) {
+      color1 = vert;
+      color2 = vert;
+      color3 = gris;
+      transactionStatus = "En attente de déclaration";
+    } else if (status === 2) {
+      color1 = vert;
+      color2 = vert;
+      color3 = jaune;
+      transactionStatus = "En attente de déclaration du swaper";
+    } else if (status === 3) {
+      color1 = vert;
+      color2 = vert;
+      color3 = vert;
+      transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
     }
-  } else if (status === 1) {
-    components = <Declaration />;
-  } else if (status === 2) {
-    components = <DoubleDeclaration />;
-  }
+
+
 
   //
   // ────────────────────────────────────────────────────── I ──────────
   //   :::::: R E N D E R S : :  :   :    :     :        :          :
   // ────────────────────────────────────────────────────────────────
   //
+    // affichage des composants selon le statut de la transaction
+    var components;
+    if (status === 0) {
+      if(props.transactionInfos.isAsker) {
+      //  si je suis asker
+      components = <Confirmation
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />
+                    } else {
+      //  si je suis helper
+      components = <Confirmation
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.request.asker.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      // disponibility={}
+                      // location={}
+                      />  
+                    }
+    } else if (status === 1) {
+      if(props.transactionInfos.isAsker) {
+      components = <Declaration 
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      />
+                    } else {
+      components = <Declaration 
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.request.asker.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      />
+                    }
+    } else if (status === 2) {
+      if(props.transactionInfos.isAsker) {
+      components = <DoubleDeclaration 
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.conversation_id.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
+                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      />
+                    } else {
+        components = <DoubleDeclaration 
+                      isAsker={transactionInfos.isAsker}
+                      token={transactionInfos.conversationInfos.request.asker.token}
+                      requestId={transactionInfos.conversationInfos.requestId}
+                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
+                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
+                      category={transactionInfos.conversationInfos.request.category}
+                      description={transactionInfos.conversationInfos.request.description}
+                      />
+      }
+    }
+
+    let source = require("../../assets/avatar.png");
+
+
+    // useEffect(() => {
+    //   socket.on("sendMessageToAll", (messageData) => {
+    //     setListMessage([...listMessage, messageData]);
+    //   });
+    // }, [listMessage]);
+
+    // var chatMessages = listMessage.map((messageData, i) => {
+    //   var msg = messageData.message.replace(/:\)/g, '\u263A');
+    //   msg = msg.replace(/:\(/g, '\u2639');
+    //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
+    //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
+
+    //       return(
+    //         <ListItem key={i}>
+    //           <ListItem.Content>
+    //             <ListItem.Title>{msg}</ListItem.Title>
+    //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
+    //           </ListItem.Content>
+    //         </ListItem>
+    //       )
+    //     });
 
   return (
     <ImageBackground
@@ -417,6 +485,8 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     </ImageBackground>
   );
 };
+
+
 
 function mapStateToProps(state) {
   return { transactionInfos: state.transactionInfos, user: state.userReducer };

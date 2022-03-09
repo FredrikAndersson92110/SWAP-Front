@@ -300,9 +300,13 @@ function ListRequestScreen(props) {
 
                 <Text style={styles.textTitle2}>Demande envoyée ! </Text>
 
-                <View style={styles.container2}>
+                {/* <View style={styles.container2}>
                   <AntDesign name="checkcircle" size={100} color="#F7CE46" />
-                </View>
+                </View> */}
+                <Image
+                     style={styles.timeCounter}
+                    source={require("../assets/images/HomeScreen/timeCounter.png")}
+                    />
 
                 <Text style={styles.bodyText}>
                   Les Swapers sélectionnés recevront une notification concernant
