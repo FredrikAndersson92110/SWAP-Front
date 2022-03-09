@@ -25,7 +25,7 @@ import DoubleDeclaration from "./DoubleDeclaration";
 
 //Socket
 import socketIOClient from "socket.io-client";
-var socket = socketIOClient("http://192.168.10.154:3000");
+var socket = socketIOClient("https://swapapp-backend.herokuapp.com");
 
 import { useIsFocused } from "@react-navigation/native";
 import { log } from "react-native-reanimated";
@@ -59,17 +59,20 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     socket.emit("SendMessage", { userName: user.firstName, message: value });
     setCurrentMessage("");
 
-    let request = await fetch("http://192.168.10.154:3000/add-message", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: user.token,
-        requestId: transactionInfos.conversationInfos.requestId,
-        conversationToken:
-          transactionInfos.conversationInfos.conversation_id.token,
-        content: value,
-      }),
-    });
+    let request = await fetch(
+      "https://swapapp-backend.herokuapp.com/add-message",
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          requestId: transactionInfos.conversationInfos.requestId,
+          conversationToken:
+            transactionInfos.conversationInfos.conversation_id.token,
+          content: value,
+        }),
+      }
+    );
     let response = await request.json();
     console.log(response);
   };

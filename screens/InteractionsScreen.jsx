@@ -20,7 +20,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     if (isFocused) {
       async function getRequests() {
         let request = await fetch(
-          `http://192.168.10.154:3000/get-matches/${user.token}`
+          `https://swapapp-backend.herokuapp.com/get-matches/${user.token}`
         );
         let response = await request.json();
 
