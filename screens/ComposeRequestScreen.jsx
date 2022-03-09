@@ -13,10 +13,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 import * as Location from "expo-location";
 import { connect } from "react-redux";
-
 const ComposeRequestScreen = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
-
   const [selected, setSelected] = useState("");
   let categoriesSelected = [];
 
@@ -37,16 +35,13 @@ const ComposeRequestScreen = (props) => {
       value: "address2",
     },
   ];
-
   // 4 valeurs INPUTS
   let addressObj;
   const [selectedAddress, setSelectedAddress] = useState("");
   const [description, setDescription] = useState("");
   const [disponibility, setDisponibility] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
-
   const handleLocation = async (location) => {
-
     // Récupération de la géolocalisation si choix utilisateur
     if (location.value == "geolocation") {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -64,37 +59,28 @@ const ComposeRequestScreen = (props) => {
         setSelectedAddress(addressObj);
         console.log("choix localisation =>", addressObj);
       }
-    } else if (location.value == "address1") {
-      if (props.user.userAddresses[0]) {
-        addressObj = {
-          address_street_1: props.user.userAddresses[0].address_street_1,
-          address_zipcode: props.user.userAddresses[0].address_zipcode,
-          address_city: props.user.userAddresses[0].address_city,
-        };
-        setSelectedAddress(addressObj);
-      } else {
-        setErrorMessage("Pas d'adresse 1 enregistrée");
-      }
-
+    } else if (location.value == props.user.userAddresses[0].address_street_1) {
       console.log("choix 1 =>", location.value);
-    } else if (location.value == "address2") {
-      if (props.user.userAddresses[1]) {
-        addressObj = {
-          address_street_1: props.user.userAddresses[1].address_street_1,
-          address_zipcode: props.user.userAddresses[1].address_zipcode,
-          address_city: props.user.userAddresses[1].address_city,
-        };
-        setSelectedAddress(addressObj);
-      } else {
-        setErrorMessage("Pas d'adresse 1 enregistrée");
-      }
+      addressObj = {
+        address_street_1: props.user.userAddresses[0].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+      };
+      setSelectedAddress(addressObj);
+    } else if (location.value == props.user.userAddresses[1].address_street_1) {
+      addressObj = {
+        address_street_1: props.user.userAddresses[1].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+      };
+      setSelectedAddress(addressObj);
+      console.log("choix 2 =>", location.value);
     }
   };
   const handleSubmit = () => {
     selectedCat.length > 1
       ? setErrorMessage("Vous ne pouvez choisir qu'une seul categorie")
       : null;
-
     if (
       selectedAddress == "" ||
       description == "" ||
@@ -108,14 +94,11 @@ const ComposeRequestScreen = (props) => {
         disponibility: disponibility,
         category: selectedCat[0],
         address_street_1: selectedAddress.address_street_1,
-        address_city: selectedAddress.address_city,
-        address_zipcode: selectedAddress.address_zipcode,
       };
       console.log(data);
       props.onComposeRequest(data);
     }
   };
-
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -142,7 +125,6 @@ const ComposeRequestScreen = (props) => {
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           {/* ==== LIEU ==== */}
           <Text style={styles.textTitle}>Lieu</Text>
-
           <View>
             <Dropdown
               style={[styles.card]}
@@ -154,12 +136,7 @@ const ComposeRequestScreen = (props) => {
               data={data}
               labelField="label"
               valueField="value"
-              placeholder={
-                selected.label
-                  ? selected.label.charAt(0).toUpperCase() +
-                    selected.label.substring(1)
-                  : "Choisissez lieu d'intervention"
-              }
+              placeholder={selected.label}
               onChange={(item) => {
                 setSelected(item);
                 handleLocation(item);
@@ -172,7 +149,7 @@ const ComposeRequestScreen = (props) => {
           <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
 
           <DropDownCategories
-            placeHolder={selectedCat ? selectedCat : "Choisissez une catégorie"}
+            placeHolder={"Choisissez une catégorie"}
             containerStyle={[
               styles.card,
               {
@@ -213,7 +190,7 @@ const ComposeRequestScreen = (props) => {
             textAlignVertical={"top"}
             style={[styles.inputTextarea, { paddingTop: 25 }]}
             placeholder="Description de votre demande en quelques mots.
-          N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
+      N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
             placeholderTextColor="grey"
             numberOfLines={7}
             multiline={true}
@@ -255,9 +232,7 @@ const ComposeRequestScreen = (props) => {
 };
 
 function mapStateToProps(state) {
-  return {
-    user: state.userReducer,
-  };
+  return { user: state.userReducer, request: state.newRequest };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -267,18 +242,15 @@ function mapDispatchToProps(dispatch) {
     },
   };
 }
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ComposeRequestScreen);
-
 //
 // ─────────────────────────────────────────────────── ──────────
 //   :::::: S T Y L E S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────
 //
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

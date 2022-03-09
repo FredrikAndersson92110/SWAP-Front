@@ -16,8 +16,15 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // Outils pour dynamiser le compteur
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
+import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
+import DropDownPicker from 'react-native-dropdown-picker';
 
+<<<<<<< HEAD
 const UserScreen = (props, request) => {
+=======
+
+const UserScreen = (props) => {
+>>>>>>> e07d5ec209d4cbae7773ee3f06c77a9b2b33e212
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -28,10 +35,10 @@ const UserScreen = (props, request) => {
   const [city2, setCity2] = useState();
   const [comp1, setComp1] = useState();
   const [comp2, setComp2] = useState();
-  const [comp3, setComp3] = useState();
-  const [comp4, setComp4] = useState();
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
+  const [selectedCat, setSelectedCat] = useState("");
+ 
 
   let handleSubmit = async () => {
     let response = await fetch(
@@ -226,38 +233,77 @@ const UserScreen = (props, request) => {
                 </TouchableWithoutFeedback>
               </Text>
 
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={request.category}
-                onChangeText={(text) => setComp1(text)}
-                editable={isEditable}
-              />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp2(text)}
-                editable={isEditable}
-              />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp3(text)}
-                editable={isEditable}
-              />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp4(text)}
-                editable={isEditable}
-              />
+              
+            
+              <DropDownCategories
+            placeHolder={"Choisissez une catégorie"}
+            containerStyle={[
+              styles.card,
+              {
+                height: 100,
+                marginBottom: 200,
+                width: "77%",
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+              },
+            ]}
+            style={{
+              width: "100%",
+              padding: 15,
+              
+              shadowColor: "#171717",
+              shadowOffset: { width: 1, height: 5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 7,
+              borderRadius: 15,
+              elevation: 6,
+              marginHorizontal: 15,
+              paddingHorizontal: 30,
+            }}
+            onChange={(item) => {
+              
+              setSelectedCat();
+              setSelectedCat(item);
+              
+              console.log("selectedCat", selectedCat);
+              // handleCategories();
+            }}
+          />
+              <DropDownCategories
+            placeHolder={"Choisissez une catégorie"}
+            containerStyle={[
+              styles.card,
+              {
+                height: 100,
+                marginBottom: 200,
+                width: "77%",
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+              },
+            ]}
+            style={{
+              width: "100%",
+              padding: 15,
+              
+              shadowColor: "#171717",
+              shadowOffset: { width: 1, height: 5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 7,
+              borderRadius: 15,
+              elevation: 6,
+              marginHorizontal: 15,
+              paddingHorizontal: 30,
+            }}
+            onChange={(item) => {
+              
+              setSelectedCat();
+              setSelectedCat(item);
+              
+              console.log("selectedCat", selectedCat);
+              // handleCategories();
+            }}
+          />
+          
             </View>
           </View>
         </ScrollView>
