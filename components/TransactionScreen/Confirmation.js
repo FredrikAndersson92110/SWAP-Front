@@ -19,7 +19,7 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    return navigation.navigate("UserScreen");
+    // return navigation.navigate("UserScreen");
   };
 
   let source = require("../../assets/avatar.png");
@@ -36,6 +36,22 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
                           .replace(/[\u0300-\u036f]/g, "")
                   }.png`
 
+
+  useEffect(() => {
+    let changeStatus = async () => {
+      let response = await fetch( "https://swapapp-backend.herokuapp.com/update-status/requestID",  {
+          method: "PUT",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `address_street_1=${adress1}&address_zipcode=${cp1}`,
+        }
+      )
+    response = await response.json();
+    // console.log('REPONSE FETCH STATUS:', response);
+  }
+}, []);     
+
+
+
   // let handleSubmit = async () => {
   //   let response = await fetch(
   //     `https://swapapp-backend.herokuapp.com/users/adress/:`,
@@ -48,8 +64,6 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
   //   );
   //   response = await response.json();
   // };
-// var test = props.transactionInfos.requestInfos[0].conversations[0].conversation_id.firstName;  
-// console.log('+++ CONVERSATIONS:', test);
 
      return (
       <View style={styles.container}>
@@ -113,8 +127,8 @@ function Confirmation({firstName, avatar, description, category, transactionInfo
 
           <TouchableOpacity
             style={styles.button2}
-            // onPress={() => { setConfirm(true), {/* reducer pour changer status dans le store */} }
-            // }
+            onPress={() => { changeStatus()}
+            }
           >
             <Text style={styles.text2}>Confirmer</Text>
           </TouchableOpacity>
@@ -162,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
@@ -193,16 +207,16 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: "#FFFFFF",
-    fontSize: 18,
-    // lineHeight: 21,
-    letterSpacing: 0.6,
-    fontFamily: "Poppins_700Bold",
+    fontSize: 20,
+    lineHeight: 24,
+    marginTop: 3,
+    fontFamily: "Poppins_600SemiBold",
   },
   text2: {
     color: "#000000",
-    fontSize: 18,
-    // lineHeight: 21,
-    letterSpacing: 0.6,
-    fontFamily: "Poppins_700Bold",
+    fontSize: 20,
+    lineHeight: 24,
+    marginTop: 3,
+    fontFamily: "Poppins_600SemiBold",
   },
 });

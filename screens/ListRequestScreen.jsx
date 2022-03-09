@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -22,10 +23,17 @@ function ListRequestScreen(props) {
   const [check2, setCheck2] = useState(false);
   const [check1, setCheck1] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const isFocused = useIsFocused();
 
   const toggleOverlay = () => {
     setOverlayVisible(!overlayVisible);
   };
+ 
+
+  
+
 
 
 
@@ -73,7 +81,7 @@ function ListRequestScreen(props) {
               marginTop: 7,
               marginHorizontal: 15,
             }}
-            placeHolder={props.requests.category}
+            placeHolder={props.composeRequest.category}
           />
 
           <TouchableOpacity
@@ -110,7 +118,7 @@ function ListRequestScreen(props) {
                   fontSize: 18,
                 }}
               >
-                Lieu : Passer en dynamique
+                Lieu : {props.composeRequest.address_street_1}
               </Text>
             </View>
           </TouchableOpacity>
@@ -140,9 +148,9 @@ function ListRequestScreen(props) {
               />
 
               <View>
-                <Text style={styles.cardTitle}>Elisa</Text>
+                <Text style={styles.cardTitle}>Lou</Text>
                 <Text style={styles.bodyText2}>
-                  Propose des cours de chinois
+                  Propose prestations ménages
                 </Text>
               </View>
               <TouchableWithoutFeedback
@@ -153,7 +161,9 @@ function ListRequestScreen(props) {
                 }}
               >
                 <Image
-                  source={require("../assets/avatar.png")}
+                  source={{
+                    uri: "https://randomuser.me/api/portraits/med/women/21.jpg",
+                  }}
                   style={styles.avatar}
                 ></Image>
               </TouchableWithoutFeedback>
@@ -175,15 +185,25 @@ function ListRequestScreen(props) {
               />
 
               <View>
-                <Text style={styles.cardTitle}>Théo</Text>
+                <Text style={styles.cardTitle}>Yanis</Text>
                 <Text style={styles.bodyText2}>
-                  Propose des cours de chinois
+                  Propose des cours de  swahili
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={{
+                    uri: "https://randomuser.me/api/portraits/med/women/31.jpg",
+                  }}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -202,15 +222,26 @@ function ListRequestScreen(props) {
               />
 
               <View>
-                <Text style={styles.cardTitle}>Théo</Text>
+                <Text style={styles.cardTitle}>Lilou</Text>
                 <Text style={styles.bodyText2}>
-                  Propose des cours de chinois
+                  Propose des cours de coréen
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={{
+                    uri: "https://randomuser.me/api/portraits/med/women/94.jpg",
+                  }}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -229,15 +260,25 @@ function ListRequestScreen(props) {
               />
 
               <View>
-                <Text style={styles.cardTitle}>Théo</Text>
+                <Text style={styles.cardTitle}>Alicia</Text>
                 <Text style={styles.bodyText2}>
-                  Propose des cours de chinois
+                  Propose promenades animaux
                 </Text>
               </View>
-              <Image
-                source={require("../assets/avatar.png")}
-                style={styles.avatar}
-              ></Image>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate("UserRequestScreen", {
+                    screen: "UserRequestScreen",
+                  });
+                }}
+              >
+                <Image
+                  source={{
+                    uri: "https://randomuser.me/api/portraits/med/women/67.jpg",
+                  }}
+                  style={styles.avatar}
+                ></Image>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 
@@ -249,7 +290,7 @@ function ListRequestScreen(props) {
             onPress={() => toggleOverlay()}
           />
 
-          <Overlay
+<Overlay
             isVisible={overlayVisible}
             fullScreen
             overlayStyle={{ padding: 0 }}
@@ -305,7 +346,6 @@ function ListRequestScreen(props) {
   );
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {
@@ -315,10 +355,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.userReducer, requests: state.requestsReducer, request:  state.newRequest };
+  return {
+    user: state.userReducer,
+    requests: state.requestsReducer,
+    composeRequest: state.composeRequestReducer,
+    categoryMatches: state.categoriesReducer,
+    userDetails: state.userDetailsReducer 
+  };
 }
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 
@@ -333,11 +377,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
+  
   container2: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 70,
+    marginTop: 170,
     marginBottom: 140,
   },
   containerCheckBox: {
@@ -467,8 +512,9 @@ const styles = StyleSheet.create({
     color: "#717171",
     fontSize: 15,
     fontFamily: "Poppins_400Regular",
-    marginLeft: 10,
+    marginLeft: 25,
     paddingHorizontal: 20,
+    marginRight: 25
   },
   bodyText2: {
     color: "#717171",
@@ -478,11 +524,7 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
   },
-  container2: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: "grey",
-  },
+
   contentContainer: {
     flex: 1,
     alignItems: "center",

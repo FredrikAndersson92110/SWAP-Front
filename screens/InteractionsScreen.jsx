@@ -15,7 +15,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
 
   const [message, setMessage] = useState("");
 
-  // appel de la route qui recherche les matches de requêtes qui
+  // chercher les matches sur ResquestSchema
   useEffect(() => {
     if (isFocused) {
       async function getRequests() {
@@ -27,7 +27,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
         console.log(response.status);
         if (response.status) {
           onAddRequests(response.requests);
-          // console.log('RESPONSE FETCH RESQUEST:', response.requests)
         } else {
           setMessage(response.message);
         }
@@ -38,6 +37,7 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
 
   let conversations = [];
   requests.forEach((req) => {
+    // si le token du asker est le mien, alors:
     if (req.asker.token === user.token) {
       let tempConv = req.conversations.map((conversation) => {
         return {
@@ -50,9 +50,11 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
       });
       conversations = conversations.concat(tempConv);
     } else {
+      // si mon token est stocké dans la propriété "conversation_id", je suis helper, et une conversation existe déjà:
       let foundConversation = req.conversations.find(
         (conversation) => conversation.conversation_id.token === user.token
       );
+      // si une conversation existe déjà, pusher dans les conversations existantes la category, le requestId et ttes les infos du asker
       if (foundConversation) {
         conversations.push({
           ...foundConversation,
@@ -69,11 +71,11 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     if (conversation.asker.token === user.token) {
       return (
         <Conversation
-          conversationInfos={conversation} // pour afficher conversation
           key={i}
-          isAsker={true} // // passé en props destructuré dans la function du screen "Conversation"
-          name={conversation.conversation_id.firstName} // same
-          useravatar={conversation.conversation_id.user_img} // same
+          conversationInfos={conversation}
+          isAsker={true}
+          name={conversation.conversation_id.firstName}
+          useravatar={conversation.conversation_id.user_img}
           category={
             conversation.category.sub_category
               ? conversation.category.sub_category
@@ -89,8 +91,8 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
     } else {
       return (
         <Conversation
-          conversationInfos={conversation} // pour afficher conversation
           key={i}
+          conversationInfos={conversation}
           isAsker={false}
           name={conversation.asker.firstName}
           useravatar={conversation.asker.user_img}
@@ -174,8 +176,6 @@ function InteractionsScreen({ requests, onAddRequests, navigation, user }) {
   );
 }
 
-// ajoute dans le store les requests correspondant au token de l'utilisateur, via l'argument "data"
-// request récupéré par "onAddRequests(response.requests)" dans le fetch
 function mapDispatchToProps(dispatch) {
   return {
     onAddRequests: function (data) {

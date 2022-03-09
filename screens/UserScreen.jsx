@@ -3,16 +3,22 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import {
   Image,
-  ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-// Outils pour dynamiser le compteur 
+// Outils pour dynamiser le compteur
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
+import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 
-
-const UserScreen = (props, request) => {
+const UserScreen = (props) => {
   const navigation = useNavigation();
 
   const [adress1, setAdress1] = useState();
@@ -23,13 +29,9 @@ const UserScreen = (props, request) => {
   const [city2, setCity2] = useState();
   const [comp1, setComp1] = useState();
   const [comp2, setComp2] = useState();
-  const [comp3, setComp3] = useState();
-  const [comp4, setComp4] = useState();
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
-
-
-
+  const [selectedCat, setSelectedCat] = useState("");
 
   let handleSubmit = async () => {
     let response = await fetch(
@@ -41,7 +43,7 @@ const UserScreen = (props, request) => {
         // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
       }
     );
-   
+
     let jresponse = await response.json();
     console.log(adress1);
     console.log(cp1);
@@ -51,13 +53,13 @@ const UserScreen = (props, request) => {
     try {
       await AsyncStorage.removeItem("token");
     } catch (e) {
-      console.log(e)
+      console.log(e);
       // clear error
     }
 
     console.log("Token removed from local storage (userScreen File)");
     navigation.navigate("SignInScreen");
-  }
+  };
 
   const updateState = () => {
     setIsEditable(!isEditable);
@@ -103,7 +105,7 @@ const UserScreen = (props, request) => {
                 fontFamily: "Poppins_600SemiBold",
                 fontSize: 14,
               }}
-              onPress={ ()=> logOut() }
+              onPress={() => logOut()}
             >
               Deconnexion
             </Text>
@@ -224,37 +226,71 @@ const UserScreen = (props, request) => {
                 </TouchableWithoutFeedback>
               </Text>
 
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder={request.category}
-                onChangeText={(text) => setComp1(text)}
-                editable={isEditable}
+              <DropDownCategories
+                placeHolder={"Choisissez une catégorie"}
+                containerStyle={[
+                  styles.card,
+                  {
+                    height: 100,
+                    marginBottom: 200,
+                    width: "77%",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  },
+                ]}
+                style={{
+                  width: "100%",
+                  padding: 15,
+
+                  shadowColor: "#171717",
+                  shadowOffset: { width: 1, height: 5 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 7,
+                  borderRadius: 15,
+                  elevation: 6,
+                  marginHorizontal: 15,
+                  paddingHorizontal: 30,
+                }}
+                onChange={(item) => {
+                  setSelectedCat();
+                  setSelectedCat(item);
+
+                  console.log("selectedCat", selectedCat);
+                  // handleCategories();
+                }}
               />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp2(text)}
-                editable={isEditable}
-              />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp3(text)}
-                editable={isEditable}
-              />
-              <Input
-                containerStyle={styles.input2}
-                inputStyle={{ fontSize: 13 }}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                placeholder="Indiquez ici vos talents ! "
-                onChangeText={(text) => setComp4(text)}
-                editable={isEditable}
+              <DropDownCategories
+                placeHolder={"Choisissez une catégorie"}
+                containerStyle={[
+                  styles.card,
+                  {
+                    height: 100,
+                    marginBottom: 200,
+                    width: "77%",
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  },
+                ]}
+                style={{
+                  width: "100%",
+                  padding: 15,
+
+                  shadowColor: "#171717",
+                  shadowOffset: { width: 1, height: 5 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 7,
+                  borderRadius: 15,
+                  elevation: 6,
+                  marginHorizontal: 15,
+                  paddingHorizontal: 30,
+                }}
+                onChange={(item) => {
+                  setSelectedCat();
+                  setSelectedCat(item);
+
+                  console.log("selectedCat", selectedCat);
+                  // handleCategories();
+                }}
               />
             </View>
           </View>
@@ -320,7 +356,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
-    elevation: 6
+    elevation: 6,
   },
   boxTitle: {
     fontFamily: "Poppins_600SemiBold",
@@ -415,9 +451,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
- 
-  return { user: state.userReducer, request:  state.newRequest };
- 
+  return { user: state.userReducer, request: state.newRequest };
 }
 
 export default connect(mapStateToProps, null)(UserScreen);

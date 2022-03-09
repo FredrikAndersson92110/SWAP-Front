@@ -31,7 +31,7 @@ const DemoScreen = (props) => {
 
         // console.log("recuparation user grace TOKEN : ", response.user);
         props.saveUser(response.user);
-        console.log("user Store", props.userStore);
+        // console.log("user Store", props.userStore);
         return props.navigation.navigate("MyTabs");
       } else {
         loadPage = true;

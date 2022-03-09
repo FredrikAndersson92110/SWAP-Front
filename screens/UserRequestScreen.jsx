@@ -59,10 +59,12 @@ export default function DetailScreen(props) {
                   alignItems: "center",
                 }}
               >
-                <Avatar rounded size="large" source={source} />
+                <Avatar rounded size="large" source={{
+                    uri: "https://randomuser.me/api/portraits/med/women/21.jpg",
+                  }} />
                 <View style={{ marginLeft: 20, justifyContent: "center" }}>
                   <Text style={{ fontSize: 22, fontFamily: "Poppins_700Bold" }}>
-                    Elisa
+                    Lou
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <MaterialIcons name="verified" size={14} color="#F7CE46" />

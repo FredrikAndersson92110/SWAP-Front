@@ -4,48 +4,67 @@ import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  TextInput,
 } from "react-native";
 import { Input, Text, Avatar, Image } from "react-native-elements";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 // import RNPickerSelect from "react-native-picker-select";
 
 /*---------------------------------- FUNCTION ----------------------------------*/
 export default function Declaration(props) {
-  const [date, setDate] = useState(new Date("01/01/2012"));
-  const [mode, setMode] = useState("date"); // changer
-  const [show, setShow] = useState(false);
-  const [time, setTime] = useState(0);
-
-  const [selectedValue, setSelectedValue] = useState("java");
+  const [date, setDate] = useState();
+  const [time, setTime] = useState("0");
+  const [error, setError] = useState("");
 
   let source = require("../../assets/avatar.png");
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-  };
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === "ios");
+  //   setDate(currentDate);
+  // };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
+  // const showMode = (currentMode) => {
+  //   setShow(true);
+  //   setMode(currentMode);
+  // };
 
-  const showDatepicker = () => {
-    showMode("date"); // changer
-  };
+  // const showDatepicker = () => {
+  //   showMode("date"); // changer
+  // };
 
   //   const showTimepicker = () => {
   //     showMode('time');
   //   };
 
+  const handleDate = (inputDate) => {
+    if (
+      inputDate.length >= 10 &&
+      !inputDate.match(
+        /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+      )
+    ) {
+      setError("Date au mauvais format");
+    } else {
+      setDate(inputDate);
+      console.log("Date enregistrée :", date);
+    }
+  };
+
   const incrementTime = () => {
-    setTime(time + 0, 5);
+    let timeCopy = Number(time);
+    timeCopy += 0.5;
+    setTime(timeCopy.toString());
+    console.log("time :", time);
   };
 
   const decrementTime = () => {
-    setTime(time - 0, 5);
+    let timeCopy = Number(time);
+    if (timeCopy > 0) {
+      timeCopy -= 0.5;
+      setTime(timeCopy.toString());
+      console.log("time :", time);
+    }
   };
 
   return (
@@ -99,18 +118,8 @@ export default function Declaration(props) {
                         Demande de bricolage Demawdrhdjgcde de bricolage
                         Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
                         Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricoge
-                        Demawdrhdjgc
-                        Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricolage Demawdrhdjgcde de bricolage
-                        Demawdrhdjgcde de bricoge
-                        Demawdrhdjgc
-                       
+                        Demawdrhdjgc Demande de bricolage Demawdrhdjgcde de
+                        bricolage
                       </Text>
                     </View>
                   </View>
@@ -127,64 +136,28 @@ export default function Declaration(props) {
             </View> */}
           <View style={styles.calendar}>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChange}
-                />
-              )}
               <Input
                 containerStyle={styles.input1}
                 inputStyle={{ fontSize: 13, fontFamily: "Poppins_400Regular" }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
                 placeholder="jj/mm/aaaa"
-                onFocus={() => setShow(true)}
-                // value={date}
+                onChangeText={(text) => {
+                  handleDate(text);
+                }}
               />
               <FontAwesome5
                 name="calendar-alt"
                 size={25}
                 color="#F7CE46"
-                style={{ marginLeft: 8, marginRight: 15 }}
+                style={{ marginLeft: 8, marginRight: 15, top: 7 }}
               />
             </View>
             <View style={{ flexDirection: "row" }}>
-              <View style={styles.input2}>
-                {/* <Picker
-                  selectedValue={selectedValue}
-                  // placeholder={{
-                  //   label: "Sélectionnez votre position",
-                  //   value: null,
-                  // }}
-                  style={{
-                    height: 50,
-                    width: 200,
-                    backgroundColor: "#000000",
-                    color: "red",
-                    fontFamily: "Poppins_400Regular",
-                  }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }
-                >
-                  <Picker.Item
-                    style={{ color: "#E7E7E7" }}
-                    label="30 mins"
-                    value="0.5"
-                  />
-                  <Picker.Item label="1h" value="1" />
-                  <Picker.Item label="1h30" value="1.5" />
-                  <Picker.Item label="2h" value="2" />
-                  <Picker.Item label="2h30" value="2.5" />
-                  <Picker.Item label="3h" value="3" />
-                  <Picker.Item label="3h30" value="3.5" />
-                  <Picker.Item label="4h" value="4" />
-                </Picker> */}
-              </View>
+              <TextInput
+                style={styles.input2}
+                placeholder={`${time} h`}
+                editable={false}
+              />
 
               {/* <Input
               containerStyle={styles.input2}
@@ -197,15 +170,16 @@ export default function Declaration(props) {
                 <TouchableOpacity onPress={() => incrementTime()}>
                   <MaterialCommunityIcons
                     name="arrow-up-drop-circle"
-                    size={16}
-                    color="#000000"
+                    size={28}
+                    color="#F7CE46"
                   />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => decrementTime()}>
                   <MaterialCommunityIcons
                     name="arrow-down-drop-circle"
-                    size={16}
-                    color="#000000"
+                    size={28}
+                    color="#F7CE46"
+                    style={{ marginTop: 5 }}
                   />
                 </TouchableOpacity>
               </View>
@@ -213,10 +187,11 @@ export default function Declaration(props) {
           </View>
         </View>
         {/* BOUTON DECLARER */}
+        <Text style={styles.error}>{error}</Text>
         <View style={styles.boutonDecl}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("BottomNavigator")}
+            onPress={() => props.navigation.navigate("DoubleDeclaration")}
           >
             <Text style={styles.text}>Déclarer</Text>
           </TouchableOpacity>
@@ -248,7 +223,6 @@ export default function Declaration(props) {
 //         ]}
 //       />
 //     </View> */}
-
 
 //
 // ─────────────────────────────────────────────────── ──────────
@@ -303,7 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
@@ -349,14 +323,23 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     justifyContent: "space-between",
     height: 40,
+    top: -10,
     marginLeft: 8,
     marginRight: 15,
   },
   text: {
     color: "#000000",
     fontSize: 20,
-    lineHeight: 21,
-    letterSpacing: 0.6,
-    fontFamily: "Poppins_700Bold",
+    lineHeight: 24,
+    marginTop: 3,
+    fontFamily: "Poppins_600SemiBold",
+  },
+  error: {
+    fontFamily: "Poppins_400Regular",
+    fontSize: 12,
+    marginLeft: 15,
+    paddingLeft: 15,
+    color: "red",
+    marginLeft: -5,
   },
 });

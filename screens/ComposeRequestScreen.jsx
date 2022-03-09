@@ -13,27 +13,36 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DropDownCategories from "../components/MoreInfoScreen/DropDownCategories";
 import * as Location from "expo-location";
 import { connect } from "react-redux";
-
 const ComposeRequestScreen = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
-
   const [selected, setSelected] = useState("");
   let categoriesSelected = [];
 
+  // console.log(" <<<<<<<<<<<<< USER >>>>>>>>>>>>>>", props.user);
+
   const data = [
     { label: "Ma position actuelle", value: "geolocation" },
-    { label: "Adresse 1 (à dyna)", value: "address1" },
-    { label: "Adresse 2 (à dyna)", value: "address2" },
+    {
+      label: props.user.userAddresses[0].address_street_1
+        ? `${props.user.userAddresses[0].address_street_1}, ${props.user.userAddresses[0].address_city}`
+        : "Ajoutez une addresse depuis votre profil",
+      value: "address1",
+    },
+    {
+      label: props.user.userAddresses[1].address_street_1
+        ? `${props.user.userAddresses[1].address_street_1}, ${props.user.userAddresses[1].address_city}`
+        : "Ajoutez une addresse depuis votre profil",
+      value: "address2",
+    },
   ];
-
   // 4 valeurs INPUTS
   let addressObj;
   const [selectedAddress, setSelectedAddress] = useState("");
   const [description, setDescription] = useState("");
   const [disponibility, setDisponibility] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
-
   const handleLocation = async (location) => {
+    // Récupération de la géolocalisation si choix utilisateur
     if (location.value == "geolocation") {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status == "granted") {
@@ -50,35 +59,46 @@ const ComposeRequestScreen = (props) => {
         setSelectedAddress(addressObj);
         console.log("choix localisation =>", addressObj);
       }
-    } else if (location.value == "address1") {
+    } else if (location.value == props.user.userAddresses[0].address_street_1) {
       console.log("choix 1 =>", location.value);
-    } else if (location.value == "address2") {
+      addressObj = {
+        address_street_1: props.user.userAddresses[0].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+      };
+      setSelectedAddress(addressObj);
+    } else if (location.value == props.user.userAddresses[1].address_street_1) {
+      addressObj = {
+        address_street_1: props.user.userAddresses[1].address_street_1,
+        address_zipcode: props.user.userAddresses[0].address_zipcode,
+        address_city: props.user.userAddresses[0].address_city,
+      };
+      setSelectedAddress(addressObj);
       console.log("choix 2 =>", location.value);
     }
   };
   const handleSubmit = () => {
-              selectedCat.length > 1
-                ? setErrorMessage(
-                    "Vous ne pouvez choisir qu'une seul categorie"
-                  )
-                : null;
-
-    if (selectedAddress == "" || description == "" || disponibility == "" || selectedCat == "") {
-      setErrorMessage("Merci de remplir tous les champs")
+    selectedCat.length > 1
+      ? setErrorMessage("Vous ne pouvez choisir qu'une seul categorie")
+      : null;
+    if (
+      selectedAddress == "" ||
+      description == "" ||
+      disponibility == "" ||
+      selectedCat == ""
+    ) {
+      setErrorMessage("Merci de remplir tous les champs");
     } else {
       let data = {
-        description : description,
+        description: description,
         disponibility: disponibility,
         category: selectedCat[0],
         address_street_1: selectedAddress.address_street_1,
-        address_city: selectedAddress.address_city,
-        address_zipcode: selectedAddress.address_zipcode,
       };
       console.log(data);
       props.onComposeRequest(data);
     }
   };
-
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -105,7 +125,6 @@ const ComposeRequestScreen = (props) => {
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           {/* ==== LIEU ==== */}
           <Text style={styles.textTitle}>Lieu</Text>
-
           <View>
             <Dropdown
               style={[styles.card]}
@@ -122,7 +141,7 @@ const ComposeRequestScreen = (props) => {
                 setSelected(item);
                 handleLocation(item);
               }}
-              containerStyle={[styles.dropContainer,{height: 0}]}
+              containerStyle={[styles.dropContainer, { height: 0 }]}
             />
           </View>
 
@@ -171,7 +190,7 @@ const ComposeRequestScreen = (props) => {
             textAlignVertical={"top"}
             style={[styles.inputTextarea, { paddingTop: 25 }]}
             placeholder="Description de votre demande en quelques mots.
-          N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
+      N'hésitez pas à préciser les jours de la semaine ou vous êtes disponible."
             placeholderTextColor="grey"
             numberOfLines={7}
             multiline={true}
@@ -212,27 +231,26 @@ const ComposeRequestScreen = (props) => {
   );
 };
 
+function mapStateToProps(state) {
+  return { user: state.userReducer, request: state.newRequest };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     onComposeRequest: function (newRequest) {
       dispatch({ type: "composeRequest::newRequest", newRequest });
     },
-
   };
 }
-
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ComposeRequestScreen);
-
 //
 // ─────────────────────────────────────────────────── ──────────
 //   :::::: S T Y L E S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────
 //
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
