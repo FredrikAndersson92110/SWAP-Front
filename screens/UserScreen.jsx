@@ -3,14 +3,19 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import {
   Image,
-  ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-// Outils pour dynamiser le compteur 
+// Outils pour dynamiser le compteur
 // import AnimateNumber from "react-native-animate-number";
 import { connect } from "react-redux";
-
 
 const UserScreen = (props, request) => {
   const navigation = useNavigation();
@@ -28,9 +33,6 @@ const UserScreen = (props, request) => {
   const [isEditable, setIsEditable] = useState(false);
   const [isModif, setIsModif] = useState("");
 
-
-
-
   let handleSubmit = async () => {
     let response = await fetch(
       `https://swapapp-backend.herokuapp.com/users/updateAdress/${props.user.token}`,
@@ -41,7 +43,7 @@ const UserScreen = (props, request) => {
         // body: JSON.stringify({ address_street_1:adress1,address_zipcode:cp1 })
       }
     );
-   
+
     let jresponse = await response.json();
     console.log(adress1);
     console.log(cp1);
@@ -51,13 +53,13 @@ const UserScreen = (props, request) => {
     try {
       await AsyncStorage.removeItem("token");
     } catch (e) {
-      console.log(e)
+      console.log(e);
       // clear error
     }
 
     console.log("Token removed from local storage (userScreen File)");
     navigation.navigate("SignInScreen");
-  }
+  };
 
   const updateState = () => {
     setIsEditable(!isEditable);
@@ -103,7 +105,7 @@ const UserScreen = (props, request) => {
                 fontFamily: "Poppins_600SemiBold",
                 fontSize: 14,
               }}
-              onPress={ ()=> logOut() }
+              onPress={() => logOut()}
             >
               Deconnexion
             </Text>
@@ -320,7 +322,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
-    elevation: 6
+    elevation: 6,
   },
   boxTitle: {
     fontFamily: "Poppins_600SemiBold",
@@ -369,6 +371,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
+    height: 20
   },
   fonts: {
     marginBottom: 8,
@@ -415,9 +418,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
- 
-  return { user: state.userReducer, request:  state.newRequest };
- 
+  return { user: state.userReducer, request: state.newRequest };
 }
 
 export default connect(mapStateToProps, null)(UserScreen);

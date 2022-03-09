@@ -40,7 +40,8 @@ import TinderScreen from "./screens/TinderScreen";
 import TransactionScreen from "./screens/TransactionScreen";
 import UserRequestScreen from "./screens/UserRequestScreen";
 import UserScreen from "./screens/UserScreen";
-
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([""]);
 const store = createStore(
   combineReducers({
     requestsReducer,

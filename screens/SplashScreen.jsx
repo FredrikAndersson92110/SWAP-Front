@@ -18,7 +18,7 @@ const SplashScreen = (props) => {
         );
         response = await response.json();
 
-        // console.log("recuparation user grace TOKEN : ", response.user);
+        //  console.log("recuparation user grace TOKEN : ", response.user);
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
         return props.navigation.navigate("MyTabs");

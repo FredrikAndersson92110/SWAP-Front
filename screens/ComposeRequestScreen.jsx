@@ -20,10 +20,22 @@ const ComposeRequestScreen = (props) => {
   const [selected, setSelected] = useState("");
   let categoriesSelected = [];
 
+  // console.log(" <<<<<<<<<<<<< USER >>>>>>>>>>>>>>", props.user);
+
   const data = [
     { label: "Ma position actuelle", value: "geolocation" },
-    { label: "Adresse 1 (à dyna)", value: "address1" },
-    { label: "Adresse 2 (à dyna)", value: "address2" },
+    {
+      label: props.user.userAddresses[0].address_street_1
+        ? `${props.user.userAddresses[0].address_street_1}, ${props.user.userAddresses[0].address_city}`
+        : "Ajoutez une addresse depuis votre profil",
+      value: "address1",
+    },
+    {
+      label: props.user.userAddresses[1].address_street_1
+        ? `${props.user.userAddresses[1].address_street_1}, ${props.user.userAddresses[1].address_city}`
+        : "Ajoutez une addresse depuis votre profil",
+      value: "address2",
+    },
   ];
 
   // 4 valeurs INPUTS
@@ -34,6 +46,8 @@ const ComposeRequestScreen = (props) => {
   const [selectedCat, setSelectedCat] = useState("");
 
   const handleLocation = async (location) => {
+
+    // Récupération de la géolocalisation si choix utilisateur
     if (location.value == "geolocation") {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status == "granted") {
@@ -51,23 +65,46 @@ const ComposeRequestScreen = (props) => {
         console.log("choix localisation =>", addressObj);
       }
     } else if (location.value == "address1") {
+      if (props.user.userAddresses[0]) {
+        addressObj = {
+          address_street_1: props.user.userAddresses[0].address_street_1,
+          address_zipcode: props.user.userAddresses[0].address_zipcode,
+          address_city: props.user.userAddresses[0].address_city,
+        };
+        setSelectedAddress(addressObj);
+      } else {
+        setErrorMessage("Pas d'adresse 1 enregistrée");
+      }
+
       console.log("choix 1 =>", location.value);
     } else if (location.value == "address2") {
-      console.log("choix 2 =>", location.value);
+      if (props.user.userAddresses[1]) {
+        addressObj = {
+          address_street_1: props.user.userAddresses[1].address_street_1,
+          address_zipcode: props.user.userAddresses[1].address_zipcode,
+          address_city: props.user.userAddresses[1].address_city,
+        };
+        setSelectedAddress(addressObj);
+      } else {
+        setErrorMessage("Pas d'adresse 1 enregistrée");
+      }
     }
   };
   const handleSubmit = () => {
-              selectedCat.length > 1
-                ? setErrorMessage(
-                    "Vous ne pouvez choisir qu'une seul categorie"
-                  )
-                : null;
+    selectedCat.length > 1
+      ? setErrorMessage("Vous ne pouvez choisir qu'une seul categorie")
+      : null;
 
-    if (selectedAddress == "" || description == "" || disponibility == "" || selectedCat == "") {
-      setErrorMessage("Merci de remplir tous les champs")
+    if (
+      selectedAddress == "" ||
+      description == "" ||
+      disponibility == "" ||
+      selectedCat == ""
+    ) {
+      setErrorMessage("Merci de remplir tous les champs");
     } else {
       let data = {
-        description : description,
+        description: description,
         disponibility: disponibility,
         category: selectedCat[0],
         address_street_1: selectedAddress.address_street_1,
@@ -117,12 +154,17 @@ const ComposeRequestScreen = (props) => {
               data={data}
               labelField="label"
               valueField="value"
-              placeholder={selected.label}
+              placeholder={
+                selected.label
+                  ? selected.label.charAt(0).toUpperCase() +
+                    selected.label.substring(1)
+                  : "Choisissez lieu d'intervention"
+              }
               onChange={(item) => {
                 setSelected(item);
                 handleLocation(item);
               }}
-              containerStyle={[styles.dropContainer,{height: 0}]}
+              containerStyle={[styles.dropContainer, { height: 0 }]}
             />
           </View>
 
@@ -130,7 +172,7 @@ const ComposeRequestScreen = (props) => {
           <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
 
           <DropDownCategories
-            placeHolder={"Choisissez une catégorie"}
+            placeHolder={selectedCat ? selectedCat : "Choisissez une catégorie"}
             containerStyle={[
               styles.card,
               {
@@ -212,18 +254,22 @@ const ComposeRequestScreen = (props) => {
   );
 };
 
+function mapStateToProps(state) {
+  return {
+    user: state.userReducer,
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     onComposeRequest: function (newRequest) {
       dispatch({ type: "composeRequest::newRequest", newRequest });
     },
-
   };
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ComposeRequestScreen);
 

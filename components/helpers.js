@@ -17,6 +17,6 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-console.log(getDistance(41.928, -87.7044, 42.8807, -88.2014));
+// console.log(getDistance(41.928, -87.7044, 42.8807, -88.2014));
 
 export default getDistance;

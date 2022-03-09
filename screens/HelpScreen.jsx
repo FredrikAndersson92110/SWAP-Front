@@ -35,16 +35,18 @@ function HelpScreen({
             let promise = await Promise.all(
               response.matchingRequests.map(async (req) => {
                 let coords = await fetch(
-                  `https://koumoul.com/s/geocoder/api/v1/coord?city=${req.asker.userAddresses[0].address_city}`
+                  // `https://koumoul.com/s/geocoder/api/v1/coord?city=${req.asker.userAddresses[0].address_city}`
+                  `http://api.openweathermap.org/geo/1.0/direct?q=${req.asker.userAddresses[0].address_city},fr&appid=f2b23e6c8f32f28cdd181b47f5b3ba63`
                 );
-                let resp = await coords.json();
 
+                let resp = await coords.json();
+                console.log("LAT : ", resp[0]);
                 let distance = Math.round(
                   getDistance(
                     userLocation.coords.latitude,
                     userLocation.coords.longitude,
-                    resp.lat,
-                    resp.lon
+                    resp[0].lat,
+                    resp[0].lon
                   )
                 );
                 return {
@@ -53,6 +55,7 @@ function HelpScreen({
                 };
               })
             );
+
             onMatchCategories(promise);
           } catch (error) {
             console.error(error);
@@ -77,7 +80,7 @@ function HelpScreen({
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
     }.png`;
-    console.log("PATH", path);
+    // console.log("PATH", path);
     //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663953/montage_de_meubles.png
     //res.cloudinary.com/dz6vuz9mf/image/upload/v1646663954/montage_de_meubles.png
     if (request.distance < 200) {
