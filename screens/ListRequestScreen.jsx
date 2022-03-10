@@ -1,35 +1,85 @@
 import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
+  Dimensions,
 } from "react-native";
-import { Button, CheckBox, Input, Overlay, Text } from "react-native-elements";
+import { Button, Overlay, Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import RNPickerSelect from "react-native-picker-select";
 import InputButton from "../components/InputButton";
 import { connect } from "react-redux";
 import BottomSheet from "@gorhom/bottom-sheet";
 
+import Card from "../components/ListRequestScreen/Card";
 
-function ListRequestScreen(props) {
-  const [check4, setCheck4] = useState(false);
-  const [check3, setCheck3] = useState(false);
-  const [check2, setCheck2] = useState(false);
-  const [check1, setCheck1] = useState(false);
+function ListRequestScreen({
+  navigation,
+  composeRequest,
+  selectedUsers,
+  user,
+  onResetSelectedUsers,
+}) {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [message, setMessage] = useState("");
+  const [foundUsers, setFoundUsers] = useState([]);
 
   const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      async function getUsers() {
+        let request = await fetch(
+          `http://192.168.10.137:3000/users-by-category/${composeRequest.category}`
+        );
+        let response = await request.json();
+        if (response.status) {
+          setFoundUsers(response.foundUsers);
+        } else {
+          setMessage(response.message);
+        }
+      }
+      getUsers();
+    }
+  }, [isFocused]);
 
   const toggleOverlay = () => {
     setOverlayVisible(!overlayVisible);
   };
+
+  const handleSubmit = async () => {
+    let request = await fetch("http://192.168.10.137:3000/add-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...composeRequest,
+        userToken: user.token,
+        selectedUsers,
+      }),
+    });
+    let response = await request.json();
+
+    if (response.status) {
+      onResetSelectedUsers();
+      toggleOverlay();
+    }
+  };
+
+  let userList = foundUsers.map((user, i) => {
+    return (
+      <Card
+        key={i}
+        firstName={user.firstName}
+        category={composeRequest.category}
+        avatar={user.user_img}
+        selectedUser={user}
+      />
+    );
+  });
 
   return (
     <ImageBackground
@@ -48,7 +98,7 @@ function ListRequestScreen(props) {
         >
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate("Home");
+              navigation.navigate("Home");
             }}
           >
             <AntDesign name="close" size={24} color="black" />
@@ -75,7 +125,7 @@ function ListRequestScreen(props) {
               marginTop: 7,
               marginHorizontal: 15,
             }}
-            placeHolder={props.composeRequest.category}
+            placeHolder={composeRequest.category}
           />
 
           <TouchableOpacity
@@ -107,7 +157,7 @@ function ListRequestScreen(props) {
                   fontSize: 18,
                 }}
               >
-                Lieu : {props.composeRequest.address_street_1}
+                Lieu : {composeRequest.address_street_1}
               </Text>
             </View>
           </TouchableOpacity>
@@ -122,164 +172,18 @@ function ListRequestScreen(props) {
 
           <Text style={styles.textTitle}>Les profils qui correspondent</Text>
 
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <CheckBox
-                left
-                checkedIcon={
-                  <Ionicons name="checkbox-outline" size={35} color="#F7CE46" />
-                }
-                uncheckedIcon={
-                  <Ionicons name="square-outline" size={35} color="#F7CE46" />
-                }
-                checked={check1}
-                onPress={() => setCheck1(!check1)}
-              />
+          {userList}
 
-              <View>
-                <Text style={styles.cardTitle}>Lou</Text>
-                <Text style={styles.bodyText2}>
-                  Propose prestations ménages
-                </Text>
-              </View>
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  props.navigation.navigate("UserRequestScreen", {
-                    screen: "UserRequestScreen",
-                  });
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://randomuser.me/api/portraits/med/women/21.jpg",
-                  }}
-                  style={styles.avatar}
-                ></Image>
-              </TouchableWithoutFeedback>
-            </View>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity
+              style={styles.buttonValidate}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.text}>Valider</Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <CheckBox
-                left
-                checkedIcon={
-                  <Ionicons name="checkbox-outline" size={35} color="#F7CE46" />
-                }
-                uncheckedIcon={
-                  <Ionicons name="square-outline" size={35} color="#F7CE46" />
-                }
-                checked={check2}
-                onPress={() => setCheck2(!check2)}
-              />
-
-              <View>
-                <Text style={styles.cardTitle}>Yanis</Text>
-                <Text style={styles.bodyText2}>
-                  Propose des cours de  swahili
-                </Text>
-              </View>
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  props.navigation.navigate("UserRequestScreen", {
-                    screen: "UserRequestScreen",
-                  });
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://randomuser.me/api/portraits/med/women/31.jpg",
-                  }}
-                  style={styles.avatar}
-                ></Image>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <CheckBox
-                left
-                checkedIcon={
-                  <Ionicons name="checkbox-outline" size={35} color="#F7CE46" />
-                }
-                uncheckedIcon={
-                  <Ionicons name="square-outline" size={35} color="#F7CE46" />
-                }
-                checked={check4}
-                onPress={() => setCheck4(!check4)}
-              />
-
-              <View>
-                <Text style={styles.cardTitle}>Lilou</Text>
-                <Text style={styles.bodyText2}>
-                  Propose des cours de coréen
-                </Text>
-              </View>
-
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  props.navigation.navigate("UserRequestScreen", {
-                    screen: "UserRequestScreen",
-                  });
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://randomuser.me/api/portraits/med/women/94.jpg",
-                  }}
-                  style={styles.avatar}
-                ></Image>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
-              <CheckBox
-                left
-                checkedIcon={
-                  <Ionicons name="checkbox-outline" size={35} color="#F7CE46" />
-                }
-                uncheckedIcon={
-                  <Ionicons name="square-outline" size={35} color="#F7CE46" />
-                }
-                checked={check3}
-                onPress={() => setCheck3(!check3)}
-              />
-
-              <View>
-                <Text style={styles.cardTitle}>Alicia</Text>
-                <Text style={styles.bodyText2}>
-                  Propose promenades animaux
-                </Text>
-              </View>
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  props.navigation.navigate("UserRequestScreen", {
-                    screen: "UserRequestScreen",
-                  });
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://randomuser.me/api/portraits/med/women/67.jpg",
-                  }}
-                  style={styles.avatar}
-                ></Image>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-
-          <Button
-            title="Valider"
-            titleStyle={styles.buttonTitle}
-            buttonStyle={styles.button}
-            containerStyle={styles.buttonContainer}
-            onPress={() => toggleOverlay()}
-          />
-
-<Overlay
+          <Overlay
             isVisible={overlayVisible}
             fullScreen
             overlayStyle={{ padding: 0 }}
@@ -325,14 +229,13 @@ function ListRequestScreen(props) {
                   buttonStyle={styles.button}
                   containerStyle={styles.buttonContainer}
                   onPress={() => {
-                    props.navigation.navigate("Home");
                     toggleOverlay();
+                    navigation.navigate("Home");
                   }}
                 />
               </View>
             </ImageBackground>
           </Overlay>
-
         </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
@@ -344,6 +247,9 @@ function mapDispatchToProps(dispatch) {
     onAddRequests: function (data) {
       dispatch({ type: "user::requests", requests: data });
     },
+    onResetSelectedUsers: function () {
+      dispatch({ type: "reset::selected" });
+    },
   };
 }
 
@@ -353,7 +259,8 @@ function mapStateToProps(state) {
     requests: state.requestsReducer,
     composeRequest: state.composeRequestReducer,
     categoryMatches: state.categoriesReducer,
-    userDetails: state.userDetailsReducer 
+    userDetails: state.userDetailsReducer,
+    selectedUsers: state.selectedReducer,
   };
 }
 
@@ -370,7 +277,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
-  
+
   container2: {
     flex: 1,
     flexDirection: "row",
@@ -428,6 +335,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: "center",
   },
+  text: {
+    color: "#000000",
+    fontSize: 16,
+    fontFamily: "Poppins_600SemiBold",
+    letterSpacing: 0.6,
+  },
   card: {
     backgroundColor: "white",
     padding: 30,
@@ -457,6 +370,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
+  },
+  buttonValidate: {
+    justifyContent: "center",
+    backgroundColor: "#F7CE46",
+    alignItems: "center",
+    width: Dimensions.get("window").width * 0.85,
+    height: 45,
+    borderRadius: 8,
+    marginBottom: 45,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+    elevation: 4,
   },
   buttonContainer: {
     width: "100%",
@@ -507,7 +434,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     marginLeft: 25,
     paddingHorizontal: 20,
-    marginRight: 25
+    marginRight: 25,
   },
   bodyText2: {
     color: "#717171",

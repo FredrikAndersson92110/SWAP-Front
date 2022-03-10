@@ -1,4 +1,5 @@
 export default function (userDetails = {}, action) {
+  console.log("REDUCER", action.user);
   let data = {
     isAsker: action.isAsker,
     request: action.request,
@@ -7,5 +8,6 @@ export default function (userDetails = {}, action) {
     user: action.user,
   };
   if (action.type === "user::details") return data;
+  else if (action.type === "request::userdetails") return action.user;
   return userDetails;
 }
