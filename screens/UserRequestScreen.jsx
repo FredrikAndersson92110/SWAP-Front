@@ -1,14 +1,18 @@
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import {
   Image,
-  ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Avatar, Text } from "react-native-elements";
 
+import { connect } from "react-redux";
 
-export default function DetailScreen(props) {
-  let source = require("../assets/img_avatar2.png");
-
+function UserRequestScreen({ userDetails, navigation }) {
+  console.log(userDetails);
   return (
     <ImageBackground
       style={styles.ImageBackground}
@@ -29,7 +33,7 @@ export default function DetailScreen(props) {
           <Text style={styles.pageTitle}>Profil</Text>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate("ListRequestScreen", {
+              navigation.navigate("ListRequestScreen", {
                 screen: "ListRequestScreen",
               });
             }}
@@ -59,22 +63,32 @@ export default function DetailScreen(props) {
                   alignItems: "center",
                 }}
               >
-                <Avatar rounded size="large" source={{
-                    uri: "https://randomuser.me/api/portraits/med/women/21.jpg",
-                  }} />
+                <Avatar
+                  rounded
+                  size="large"
+                  source={{
+                    uri: userDetails.user_img,
+                  }}
+                />
                 <View style={{ marginLeft: 20, justifyContent: "center" }}>
                   <Text style={{ fontSize: 22, fontFamily: "Poppins_700Bold" }}>
-                    Lou
+                    {userDetails.firstName}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <MaterialIcons name="verified" size={14} color="#F7CE46" />
+                    <MaterialIcons
+                      name="verified"
+                      size={14}
+                      color={
+                        userDetails.verified_profile ? "#F7CE46" : "#8B8B8B"
+                      }
+                    />
                     <Text
                       style={{
                         marginLeft: 5,
                         fontFamily: "Poppins_400Regular",
                       }}
                     >
-                      Profil vérifié
+                      {userDetails.verified_profile ? "Profil vérifié" : null}
                     </Text>
                   </View>
                 </View>
@@ -107,66 +121,42 @@ export default function DetailScreen(props) {
               >
                 Compétences
               </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  source={require("../assets/images/categories/bricolage.png")}
-                  style={{
-                    width: 21,
-                    height: 21,
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 5,
-                  }}
-                />
-                <Text style={styles.bodyText}>
-                  Bricolage - ( 4 missions effectuees)
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  source={require("../assets/images/categories/bricolage.png")}
-                  style={{
-                    width: 21,
-                    height: 21,
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 5,
-                  }}
-                />
-                <Text style={styles.bodyText}>
-                  Bricolage - ( 4 missions effectuees)
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  source={require("../assets/images/categories/bricolage.png")}
-                  style={{
-                    width: 21,
-                    height: 21,
-                    marginRight: 10,
-                    marginLeft: 10,
-                    marginTop: 5,
-                  }}
-                />
-                <Text style={styles.bodyText}>
-                  Bricolage - ( 4 missions effectuees)
-                </Text>
-              </View>
+
+              {userDetails.categories.map((category, i) => {
+                console.log("category", category);
+                let path = `https://theoduvivier.com/swap/${
+                  category.sub_category
+                    ? category.sub_category
+                        .replace(/\s/g, "_")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                    : category.category
+                        .replace(/\s/g, "_")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                }.png`;
+                return (
+                  <View
+                    key={i}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: path }}
+                      style={{ width: 21, height: 21, marginRight: 10 }}
+                    />
+                    <Text style={styles.cardTitle}>
+                      {category.sub_category
+                        ? category.sub_category.charAt(0).toUpperCase() +
+                          category.sub_category.substring(1)
+                        : category.category}
+                    </Text>
+                  </View>
+                );
+              })}
+
               {/* divider */}
               <View
                 style={{
@@ -189,45 +179,22 @@ export default function DetailScreen(props) {
                 Commentaires
               </Text>
 
-              <View>
-                <Text style={styles.comments}>Anais</Text>
-                <Text style={styles.bodyText}>
-                  Je prends des cours de piano avec Elisa plusieurs fois par
-                  mois. Elle est ponctuelle et pédagogue.
-                </Text>
-              </View>
-
-              <View>
-                <Text style={styles.comments}>Karim</Text>
-                <Text style={styles.bodyText}>
-                  Elisa à pu m’aider pour m’occuper de plantes malades. Elles
-                  sont maintenant en pleine forme!
-                </Text>
-              </View>
-
-              <View>
-                <Text style={styles.comments}>Marie</Text>
-                <Text style={styles.bodyText}>
-                  Elisa donne des cours de piano à mon fils qui est débutant,
-                  nous sommes très satisfaits.
-                </Text>
-              </View>
-
-              <View>
-                <Text style={styles.comments}>Anais</Text>
-                <Text style={styles.bodyText}>
-                  Je prends des cours de piano avec Elisa plusieurs fois par
-                  mois. Elle est ponctuelle et pédagogue.
-                </Text>
-              </View>
-
-              <View>
-                <Text style={styles.comments}>Anais</Text>
-                <Text style={styles.bodyText}>
-                  Je prends des cours de piano avec Elisa plusieurs fois par
-                  mois. Elle est ponctuelle et pédagogue.
-                </Text>
-              </View>
+              {userDetails.comments.length > 0 ? (
+                userDetails.comments.map((comment, i) => {
+                  return (
+                    <View key={i}>
+                      <Text style={styles.comments}>{comment.author}</Text>
+                      <Text style={styles.bodyText}>{comment.content}</Text>
+                    </View>
+                  );
+                })
+              ) : (
+                <View>
+                  <Text style={styles.bodyText}>
+                    {userDetails.firstName} n'a pas encore de commentaires
+                  </Text>
+                </View>
+              )}
             </ScrollView>
           </View>
         </View>
@@ -235,6 +202,12 @@ export default function DetailScreen(props) {
     </ImageBackground>
   );
 }
+
+function mapStateToProps(state) {
+  return { userDetails: state.userDetailsReducer };
+}
+
+export default connect(mapStateToProps, null)(UserRequestScreen);
 
 const styles = StyleSheet.create({
   container: {

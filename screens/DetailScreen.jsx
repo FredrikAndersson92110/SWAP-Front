@@ -18,7 +18,6 @@ function DetailScreen({
   onRemoveCategoryMatch,
   getTransactionInfos,
 }) {
-  console.log("ID", userDetails.requestId, "TOKEN", user.token);
   const handleAccept = async () => {
     if (userDetails.isAsker) {
       let request = await fetch(
@@ -32,7 +31,6 @@ function DetailScreen({
         getTransactionInfos(response.request, userDetails.isAsker);
       }
     } else {
-      console.log(userDetails.requestId, user.token);
       onRemoveCategoryMatch(userDetails.requestId);
       let request = await fetch(
         `http:/192.168.10.154:3000/add-willing-user/${userDetails.requestId}/${user.token}`,
@@ -121,7 +119,6 @@ function DetailScreen({
             <View style={styles.divider} />
             {/* Content */}
             {data.categories.map((category, i) => {
-              console.log("category", category);
               let path = `https://theoduvivier.com/swap/${
                 category.sub_category
                   ? category.sub_category

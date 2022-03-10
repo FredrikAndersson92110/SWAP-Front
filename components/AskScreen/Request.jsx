@@ -49,7 +49,7 @@ function Request({
           />
           <View>
             <Text style={styles.cardTitle}>{name}</Text>
-            <Text style={styles.bodyText}>Propose des cours de {category}</Text>
+            <Text style={styles.bodyText}>Propose: {category}</Text>
 
             {/* CITY */}
             <View
@@ -65,8 +65,8 @@ function Request({
                 style={{ marginRight: 10 }}
               />
               <Text style={styles.bodyText}>
-                {location.length > 10
-                  ? location.substring(0, 10) + "..."
+                {location.length > 50
+                  ? location.substring(0, 15) + "..."
                   : location}{" "}
                 ({distance} km)
               </Text>
