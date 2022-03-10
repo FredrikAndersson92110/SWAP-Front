@@ -2,7 +2,8 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import {
-  CardStyleInterpolators, createStackNavigator
+  CardStyleInterpolators,
+  createStackNavigator,
 } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet } from "react-native";
@@ -21,6 +22,7 @@ import locationReducer from "./reducers/location.reducer";
 import transactionInfos from "./reducers/transaction.reducer";
 import willingReducer from "./reducers/willing.reducer";
 import composeRequestReducer from "./reducers/composeRequest.reducer";
+import selectedReducer from "./reducers/selected.reducer";
 //Screens
 import AskScreen from "./screens/AskScreen";
 import ComposeRequestScreen from "./screens/ComposeRequestScreen";
@@ -52,6 +54,7 @@ const store = createStore(
     locationReducer,
     composeRequestReducer,
     transactionInfos,
+    selectedReducer,
   })
 );
 
