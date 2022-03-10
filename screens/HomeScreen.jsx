@@ -11,6 +11,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 import Suggestions from "../components/HomeScreen/Suggestions";
@@ -115,7 +116,7 @@ const HomeScreen = ({ onSetLocation, user, navigation }) => {
             <Text style={styles.boxTitle}>Ma recherche</Text>
             <InputButton
               style={{
-                width: "100%",
+                width: Dimensions.get("window").width * 0.9,
                 height: 42,
                 backgroundColor: "white",
                 paddingLeft: 13,
@@ -158,9 +159,9 @@ const HomeScreen = ({ onSetLocation, user, navigation }) => {
                 height: 55,
                 width: 55,
                 position: "relative",
-                left: "50%",
+                left: "50.1%",
                 marginLeft: -27,
-                bottom: "64%",
+                bottom: "64.5%",
               }}
             />
           </View>

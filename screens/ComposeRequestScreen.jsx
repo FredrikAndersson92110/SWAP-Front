@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Text } from "react-native-elements";
@@ -89,6 +90,7 @@ const ComposeRequestScreen = (props) => {
       }
     }
   };
+
   const handleSubmit = () => {
     selectedCat.length > 1
       ? setErrorMessage("Vous ne pouvez choisir qu'une seul categorie")
@@ -110,7 +112,9 @@ const ComposeRequestScreen = (props) => {
         address_city: selectedAddress.address_city,
         address_zipcode: selectedAddress.address_zipcode,
       };
-      console.log(data);
+      props.navigation.navigate("ListRequestScreen", {
+        screen: "ListRequestScreen",
+      });
       props.onComposeRequest(data);
     }
   };
@@ -168,7 +172,9 @@ const ComposeRequestScreen = (props) => {
           </View>
 
           {/* ==== CATEGORIES ==== */}
-          <Text style={[styles.textTitle, { marginBottom: 0 }]}>Catégorie</Text>
+          <Text style={[styles.textTitle, { marginBottom: 10 }]}>
+            Catégorie
+          </Text>
 
           <DropDownCategories
             placeHolder={selectedCat ? selectedCat : "Choisissez une catégorie"}
@@ -183,7 +189,7 @@ const ComposeRequestScreen = (props) => {
               },
             ]}
             style={{
-              width: "100%",
+              width: Dimensions.get("window").width * 0.85,
               padding: 15,
               backgroundColor: "white",
               shadowColor: "#171717",
@@ -240,9 +246,6 @@ const ComposeRequestScreen = (props) => {
             style={styles.button}
             onPress={() => {
               handleSubmit();
-              props.navigation.navigate("ListRequestScreen", {
-                screen: "ListRequestScreen",
-              });
             }}
           >
             <Text style={styles.text}>Suivant</Text>
@@ -312,6 +315,7 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     elevation: 6,
     borderBottomWidth: 0,
+    width: Dimensions.get("window").width * 0.85,
   },
   textTitle: {
     fontSize: 18,
@@ -324,7 +328,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#F7CE46",
     alignItems: "center",
-    width: "100%",
+    width: Dimensions.get("window").width * 0.85,
     height: 45,
     borderRadius: 8,
     marginBottom: 45,
@@ -357,6 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     elevation: 6,
     marginHorizontal: 15,
+    width: Dimensions.get("window").width * 0.85,
   },
   pageTitle: {
     fontSize: 24,
@@ -398,7 +403,7 @@ const styles = StyleSheet.create({
   },
   dropContainer: {
     height: 20,
-    width: "72%",
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
     borderRadius: 7,
     borderColor: "#E7E7E7",
