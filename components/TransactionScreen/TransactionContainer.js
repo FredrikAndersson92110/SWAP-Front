@@ -133,9 +133,9 @@ const TransactionContainer = ({ transactionInfos, user }) => {
   const [active, setActive] = useState(false);
   const [confirm, setConfirm] = useState(false);
 
-  useEffect(() => {
+  useEffect((isFocused) => {
     setStatus(transactionInfos.conversationInfos.request.asker_status);
-  }, []);
+  }, [isFocused]);
   console.log(
     "USEEFFECT :",
     transactionInfos.conversationInfos.request.asker_status

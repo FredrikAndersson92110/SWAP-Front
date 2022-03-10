@@ -6,18 +6,21 @@ import {
   TouchableOpacity,
   ImageBackground,
   TouchableWithoutFeedback,
+  ScrollView,
+  TextInput,
 } from "react-native";
-import { Image, Avatar, Overlay, Button } from "react-native-elements";
+import { Image, Avatar, Overlay, Button, } from "react-native-elements";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 
 import { connect } from "react-redux";
 
 import { useNavigation } from "@react-navigation/native";
 
+
 /*---------------------------------- FUNCTION ----------------------------------*/
 function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
   const navigation = useNavigation();
-
+  const [isVisible, setIsVisible] = useState(false)
   const [overlayVisible, setOverlayVisible] = useState(true);
   // const [active, setActive] = useState(true);
 
@@ -33,10 +36,13 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
           .replace(/[\u0300-\u036f]/g, "")
   }.png`;
 
-  return (
-    // {isAsker ? (... il vous reste .. h  ) else ( félicitation! vous avez désormais ...h crédit) }
+  // overlay fin de transaction
 
+
+  return (
+    
     <View style={styles.container}>
+    
       <Overlay
         isVisible={overlayVisible}
         fullScreen
@@ -48,15 +54,27 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
             flexDirection: "column",
             justifyContent: "space-between",
           }}
-          onPress={() => setOverlayVisible(true)}
+          onPress={() => setOverlayVisible(false)}
         >
           <ImageBackground
             style={styles.ImageBackground}
             source={require("../../assets/images/background-2.png")}
             resizeMode="cover"
           >
+            <View style={{flex:1, alignItems: 'flex-end',paddingTop: 40, paddingRight: 20, }}>
+            <TouchableWithoutFeedback onPress={() => setIsVisible(true)}>
+                <AntDesign
+                  name="close"
+                  size={30}
+                  color="#000000"
+                  style={{ marginRight: 10 }}
+                />
+              </TouchableWithoutFeedback>
+            </View>
             <View style={styles.containerOverlay}>
-              <Text style={styles.textTitle2}>Merci!</Text>
+              <Text style={styles.textTitle2}>
+                Merci d'avoir utilisé SWAP!
+                </Text>
 
               <Text style={styles.bodyText}>
                 Nous avons bien pris en compte votre déclaration.
@@ -67,28 +85,30 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
                   style={styles.timeCounter}
                   source={require("../../assets/images/HomeScreen/timeCounter.png")}
                 />
-                {/* <Text
-                  style={
-                    (styles.boxTitle,
-                    {
+
+                <View style= {{alignItems: 'center', position: 'absolute', resizeMode: 'contain'}}>
+                  <Text
+                    style={{
                       fontWeight: "700",
                       fontSize: 16,
                       fontFamily: "Poppins_500Medium",
-                      // borderWidth: 4,
                       // borderColor: "green",
-                    })
-                  }
-                >
-                  Nouveau crédit temps:
-                </Text> */}
-                {/* <Text
-                  style={
-                    (styles.boxTitle,
-                    { fontSize: 25, fontFamily: "Poppins_600SemiBold" })
-                  }
-                >
-                  {user.user_credit ? user.user_credit : "1"}h
-                </Text> */}
+                      // borderWidth: 1,
+                    }}
+                  >
+                    Nouveau crédit temps:
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      fontFamily: "Poppins_600SemiBold",
+                      // borderColor: "green",
+                      // borderWidth: 1,
+                    }}
+                  >
+                    {user.user_credit ? user.user_credit : "1"}h
+                  </Text>
+                </View>
               </View>
 
               <Button
@@ -102,56 +122,6 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
           </ImageBackground>
         </TouchableOpacity>
       </Overlay>
-      
-{/* 
-      <Overlay
-        isVisible={overlayVisible}
-        fullScreen
-        overlayStyle={{ padding: 0 }}
-      >
-        <ImageBackground
-          style={styles.ImageBackground}
-          source={require("../../assets/images/background-2.png")}
-          resizeMode="cover"
-        >
-          <View style={styles.containerOverlay}>
-            <View
-              style={{
-                alignItems: "flex-end",
-                marginBottom: 20,
-                paddingTop: 50,
-              }}
-            ></View>
-
-            <Text style={styles.textTitle2}>Demande envoyée ! </Text>
-
-            <Image
-              style={styles.timeCounter}
-              source={require("../../assets/images/HomeScreen/timeCounter.png")}
-            />
-
-            <Text style={styles.bodyText}>
-              Les Swapers sélectionnés recevront une notification concernant
-              votre demande.
-            </Text>
-            <Text style={styles.bodyText}> </Text>
-            <Text style={styles.bodyText}>
-              Votre demande sera consultable par d'autres Swapers qui ont les
-              compétences requise. Ils pourront proposer de vous venir en aide.
-            </Text>
-
-            <Button
-              title="Retour à l'accueil"
-              titleStyle={styles.buttonTitle}
-              buttonStyle={styles.button}
-              containerStyle={styles.buttonContainer}
-              onPress={() => 
-                navigation.navigate("Home")               
-              }
-            />
-          </View>
-        </ImageBackground>
-      </Overlay> */}
 
       <View style={styles.vignette1}>
         {/* ajouter Touchablewithoutfeedback pour afficher le profil du collaborateur*/}
@@ -209,30 +179,45 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
       </View>
 
       {/* COMMENTAIRE */}
-
+      <ScrollView style={{flex: 1 }}>
       <View style={{ alignSelf: "flex-start" }}>
-            <Text
-              style={{
-                color: "black",
-                fontWeight: 'bold',
-                marginLeft: 35,
+      
+        <Text
+          style={{
+            color: "black",
+            fontWeight: "bold",
+            marginLeft: 35,
             fontSize: 15,
-                marginTop: 20
-              }}
-            >
-              Commentaire
-            </Text>
-          </View>
-          
-      <View style={styles.vignette2}>
-        <View style={styles.declaration}>
-          <Text style={{ fontFamily: "Poppins_400Regular" }}>
-            C'était super! C'était super! C'était super! C'était super! C'était
-            super! C'était super! C'était super! C'était super! C'était super!
-            C'était super! C'était super! C'était super!
-          </Text>
-        </View>
+            marginTop: 20,
+          }}
+        >
+          Commentaire
+        </Text>
+        
       </View>
+      
+
+      <View>
+        <View style={styles.declarationComments}>
+
+          <TextInput
+                textAlignVertical={"top"}
+                style={[styles.inputTextarea, { paddingTop: 20 }]}
+                placeholder="Laissez un commentaire au swapeur ici..."
+                placeholderTextColor="grey"
+                numberOfLines={7}
+                multiline={true}
+                onChangeText={(text) => {
+                  setDescription(text.trim());
+                }}
+              />
+
+        </View>
+        
+
+      </View>
+      </ScrollView>
+      
     </View>
   );
 }
@@ -250,24 +235,60 @@ export default connect(mapStateToProps, null)(DoubleDeclaration);
 //
 
 const styles = StyleSheet.create({
+  containerOverlay: {
+    borderRadius: 20,
+    height: "95%",
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderWidth: 4,
+    // borderColor: "purple",
+  },
   creditView: {
     alignItems: "center",
     justifyContent: "center",
     padding: 15,
-    marginTop: 40,
-    marginBottom: 180,
-    borderColor: "red",
-    borderWidth: 1,
+    marginTop: 15,
+    marginBottom: 160,
+    // borderColor: "pink",
+    // borderWidth: 3,
   },
   timeCounter: {
-    backgroundColor: "red",
-    width: 120,
-    height: 120,
+    width: 200,
+    height: 170,
     resizeMode: "contain",
-    position: "absolute",
+    // position: "absolute",
     // borderColor: "red",
     // borderWidth: 1,
-    
+  },
+  button: {
+    color: "black",
+    backgroundColor: "#F7CE46",
+    borderRadius: 10,
+    paddingVertical: 10,
+    marginHorizontal: 6,
+    shadowColor: "#171717",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+  },
+  buttonContainer: {
+    width: "100%",
+    marginBottom: 100,
+    padding: 15,
+    // borderColor: "pink",
+    // borderWidth: 3,
+  },
+  buttonTitle: {
+    color: "black",
+    fontSize: 18,
+    fontFamily: "Poppins_600SemiBold",
   },
   container: {
     flex: 1,
@@ -300,21 +321,21 @@ const styles = StyleSheet.create({
     elevation: 3,
     justifyContent: "center",
   },
-  vignette2: {
-    maxHeight: "17%",
-    paddingTop: 10,
-    paddingBottom: 10,
-    width: 330,
-    fontSize: 13,
-    margin: 15,
-    borderWidth: 0.5,
-    paddingLeft: 15,
-    borderRadius: 15,
-    borderColor: "#E7E7E7",
-    backgroundColor: "#FFFFFF",
-    elevation: 3,
-    justifyContent: "center",
-  },
+  // vignette2: {
+    // maxHeight: "17%",
+    // paddingTop: 10,
+    // paddingBottom: 10,
+    // width: 330,
+    // fontSize: 13,
+    // margin: 15,
+    // borderWidth: 0.5,
+    // paddingLeft: 15,
+    // borderRadius: 15,
+    // borderColor: "#E7E7E7",
+    // backgroundColor: "#FFFFFF",
+    // elevation: 3,
+    // justifyContent: "center",
+  // },
   pageTop: {
     alignSelf: "flex-start",
     justifyContent: "space-between",
@@ -329,6 +350,9 @@ const styles = StyleSheet.create({
     width: 180,
     justifyContent: "space-between",
   },
+  declarationComments: {
+
+  },
   titles: {
     marginTop: 25,
     marginLeft: 5,
@@ -340,26 +364,28 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "Poppins_400Regular",
   },
-  containerOverlay: {
-    borderRadius: 20,
-    height: "95%",
-    width: "100%",
-    position: "absolute",
-    bottom: 0,
+  inputTextarea: {
+    padding: 20,
+    width : 325,
+    marginHorizontal: 15,
+    textAlign: "left",
+    backgroundColor: "white",
+    fontFamily: "Poppins_400Regular",
+    borderRadius: 10,
+    color: "black",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 4,
-    borderColor: "purple",
+    elevation: 6,
+    borderBottomWidth: 0,
   },
+
   textTitle2: {
     fontSize: 17,
     fontFamily: "Poppins_700Bold",
     marginLeft: 10,
-    marginTop: 70,
+    marginTop: 90,
     marginBottom: 10,
     textAlign: "center",
     // borderWidth: 4,
@@ -377,28 +403,7 @@ const styles = StyleSheet.create({
     // borderWidth: 4,
     // borderColor: "pink",
   },
-  button: {
-    color: "black",
-    backgroundColor: "#F7CE46",
-    borderRadius: 10,
-    paddingVertical: 10,
-    marginHorizontal: 6,
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-  },
-  buttonContainer: {
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 60,
-    padding: 15,
-  },
-  buttonTitle: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Poppins_600SemiBold",
-  },
+  
   ImageBackground: {
     width: "100%",
     height: "100%",
