@@ -330,7 +330,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
                 flexDirection: "row",
                 marginTop: 20,
                 width: 280,
-                justifyContent: "space-even",
+                justifyContent: "space-between",
               }}
             >
               {/* CHECK 1 */}

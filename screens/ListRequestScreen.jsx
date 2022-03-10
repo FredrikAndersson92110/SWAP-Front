@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Dimensions,
 } from "react-native";
 import { Button, CheckBox, Input, Overlay, Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -292,7 +293,7 @@ function ListRequestScreen(props) {
               <View style={styles.container}>
                 <View
                   style={{
-                    alignItems: "flex-end",
+      
                     marginBottom: 20,
                     paddingTop: 50,
                   }}
@@ -300,13 +301,10 @@ function ListRequestScreen(props) {
 
                 <Text style={styles.textTitle2}>Demande envoyée ! </Text>
 
-                {/* <View style={styles.container2}>
+                <View style={styles.container2}>
                   <AntDesign name="checkcircle" size={100} color="#F7CE46" />
-                </View> */}
-                <Image
-                     style={styles.timeCounter}
-                    source={require("../assets/images/HomeScreen/timeCounter.png")}
-                    />
+                </View>
+                
 
                 <Text style={styles.bodyText}>
                   Les Swapers sélectionnés recevront une notification concernant
@@ -367,16 +365,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(ListRequestScreen);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    
     paddingHorizontal: 10,
+
+    height: Dimensions.get('window').height*1,
+    width: Dimensions.get('window').width*1,
   },
   
   container2: {
-    flex: 1,
+  
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 170,
-    marginBottom: 140,
+    marginTop: 100,
+    marginBottom: 60,
+    
+    width: Dimensions.get('window').width*0.94,
+    height: Dimensions.get('window').height*0.2,
+    
+    
+    
   },
   containerCheckBox: {
     flex: 1,
@@ -388,7 +395,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     textAlign: "left",
     backgroundColor: "white",
+    // borderWidth : 2,
     borderRadius: 10,
+    // borderColor: "red",
     color: "black",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
@@ -438,6 +447,7 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     borderRadius: 15,
     marginBottom: 30,
+    
   },
   avatar: {
     borderRadius: 50,
@@ -457,23 +467,27 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
+   
   },
   buttonContainer: {
     width: "100%",
     marginTop: 20,
     marginBottom: 60,
     padding: 15,
+   
   },
   buttonTitle: {
     color: "black",
     fontSize: 18,
     fontFamily: "Poppins_600SemiBold",
+    
   },
   ImageBackground: {
     width: "100%",
     height: "100%",
     flex: 1,
     justifyContent: "center",
+  
   },
   card: {
     alignItems: "center",
@@ -489,6 +503,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 13,
     paddingBottom: 20,
     marginBottom: 20,
+    
   },
   pageTitle: {
     fontSize: 24,
@@ -506,20 +521,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Poppins_400Regular",
     marginLeft: 25,
-    paddingHorizontal: 20,
-    marginRight: 25
+    paddingHorizontal: 10,
+    marginRight: 20
+    
   },
   bodyText2: {
     color: "#717171",
     fontSize: 14,
     fontWeight: "400",
+
   },
   icon: {
     marginRight: 10,
+  
   },
 
   contentContainer: {
     flex: 1,
     alignItems: "center",
+  
   },
 });
