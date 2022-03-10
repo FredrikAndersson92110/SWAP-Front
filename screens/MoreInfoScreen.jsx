@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 //Composants
@@ -78,55 +79,62 @@ const MoreInfoScreen = (props) => {
         <View
           style={{
             marginTop: 80,
-            alignContent: "center",
+            alignItems: "center",
           }}
         >
           {/* ──────────────────── DATE DE NAISSANCE ──────────────────── */}
-          <Text style={styles.label}>Date de naissance</Text>
-          <InputBirthDate />
+          <View>
+            <Text style={styles.label}>Date de naissance</Text>
+            <InputBirthDate />
+          </View>
 
           {/* ────────────────────GENRE──────────────────── */}
-          <Text style={styles.label}>Genre</Text>
-          <DropDownGender />
+          <View>
+            <Text style={styles.label}>Genre</Text>
+            <DropDownGender />
+          </View>
 
           {/* ────────────────────CATEGORIES──────────────────── */}
-
-          <Text style={styles.label}>Catégories</Text>
-
-          {/* <DropDownCategories /> */}
-          <DropDownCategories
-            placeHolder={"Choisissez une catégorie"}
-            containerStyle={[
-              styles.card,
-              {
-                height: 200,
-                marginBottom: 200,
-                width: "100%",
-                paddingHorizontal: 0,
-                paddingVertical: 10,
-              },
-            ]}
-            style={{
-              width: 330,
-              paddingVertical: 5,
-              backgroundColor: "white",
-              shadowColor: "#171717",
-              shadowOffset: { width: 1, height: 5 },
-              shadowOpacity: 0.2,
-              shadowRadius: 7,
-              borderRadius: 7,
-              elevation: 6,
-              paddingHorizontal: 30,
-            }}
-            onChange={(item) => {
-              // categoriesSelected = [];
-              // categoriesSelected.push(item);
-              // setSelectedCat();
-              // setSelectedCat(item);
-              // console.log("selectedCat", selectedCat);
-              // handleCategories();
-            }}
-          />
+<View>
+  
+            <Text style={styles.label}>Catégories</Text>
+  
+            {/* <DropDownCategories /> */}
+            <DropDownCategories
+              placeHolder={"Choisissez une catégorie"}
+              containerStyle={[
+                styles.card,
+                {
+                  height: 200,
+                  marginBottom: 200,
+                  width: Dimensions.get("window").width * 0.85,
+                  paddingHorizontal: 0,
+                  paddingVertical: 10,
+                },
+              ]}
+              style={{
+                width: Dimensions.get("window").width * 0.85,
+                paddingVertical: 5,
+                backgroundColor: "white",
+                shadowColor: "#171717",
+                shadowOffset: { width: 1, height: 5 },
+                shadowOpacity: 0.2,
+                shadowRadius: 7,
+                borderRadius: 7,
+                elevation: 6,
+                paddingHorizontal: 30,
+                marginTop: 20
+              }}
+              onChange={(item) => {
+                // categoriesSelected = [];
+                // categoriesSelected.push(item);
+                // setSelectedCat();
+                // setSelectedCat(item);
+                // console.log("selectedCat", selectedCat);
+                // handleCategories();
+              }}
+            />
+</View>
           <Text style={styles.error}>{error}</Text>
           {/* PHRASE D'EXPLICATION */}
           <Text
@@ -178,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7CE46",
     alignItems: "center",
     justifyContent: "center",
-    width: 330,
+    width: Dimensions.get("window").width * 0.85,
     paddingVertical: 8,
     borderRadius: 8,
     elevation: 3,
@@ -210,7 +218,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: "center",
     height: 40,
-    width: 330,
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
     borderWidth: 2,
     borderRadius: 5,
@@ -228,7 +236,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 40,
-    width: 300,
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
     // margin: 15,
     borderWidth: 2,

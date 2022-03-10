@@ -6,14 +6,16 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
-
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { connect } from "react-redux";
+import SkeletonContent from "react-native-skeleton-content";
 
 /* -----------------------------FUNCTION---------------------------------------*/
 
 // syntaxe REVERSE DATA FLOW (cf My Moviz)
 // props destructurés, issues du composant parent "Interactions"
+
 function Conversation({
   name,
   useravatar,
@@ -26,61 +28,64 @@ function Conversation({
   const navigation = useNavigation();
 
   var openTransaction = () => {
-    getTransactionInfos( conversationInfos, isAsker)
-    console.log('AU CLICK SUR UNE CONVERSATION:', conversationInfos, isAsker)
-  }
+    getTransactionInfos(conversationInfos, isAsker);
+    console.log("AU CLICK SUR UNE CONVERSATION:", conversationInfos, isAsker);
+  };
 
   return (
     <>
       <TouchableWithoutFeedback>
-        <ListItem
-        Component={TouchableOpacity}
-        onPress={()=> {openTransaction(), navigation.navigate("TransactionScreen")}}
-          containerStyle={{
-            backgroundColor: "transparent",
-          }}
-          style={{ width: "100%" }}
-          disabledStyle={{ opacity: 0.5 }}
-          pad={20}
-        >
-          <Avatar
-            rounded
-            size="medium"
-            source={{ uri: useravatar }}
-            avatarStyle={{
-              borderWidth: 3,
-              borderColor: isAsker ? "#F7CE46" : "#253a78",
+
+          <ListItem
+            Component={TouchableOpacity}
+            onPress={() => {
+              openTransaction(), navigation.navigate("TransactionScreen");
             }}
-          />
-          <View style={{ flex: 1, justifyContent: "space-around" }}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "column",
-                justifyContent: "space-between",
+            containerStyle={{
+              backgroundColor: "transparent",
+            }}
+            style={{ width: "100%" }}
+            disabledStyle={{ opacity: 0.5 }}
+            pad={20}
+          >
+            <Avatar
+              rounded
+              size="medium"
+              source={{ uri: useravatar }}
+              avatarStyle={{
+                borderWidth: 3,
+                borderColor: isAsker ? "#F7CE46" : "#253a78",
               }}
-            >
-              <Text style={styles.boxText}>{name}</Text>
+            />
+            <View style={{ flex: 1, justifyContent: "space-around" }}>
               <View
                 style={{
-                  flexDirection: "row",
+                  flex: 1,
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <Text style={{ color: "#8B8B8B" }}>
-                  {isAsker ? "Demande:" : "Mission:"}{" "}
-                </Text>
-                <Text style={{ fontFamily: "Poppins_700Bold" }}>
-                  {category}
-                </Text>
+                <Text style={styles.boxText}>{name}</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  <Text style={{ color: "#8B8B8B" }}>
+                    {isAsker ? "Demande:" : "Mission:"}
+                  </Text>
+                  <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                    {category}
+                  </Text>
+                </View>
               </View>
+              <Text
+                style={{ color: "#8B8B8B", fontFamily: "Poppins_400Regular" }}
+              >
+                {lastMessage.message}
+              </Text>
             </View>
-            <Text
-              style={{ color: "#8B8B8B", fontFamily: "Poppins_400Regular" }}
-            >
-              {lastMessage.message}
-            </Text>
-          </View>
-        </ListItem>
+          </ListItem>
       </TouchableWithoutFeedback>
       <View
         style={{

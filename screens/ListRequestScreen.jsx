@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Dimensions
 } from "react-native";
 import { Button, CheckBox, Input, Overlay, Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -74,6 +75,7 @@ function ListRequestScreen(props) {
               marginBottom: 10,
               marginTop: 7,
               marginHorizontal: 15,
+              width: Dimensions.get("window").width * 0.85,
             }}
             placeHolder={props.composeRequest.category}
           />
@@ -95,6 +97,7 @@ function ListRequestScreen(props) {
               marginBottom: 20,
               marginTop: 0,
               marginHorizontal: 15,
+              width: Dimensions.get("window").width * 0.85,
             }}
             activeOpacity={1}
           >
@@ -176,7 +179,7 @@ function ListRequestScreen(props) {
               <View>
                 <Text style={styles.cardTitle}>Yanis</Text>
                 <Text style={styles.bodyText2}>
-                  Propose des cours de  swahili
+                  Propose des cours de swahili
                 </Text>
               </View>
               <TouchableWithoutFeedback
@@ -250,9 +253,7 @@ function ListRequestScreen(props) {
 
               <View>
                 <Text style={styles.cardTitle}>Alicia</Text>
-                <Text style={styles.bodyText2}>
-                  Propose promenades animaux
-                </Text>
+                <Text style={styles.bodyText2}>Propose promenades animaux</Text>
               </View>
               <TouchableWithoutFeedback
                 onPress={() => {
@@ -279,7 +280,7 @@ function ListRequestScreen(props) {
             onPress={() => toggleOverlay()}
           />
 
-<Overlay
+          <Overlay
             isVisible={overlayVisible}
             fullScreen
             overlayStyle={{ padding: 0 }}
@@ -304,9 +305,9 @@ function ListRequestScreen(props) {
                   <AntDesign name="checkcircle" size={100} color="#F7CE46" />
                 </View> */}
                 <Image
-                     style={styles.timeCounter}
-                    source={require("../assets/images/HomeScreen/timeCounter.png")}
-                    />
+                  style={styles.timeCounter}
+                  source={require("../assets/images/HomeScreen/timeCounter.png")}
+                />
 
                 <Text style={styles.bodyText}>
                   Les Swapers sélectionnés recevront une notification concernant
@@ -332,7 +333,6 @@ function ListRequestScreen(props) {
               </View>
             </ImageBackground>
           </Overlay>
-
         </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
-  
+
   container2: {
     flex: 1,
     flexDirection: "row",
@@ -396,23 +396,9 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     elevation: 6,
     borderBottomWidth: 0,
+    width: Dimensions.get("window").width * 0.85,
   },
-  inputTextarea: {
-    paddingLeft: 20,
-    paddingTop: 20,
-    paddingRight: 15,
-    marginHorizontal: 6,
-    textAlign: "left",
-    backgroundColor: "white",
-    borderRadius: 10,
-    color: "black",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
-    borderBottomWidth: 0,
-  },
+
   textTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -507,7 +493,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     marginLeft: 25,
     paddingHorizontal: 20,
-    marginRight: 25
+    marginRight: 25,
   },
   bodyText2: {
     color: "#717171",

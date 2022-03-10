@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions
 } from "react-native";
 import { Image, Input } from "react-native-elements";
 import { connect } from "react-redux";
@@ -145,7 +146,13 @@ const SignInScreen = (props) => {
             />
           </View>
           {/* BOUTON VALIDER*/}
-          <View>
+          <View
+            style={{
+              justifyContent: "flex-end",
+              position: "absolute",
+              bottom: Dimensions.get("window").height * 0.07,
+            }}
+          >
             <TouchableOpacity
               style={styles.button}
               onPress={async () => {
@@ -196,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7CE46",
     alignItems: "center",
     justifyContent: "center",
-    width: 330,
+    width: Dimensions.get("window").width * 0.85,
     paddingVertical: 8,
     borderRadius: 8,
     elevation: 3,
@@ -206,8 +213,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 7,
     elevation: 10,
-    padding: 15,
-    width: 310,
+    width: Dimensions.get("window").width * 0.85,
   },
   text: {
     color: "#000000",
@@ -217,12 +223,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 330,
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
     margin: 15,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "#E7E7E7",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },

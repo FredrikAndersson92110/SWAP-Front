@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { connect } from "react-redux";
 
@@ -53,11 +53,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 40,
-    width: "100%",
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
-    borderWidth: 2,
     paddingLeft: 15,
-    borderRadius: 7,
+    borderRadius: 10,
     borderColor: "#E7E7E7",
     shadowColor: "#171717",
     shadowOffset: { width: 1, height: 5 },
