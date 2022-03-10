@@ -34,7 +34,7 @@ function ListRequestScreen({
     if (isFocused) {
       async function getUsers() {
         let request = await fetch(
-          `http://192.168.10.137:3000/users-by-category/${composeRequest.category}`
+          `https://swapapp-backend.herokuapp.com/users-by-category/${composeRequest.category}`
         );
         let response = await request.json();
         if (response.status) {
@@ -52,7 +52,7 @@ function ListRequestScreen({
   };
 
   const handleSubmit = async () => {
-    let request = await fetch("http://192.168.10.137:3000/add-request", {
+    let request = await fetch("https://swapapp-backend.herokuapp.com/add-request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
