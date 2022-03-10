@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  ImageBackground, StyleSheet, Text, TouchableOpacity, View
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
 } from "react-native";
 import { Image, Input } from "react-native-elements";
 import { connect } from "react-redux";
@@ -184,7 +189,12 @@ const SignUpScreen = (props) => {
           </View>
 
           {/* BOUTONS INSCRIPTION */}
-          <View style={{ justifyContent: "flex-end" }}>
+          <View style={{
+            justifyContent: "flex-end",
+            position: "absolute",
+            bottom: Dimensions.get("window").height *0.07,
+
+          }}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
@@ -236,8 +246,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#F7CE46",
     alignItems: "center",
-    width: 330,
-    paddingVertical: 12,
+    width: Dimensions.get("window").width * 0.85,
+    paddingVertical: 8,
     paddingHorizontal: 32,
     borderRadius: 8,
     elevation: 3,
@@ -251,12 +261,12 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    width: 330,
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
     margin: 15,
     borderWidth: 0.5,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,

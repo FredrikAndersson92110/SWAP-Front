@@ -8,6 +8,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  Dimensions
 } from "react-native";
 import SwipeCards from "react-native-swipe-cards-deck";
 import { connect } from "react-redux";
@@ -213,8 +214,10 @@ function TinderScreen({
             flex: 1,
             padding: 15,
             marginTop: 20,
-            marginLeft: 50,
-            marginRight: 50,
+            
+            // marginLeft: 50,
+            // marginRight: 50,
+            width: Dimensions.get("window").width * 0.85,
           }}
         >
           <View style={styles.container}>
@@ -254,16 +257,15 @@ function TinderScreen({
           <View
             style={{
               position: "absolute",
+              alignItems: "center",
               paddingHorizontal: 20,
               marginTop: 0,
               flexDirection: "row",
-              width: "140%",
-              left: -20,
+              width: Dimensions.get("window").width * 0.85,
             }}
           >
             <Text style={styles.pageTitle}>Demandes à proximité</Text>
             <TouchableWithoutFeedback
-              style={{ zIndex: 10, position: "absolute" }}
               onPress={() => {
                 console.log("close");
                 navigation.navigate("Home");
@@ -323,6 +325,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 70,
+    alignItems: "center"
   },
   container2: {
     // borderRadius: 70,
@@ -336,7 +339,8 @@ const styles = StyleSheet.create({
   container3: {
     position: "absolute",
     top: 0,
-    right: 20,
+    right: Dimensions.get('window').width * -0.02,
+
     zIndex: 20,
   },
   button: {
@@ -399,8 +403,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     marginRight: 70,
-    width: "130%",
-    left: -15
+    width: Dimensions.get("window").width * 0.85,
+    left: Dimensions.get('window').width * -0.05,
+
   },
   cardTitle: {
     fontSize: 16,
@@ -420,7 +425,7 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     // width: "75%",
     // height: 30,
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   handText: {
     fontFamily: "Poppins_600SemiBold",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { Input } from "react-native-elements";
 import { connect } from "react-redux";
 
@@ -24,7 +24,7 @@ const InputBirthDate = (props) => {
 
 
   return (
-    <View style={props.style}>
+    <View >
       <Input
         containerStyle={styles.input}
         inputStyle={{ fontSize: 13 }}
@@ -58,11 +58,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: "100%",
+    width: Dimensions.get("window").width * 0.85,
     fontSize: 13,
-    borderWidth: 2,
     paddingLeft: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "#E7E7E7",
     backgroundColor: "#FFFFFF",
     elevation: 3,
@@ -70,6 +69,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 7,
+    marginTop: 15
   },
   error: {
     position: "absolute",

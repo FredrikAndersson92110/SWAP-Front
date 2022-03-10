@@ -124,6 +124,7 @@ function ListRequestScreen({
               marginBottom: 10,
               marginTop: 7,
               marginHorizontal: 15,
+              width: Dimensions.get("window").width * 0.85,
             }}
             placeHolder={composeRequest.category}
           />
@@ -145,6 +146,7 @@ function ListRequestScreen({
               marginBottom: 20,
               marginTop: 0,
               marginHorizontal: 15,
+              width: Dimensions.get("window").width * 0.85,
             }}
             activeOpacity={1}
           >
@@ -314,23 +316,9 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     elevation: 6,
     borderBottomWidth: 0,
+    width: Dimensions.get("window").width * 0.85,
   },
-  inputTextarea: {
-    paddingLeft: 20,
-    paddingTop: 20,
-    paddingRight: 15,
-    marginHorizontal: 6,
-    textAlign: "left",
-    backgroundColor: "white",
-    borderRadius: 10,
-    color: "black",
-    shadowColor: "#171717",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 7,
-    elevation: 6,
-    borderBottomWidth: 0,
-  },
+
   textTitle: {
     fontSize: 18,
     fontWeight: "bold",

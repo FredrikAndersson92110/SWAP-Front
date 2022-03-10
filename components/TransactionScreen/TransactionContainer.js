@@ -406,7 +406,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
           }}
         >
           <View style={styles.contentContainer}>
-            <View style={{ width: "100%", marginLeft: 15, marginTop: 20 }}>
+            <View style={{ width: "100%", marginLeft: 15, marginTop: 10 }}>
               <Text style={styles.titre}>Messages</Text>
             </View>
 

@@ -185,12 +185,12 @@ function DetailScreen({
             width: "100%",
           }}
         >
-          <TouchableOpacity style={styles.button} onPress={handleAccept}>
-            <Text style={styles.buttonTitle}>Accepter</Text>
+          <TouchableOpacity style={styles.buttonBlack} onPress={handleAccept}>
+            <Text style={styles.buttonTitleBlack}>Refuser</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonBlack} onPress={handleRefuse}>
-            <Text style={styles.buttonTitleBlack}>Refuser</Text>
+          <TouchableOpacity style={styles.button} onPress={handleRefuse}>
+            <Text style={styles.buttonTitle}>Accepter</Text>
           </TouchableOpacity>
         </View>
       </View>
