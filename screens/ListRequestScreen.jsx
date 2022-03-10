@@ -34,7 +34,7 @@ function ListRequestScreen({
     if (isFocused) {
       async function getUsers() {
         let request = await fetch(
-          `http://192.168.10.137:3000/users-by-category/${composeRequest.category}`
+          `https://swapapp-backend.herokuapp.com/users-by-category/${composeRequest.category}`
         );
         let response = await request.json();
         if (response.status) {
@@ -208,9 +208,9 @@ function ListRequestScreen({
                   <AntDesign name="checkcircle" size={100} color="#F7CE46" />
                 </View> */}
                 <Image
-                     style={styles.timeCounter}
-                    source={require("../assets/images/HomeScreen/timeCounter.png")}
-                    />
+                  style={styles.timeCounter}
+                  source={require("../assets/images/HomeScreen/timeCounter.png")}
+                />
 
                 <Text style={styles.bodyText}>
                   Les Swapers sélectionnés recevront une notification concernant
