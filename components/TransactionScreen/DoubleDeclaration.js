@@ -159,7 +159,7 @@ function DoubleDeclaration({ category, avatar, firstName, isAsker, user }) {
                     fontFamily: "Poppins_400Regular",
                   }}
                 >
-                  Demande de bricolage
+                  Demande de Persan
                 </Text>
               </View>
             </View>
