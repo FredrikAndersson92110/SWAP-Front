@@ -1,11 +1,12 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, {
   useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
 import {
   ImageBackground,
@@ -15,20 +16,16 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 import { connect } from "react-redux";
+//Socket
+import socketIOClient from "socket.io-client";
 import Confirmation from "./Confirmation";
 import Declaration from "./Declaration";
 import DoubleDeclaration from "./DoubleDeclaration";
 
-//Socket
-import socketIOClient from "socket.io-client";
 var socket = socketIOClient("https://swapapp-backend.herokuapp.com");
-import { useNavigation, useIsFocused } from "@react-navigation/native";
-
-import { log } from "react-native-reanimated";
-
 
 
 const TransactionContainer = ({ transactionInfos, user }) => {
@@ -36,7 +33,7 @@ const TransactionContainer = ({ transactionInfos, user }) => {
 
   const navigation = useNavigation();
 
-    // WEB SOCKET CHAT
+  // WEB SOCKET CHAT
   const [currentMessage, setCurrentMessage] = useState("");
   const [listMessage, setListMessage] = useState([]);
 
@@ -114,7 +111,6 @@ const TransactionContainer = ({ transactionInfos, user }) => {
   // end
 
   let bottom = Platform.OS === "ios" ? 70 : 50;
- 
 
   //
   // ─── CONST CHAT ─────────────────────────────────────────────────────────────────
@@ -133,151 +129,169 @@ const TransactionContainer = ({ transactionInfos, user }) => {
   const [active, setActive] = useState(false);
   const [confirm, setConfirm] = useState(false);
 
-  useEffect((isFocused) => {
-    setStatus(transactionInfos.conversationInfos.request.asker_status);
-  }, [isFocused]);
+  useEffect(
+    (isFocused) => {
+      setStatus(transactionInfos.conversationInfos.request.asker_status);
+    },
+    [isFocused]
+  );
   console.log(
     "USEEFFECT :",
     transactionInfos.conversationInfos.request.asker_status
   );
 
-     // dynamise les pastilles
-    let vert = "#399F09";
-    let jaune = "#F7CE46";
-    let gris = "#DDDDDD";
-    var transactionStatus;
-    var color1;
-    var color2;
-    var color3;
-    if (status === 0) {
-      color1 = vert;
-      color2 = jaune;
-      color3 = gris;
-      transactionStatus = "En attente de confirmation";
-    } else if (status === 1) {
-      color1 = vert;
-      color2 = vert;
-      color3 = gris;
-      transactionStatus = "En attente de déclaration";
-    } else if (status === 2) {
-      color1 = vert;
-      color2 = vert;
-      color3 = jaune;
-      transactionStatus = "En attente de déclaration du swaper";
-    } else if (status === 3) {
-      color1 = vert;
-      color2 = vert;
-      color3 = vert;
-      transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
-    }
-
-
+  // dynamise les pastilles
+  let vert = "#399F09";
+  let jaune = "#F7CE46";
+  let gris = "#DDDDDD";
+  var transactionStatus;
+  var color1;
+  var color2;
+  var color3;
+  if (status === 0) {
+    color1 = vert;
+    color2 = jaune;
+    color3 = gris;
+    transactionStatus = "En attente de confirmation";
+  } else if (status === 1) {
+    color1 = vert;
+    color2 = vert;
+    color3 = gris;
+    transactionStatus = "En attente de déclaration";
+  } else if (status === 2) {
+    color1 = vert;
+    color2 = vert;
+    color3 = jaune;
+    transactionStatus = "En attente de déclaration du swaper";
+  } else if (status === 3) {
+    color1 = vert;
+    color2 = vert;
+    color3 = vert;
+    transactionStatus = "Vous êtes riche! votre crédit est de 500 heures!! ";
+  }
 
   //
   // ────────────────────────────────────────────────────── I ──────────
   //   :::::: R E N D E R S : :  :   :    :     :        :          :
   // ────────────────────────────────────────────────────────────────
   //
-    // affichage des composants selon le statut de la transaction
-    var components;
-    if (status === 0) {
-      if(transactionInfos.isAsker) {
+  // affichage des composants selon le statut de la transaction
+  var components;
+  if (status === 0) {
+    if (transactionInfos.isAsker) {
       //  si je suis asker
-      components = <Confirmation
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.conversation_id.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
-                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      // disponibility={}
-                      // location={}
-                      />
-                    } else {
+      components = (
+        <Confirmation
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.conversation_id.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={
+            transactionInfos.conversationInfos.conversation_id.firstName
+          }
+          avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+          // disponibility={}
+          // location={}
+        />
+      );
+    } else {
       //  si je suis helper
-      components = <Confirmation
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.request.asker.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
-                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      // disponibility={}
-                      // location={}
-                      />  
-                    }
-    } else if (status === 1) {
-      if(transactionInfos.isAsker) {
-      components = <Declaration 
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.conversation_id.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
-                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      />
-                    } else {
-      components = <Declaration 
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.request.asker.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
-                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      />
-                    }
-    } else if (status === 2) {
-      if(transactionInfos.isAsker) {
-      components = <DoubleDeclaration 
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.conversation_id.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.conversation_id.firstName}
-                      avatar={transactionInfos.conversationInfos.conversation_id.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      />
-                    } else {
-        components = <DoubleDeclaration 
-                      isAsker={transactionInfos.isAsker}
-                      token={transactionInfos.conversationInfos.request.asker.token}
-                      requestId={transactionInfos.conversationInfos.requestId}
-                      firstName={transactionInfos.conversationInfos.request.asker.firstName}
-                      avatar={transactionInfos.conversationInfos.request.asker.user_img}
-                      category={transactionInfos.conversationInfos.request.category}
-                      description={transactionInfos.conversationInfos.request.description}
-                      />
-      }
+      components = (
+        <Confirmation
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.request.asker.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={transactionInfos.conversationInfos.request.asker.firstName}
+          avatar={transactionInfos.conversationInfos.request.asker.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+          // disponibility={}
+          // location={}
+        />
+      );
     }
+  } else if (status === 1) {
+    if (transactionInfos.isAsker) {
+      components = (
+        <Declaration
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.conversation_id.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={
+            transactionInfos.conversationInfos.conversation_id.firstName
+          }
+          avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+        />
+      );
+    } else {
+      components = (
+        <Declaration
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.request.asker.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={transactionInfos.conversationInfos.request.asker.firstName}
+          avatar={transactionInfos.conversationInfos.request.asker.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+        />
+      );
+    }
+  } else if (status === 2) {
+    if (transactionInfos.isAsker) {
+      components = (
+        <DoubleDeclaration
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.conversation_id.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={
+            transactionInfos.conversationInfos.conversation_id.firstName
+          }
+          avatar={transactionInfos.conversationInfos.conversation_id.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+        />
+      );
+    } else {
+      components = (
+        <DoubleDeclaration
+          isAsker={transactionInfos.isAsker}
+          token={transactionInfos.conversationInfos.request.asker.token}
+          requestId={transactionInfos.conversationInfos.requestId}
+          firstName={transactionInfos.conversationInfos.request.asker.firstName}
+          avatar={transactionInfos.conversationInfos.request.asker.user_img}
+          category={transactionInfos.conversationInfos.request.category}
+          description={transactionInfos.conversationInfos.request.description}
+        />
+      );
+    }
+  }
 
-    let source = require("../../assets/avatar.png");
+  let source = require("../../assets/avatar.png");
 
+  // useEffect(() => {
+  //   socket.on("sendMessageToAll", (messageData) => {
+  //     setListMessage([...listMessage, messageData]);
+  //   });
+  // }, [listMessage]);
 
-    // useEffect(() => {
-    //   socket.on("sendMessageToAll", (messageData) => {
-    //     setListMessage([...listMessage, messageData]);
-    //   });
-    // }, [listMessage]);
+  // var chatMessages = listMessage.map((messageData, i) => {
+  //   var msg = messageData.message.replace(/:\)/g, '\u263A');
+  //   msg = msg.replace(/:\(/g, '\u2639');
+  //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
+  //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
 
-    // var chatMessages = listMessage.map((messageData, i) => {
-    //   var msg = messageData.message.replace(/:\)/g, '\u263A');
-    //   msg = msg.replace(/:\(/g, '\u2639');
-    //   msg = msg.replace(/:p/g, '\uD83D\uDE1B');
-    //   var msg = msg.replace(/[a-z]*fuck[a-z]*/gi, '\u2022\u2022\u2022');
-
-    //       return(
-    //         <ListItem key={i}>
-    //           <ListItem.Content>
-    //             <ListItem.Title>{msg}</ListItem.Title>
-    //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
-    //           </ListItem.Content>
-    //         </ListItem>
-    //       )
-    //     });
+  //       return(
+  //         <ListItem key={i}>
+  //           <ListItem.Content>
+  //             <ListItem.Title>{msg}</ListItem.Title>
+  //             <ListItem.Subtitle>{messageData.pseudo}</ListItem.Subtitle>
+  //           </ListItem.Content>
+  //         </ListItem>
+  //       )
+  //     });
 
   return (
     <ImageBackground
@@ -484,8 +498,6 @@ const TransactionContainer = ({ transactionInfos, user }) => {
     </ImageBackground>
   );
 };
-
-
 
 function mapStateToProps(state) {
   return { transactionInfos: state.transactionInfos, user: state.userReducer };

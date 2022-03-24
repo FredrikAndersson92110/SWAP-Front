@@ -14,6 +14,7 @@ import SwipeCards from "react-native-swipe-cards-deck";
 import { connect } from "react-redux";
 import getDistance from "../components/helpers";
 
+
 function Card({ data }) {
   console.log("data", data);
   return (
@@ -87,6 +88,8 @@ function Card({ data }) {
   );
 }
 
+
+
 function StatusCard({ text }) {
   return (
     <View>
@@ -94,6 +97,8 @@ function StatusCard({ text }) {
     </View>
   );
 }
+
+
 
 function TinderScreen({
   userLocation,
@@ -111,7 +116,8 @@ function TinderScreen({
         let request = await fetch(
           `https://swapapp-backend.herokuapp.com/match-categories/${user.token}`
         );
-        // CyfMgR7UvrILzTVS5keCCY2gPaqy9njx
+
+        //! PART 1 : On récupère la Lcoalisation User, puis on determine la distance avec les matchs
         let response = await request.json();
         // console.log(response)
         if (response.status) {
@@ -138,6 +144,7 @@ function TinderScreen({
                 };
               })
             );
+            // Enregistrement des matchs dans le store
             onMatchCategories(promise);
           } catch (error) {
             console.error(error);
@@ -150,10 +157,11 @@ function TinderScreen({
     }
   }, []);
 
-  // PART 2 DU USEEFFECT : DATA POUR LES CARDS
-  console.log(" ------ MATCH ------", categoryMatches);
+  //! PART 2 DU USEEFFECT : DATA POUR LES CARDS
+
+  // console.log(" ------ MATCH ------", categoryMatches);
   let cardsArray = categoryMatches.map((request, i) => {
-    console.log("----request-----", request.category);
+    // console.log("----request-----", request.category);
     return {
       key: i,
       title: request.category.sub_category
@@ -178,13 +186,8 @@ function TinderScreen({
       disponibility: request.asker.disponibilty
         ? request.asker.disponibilty
         : "Non précisé",
-      // description: request.asker.description,
     };
   });
-  setTimeout(() => {
-    console.log("hey");
-    // setCards(cardsArray);
-  }, 2000);
 
   function handleYup(card) {
     console.log(`OMG YEAH for ${card.text}`);
@@ -253,6 +256,8 @@ function TinderScreen({
             )}
           </View>
 
+          
+
           {/* DEBUT TITRE PAGE + CROIX NAVIGATION */}
           <View
             style={{
@@ -278,6 +283,8 @@ function TinderScreen({
           </View>
           {/* FIN TITRE PAGE + CROIX NAVIGATION */}
 
+          
+          
           {/* FOOTER PAGE */}
           <View style={styles.container2}>
             <View style={{ justifyContent: "center", alignItems: "center" }}>

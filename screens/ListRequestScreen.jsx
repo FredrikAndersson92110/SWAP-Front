@@ -1,21 +1,19 @@
+import { AntDesign } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Image,
+  Dimensions, Image,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  View,
-  Dimensions,
+  View
 } from "react-native";
 import { Button, Overlay, Text } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import InputButton from "../components/InputButton";
 import { connect } from "react-redux";
-import BottomSheet from "@gorhom/bottom-sheet";
-
+import InputButton from "../components/InputButton";
 import Card from "../components/ListRequestScreen/Card";
+
 
 function ListRequestScreen({
   navigation,

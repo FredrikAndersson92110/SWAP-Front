@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, View, Image } from "react-native";
-
+import React, { useEffect } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
+
 
 const SplashScreen = (props) => {
   // AsyncStorage.clear();
@@ -18,7 +18,6 @@ const SplashScreen = (props) => {
         );
         response = await response.json();
 
-        //  console.log("recuparation user grace TOKEN : ", response.user);
         props.saveUser(response.user);
         console.log("user Store", props.userStore);
         return props.navigation.navigate("MyTabs");

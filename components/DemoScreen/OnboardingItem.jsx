@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  useWindowDimensions,
-} from "react-native";
-import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import {
+  Image, StyleSheet, useWindowDimensions, View
+} from "react-native";
 
 export default OnboardingItem =  ({ item }) => {
   const { width } = useWindowDimensions();

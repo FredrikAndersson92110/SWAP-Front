@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet, FlatList, Animated } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import React, { useRef, useState } from "react";
+import { Animated, FlatList, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
-
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import slides from "./slides";
-import { useNavigation } from "@react-navigation/native";
+
 
 export default Onboarding = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
